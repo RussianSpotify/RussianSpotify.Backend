@@ -1,4 +1,4 @@
-name: .NET
+name: .NET CI
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore --no-cache
+        run: dotnet restore
 
       - name: Build the project
         run: dotnet build --no-restore /p:TreatWarningsAsErrors=true
@@ -37,6 +37,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Check out repository code
