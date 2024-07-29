@@ -22,10 +22,10 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore --no-cache
 
       - name: Build the project
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore /p:TreatWarningsAsErrors=true
 
       - name: Save build artifacts
         uses: actions/upload-artifact@v3
