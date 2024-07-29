@@ -18,6 +18,9 @@ public class AddSongAuthorRequest
     /// <param name="request">Запрос</param>
     protected AddSongAuthorRequest(AddSongAuthorRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         AuthorEmail = request.AuthorEmail;
         SongId = request.SongId;
     }

@@ -16,7 +16,7 @@ public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, Get
     {
         var resultList = new List<GetCategoriesResponseItem>();
 
-        foreach (CategoryTypes category in Enum.GetValues(typeof(CategoryTypes)))
+        foreach (CategoryType category in Enum.GetValues(typeof(CategoryType)))
         {
             var categoryDescription = category.GetDescription();
             resultList.Add(new GetCategoriesResponseItem

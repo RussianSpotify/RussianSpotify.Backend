@@ -17,6 +17,10 @@ public class AuthorController : ControllerBase
 {
     private readonly IMediator _mediator;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="mediator">Медиатор CQRS</param>
     public AuthorController(IMediator mediator)
     {
         _mediator = mediator;

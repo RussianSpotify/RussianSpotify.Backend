@@ -16,9 +16,6 @@ public static class QueryableExtensions
     /// <returns></returns>
     public static IQueryable<T> SkipTake<T>(this IQueryable<T> query, IPaginationFilter request)
     {
-        if (query is null)
-            return query;
-
         if (request.PageNumber < 0 || request.PageSize < 0)
             return query;
 

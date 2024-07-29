@@ -19,6 +19,9 @@ public class DeletePlaylistRequest
     /// <param name="request">Запрос</param>
     public DeletePlaylistRequest(DeletePlaylistRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         PlaylistId = request.PlaylistId;
     }
     

@@ -16,6 +16,9 @@ public class GetSongsByFilterRequest
     /// <param name="request">GetSongsByFilterRequest, который приходит с фронта</param>
     public GetSongsByFilterRequest(GetSongsByFilterRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         FilterName = request.FilterName;
         FilterValue = request.FilterValue;
         PageNumber = request.PageNumber;

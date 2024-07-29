@@ -25,11 +25,14 @@ public class GetAuthorsByFilterRequest
     /// <param name="request">Запрос</param>
     public GetAuthorsByFilterRequest(GetAuthorsByFilterRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         FilterName = request.FilterName;
         FilterValue = request.FilterValue;
         PlaylistCount = request.PlaylistCount;
-        _pageNumber = request.PageNumber;
-        _pageSize = request.PageSize;
+        PageNumber = request.PageNumber;
+        PageSize = request.PageSize;
     }
 
     /// <summary>

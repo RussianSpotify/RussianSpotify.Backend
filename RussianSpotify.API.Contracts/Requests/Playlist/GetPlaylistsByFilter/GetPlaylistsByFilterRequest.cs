@@ -22,6 +22,9 @@ public class GetPlaylistsByFilterRequest : IPaginationFilter
     /// <param name="request">Запрос</param>
     protected GetPlaylistsByFilterRequest(GetPlaylistsByFilterRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         PageNumber = request.PageNumber;
         PageSize = request.PageSize;
         FilterName = request.FilterName;

@@ -18,6 +18,9 @@ public class DeleteFileRequest
     /// <param name="request">Запрос</param>
     public DeleteFileRequest(DeleteFileRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         FileId = request.FileId;
     }
 

@@ -18,6 +18,9 @@ public class PostCreatePlaylistRequest
     /// <param name="request">Запрос</param>
     public PostCreatePlaylistRequest(PostCreatePlaylistRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         PlaylistName = request.PlaylistName;
         ImageId = request.ImageId;
         SongIds = request.SongIds;
@@ -27,20 +30,20 @@ public class PostCreatePlaylistRequest
     /// <summary>
     /// Название плейлиста
     /// </summary>
-    public string PlaylistName { get; set; } = default!;
+    public string PlaylistName { get; } = default!;
 
     /// <summary>
     /// Картинка плейлиста
     /// </summary>
-    public Guid? ImageId { get; set; }
+    public Guid? ImageId { get; }
 
     /// <summary>
     /// Песни
     /// </summary>
-    public List<Guid> SongIds { get; set; } = new();
+    public List<Guid> SongIds { get; } = new();
 
     /// <summary>
     /// Это альбом
     /// </summary>
-    public bool IsAlbum { get; set; }
+    public bool IsAlbum { get; }
 }

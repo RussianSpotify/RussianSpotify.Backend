@@ -47,7 +47,7 @@ public class GetSongsByFilterQueryHandler
             await _filterHandler.GetByFilterAsync(query, request.FilterName, request.FilterValue, cancellationToken);
 
         var totalCount = await filteredSongs.CountAsync(cancellationToken);
-
+        
         var resultSongs = await filteredSongs
             .Include(song => song.Buckets)
             .Select(song => new GetSongsByFilterResponseItem
@@ -64,7 +64,8 @@ public class GetSongsByFilterQueryHandler
                         AuthorName = y.UserName!
                     })
                     .ToList(),
-                IsInFavorite = song.Buckets.Any(bucket => bucket.UserId.Equals(userId.Value))
+                IsInFavorite = song.Buckets
+                    .Any(bucket => bucket.UserId.Equals(userId.Value))
             })
             .SkipTake(request: request)
             .ToListAsync(cancellationToken);

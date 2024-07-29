@@ -27,5 +27,5 @@ public class GetAuthorRequest
     /// <summary>
     /// Имя автора
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

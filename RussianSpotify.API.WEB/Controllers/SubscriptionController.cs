@@ -18,6 +18,10 @@ public class SubscriptionController : ControllerBase
 {
     private readonly IMediator _mediator;
 
+    /// <summary>
+    /// Констроллер
+    /// </summary>
+    /// <param name="mediator">Медиатор CQRS</param>
     public SubscriptionController(IMediator mediator)
     {
         _mediator = mediator;

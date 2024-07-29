@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
-      <PackageReference Include="AWSSDK.S3" Version="3.7.306.1" />
+      <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
+      <PackageReference Include="AWSSDK.S3" Version="3.7.400" />
+      <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

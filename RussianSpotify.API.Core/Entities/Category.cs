@@ -23,7 +23,7 @@ public class Category
     /// <summary>
     /// Имя категории
     /// </summary>
-    public CategoryTypes CategoryName { get; set; }
+    public CategoryType CategoryName { get; set; }
 
     /// <summary>
     /// Песни

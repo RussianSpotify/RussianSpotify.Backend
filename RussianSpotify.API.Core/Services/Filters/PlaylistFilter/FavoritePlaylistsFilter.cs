@@ -17,8 +17,8 @@ public class FavoritePlaylistsFilter : IFilter<Playlist>
 
         return Task.FromResult(queryable
             .Include(i => i.PlaylistUsers.Where(e => e.UserId == userId))
-            .ThenInclude(i => i.User)
-            .Where(playlist => playlist.Users.Any(user => user.Id.Equals(userId)))
+                .ThenInclude(i => i.User)
+            .Where(playlist => playlist.Users!.Any(user => user.Id.Equals(userId)))
             .OrderBy(i => i.PlaylistUsers.FirstOrDefault()!.AddedDate));
     }
 }

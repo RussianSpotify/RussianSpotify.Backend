@@ -28,8 +28,8 @@ public class EfContext
     {
     }
 
-    /// <inheritdoc />
-    public DbSet<Role> Roles { get; set; } = default!;
+    /// <inheritdoc cref="IdentityDbContext{TUser,TRole,TKey,TUserClaim,TUserRole,TUserLogin,TRoleClaim,TUserToken}.Roles" />
+    public override DbSet<Role> Roles { get; set; } = default!;
 
     /// <inheritdoc />
     public DbSet<RolePrivilege> Privileges { get; set; } = default!;

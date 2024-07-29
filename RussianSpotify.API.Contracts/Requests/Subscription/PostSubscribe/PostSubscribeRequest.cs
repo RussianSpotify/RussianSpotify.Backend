@@ -8,10 +8,13 @@ public class PostSubscribeRequest
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="postSubscribeRequest">Запрос</param>
-    protected PostSubscribeRequest(PostSubscribeRequest postSubscribeRequest)
+    /// <param name="request">Запрос</param>
+    protected PostSubscribeRequest(PostSubscribeRequest request)
     {
-        SubscriptionLength = postSubscribeRequest.SubscriptionLength;
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
+        SubscriptionLength = request.SubscriptionLength;
     }
 
     /// <summary>

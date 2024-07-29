@@ -18,6 +18,9 @@ public class DeleteSongAuthorRequest
     /// <param name="request"></param>
     public DeleteSongAuthorRequest(DeleteSongAuthorRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         SongId = request.SongId;
         AuthorId = request.AuthorId;
     }

@@ -18,6 +18,9 @@ public class AddSongRequest
     /// <param name="request">Запрос</param>
     protected AddSongRequest(AddSongRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         SongName = request.SongName;
         Duration = request.Duration;
         Category = request.Category;

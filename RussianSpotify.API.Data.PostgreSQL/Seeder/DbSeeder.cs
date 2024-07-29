@@ -22,12 +22,12 @@ public class DbSeeder : IDbSeeder
             RussianSpotify.API.Core.DefaultSettings.BaseRoles.UserRoleName
     };
 
-    private static List<CategoryTypes> _baseCategories = new()
+    private static List<CategoryType> _baseCategories = new()
     {
-        CategoryTypes.HipHop,
-        CategoryTypes.Metall,
-        CategoryTypes.Rap,
-        CategoryTypes.Rock
+        CategoryType.HipHop,
+        CategoryType.Metall,
+        CategoryType.Rap,
+        CategoryType.Rock
     };
 
     /// <inheritdoc />

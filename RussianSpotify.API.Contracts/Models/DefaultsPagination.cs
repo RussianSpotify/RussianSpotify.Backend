@@ -3,7 +3,7 @@ namespace RussianSpotify.Contracts.Models;
 /// <summary>
 /// Дефолтные настройки для пагинации
 /// </summary>
-public class DefaultsPagination
+public static class DefaultsPagination
 {
     /// <summary>
     /// Кол-во элементов на странице

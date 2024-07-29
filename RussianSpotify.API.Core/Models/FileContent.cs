@@ -15,7 +15,7 @@ public class FileContent
     public FileContent(
         Stream content,
         string fileName,
-        string? contentType,
+        string contentType,
         string? bucket)
     {
         Content = content;

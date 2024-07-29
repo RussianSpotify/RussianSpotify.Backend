@@ -8,7 +8,7 @@ public class GetAuthorResponse
     /// <summary>
     /// Имя автора
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     /// <summary>
     /// Id фотографии автора

@@ -14,6 +14,9 @@ public class PutPlaylistRequest
 
     public PutPlaylistRequest(PutPlaylistRequest request)
     {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+        
         PlaylistName = request.PlaylistName;
         ImageId = request.ImageId;
         SongsIds = request.SongsIds;
@@ -22,15 +25,15 @@ public class PutPlaylistRequest
     /// <summary>
     /// Название
     /// </summary>
-    public string? PlaylistName { get; set; }
+    public string? PlaylistName { get; }
 
     /// <summary>
     /// ИД фото
     /// </summary>
-    public Guid? ImageId { get; set; }
+    public Guid? ImageId { get; }
 
     /// <summary>
     /// ИД песней
     /// </summary>
-    public List<Guid>? SongsIds { get; set; }
+    public List<Guid>? SongsIds { get; }
 }
