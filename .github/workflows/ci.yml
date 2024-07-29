@@ -1,0 +1,58 @@
+name: .NET
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-check-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build and Run Analyzers
+        run: dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
+
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            **/bin/
+            **/obj/
+  
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: ./
+
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal

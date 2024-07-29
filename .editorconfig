@@ -1,0 +1,8 @@
+# Отключить правило, требующее использования ConfigureAwait(false)
+[*.cs]
+dotnet_diagnostic.NU1903.severity = none
+dotnet_diagnostic.CS8618.severity = none
+dotnet_diagnostic.CA2227.severity = none
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.CA1819.severity = none
+dotnet_diagnostic.CS0618.severity = none
