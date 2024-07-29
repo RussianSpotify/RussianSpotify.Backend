@@ -1,6 +1,14 @@
 # Russian Spotify Web Api
 
-## 1. Авторизация, Регистрация и Аутентификация
+## 1. Проверка кода на коррекность
+Используйте комманду 
+```
+1. dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
+2. dotnet test --no-build --verbosity normal
+```
+Если у вас не вышли никакие ошибки - можете со спокойной душой лить свой пр к нам в репозиторий
+
+## 2. Авторизация, Регистрация и Аутентификация
 
 ### Что тут происходит?
 
