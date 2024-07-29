@@ -1,7 +1,7 @@
 # Russian Spotify Web Api
 
 ## 1. Проверка кода на коррекность
-Используйте комманду 
+Используйте комманды для запуска в терминале
 ```
 1. dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
 2. dotnet test --no-build --verbosity normal
