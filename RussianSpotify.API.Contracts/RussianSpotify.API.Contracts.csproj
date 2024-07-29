@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>RussianSpotify.Contracts</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Authentication.Abstractions">
+        <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.13\Microsoft.AspNetCore.Authentication.Abstractions.dll</HintPath>
+      </Reference>
+
+
+
+
+
+    </ItemGroup>
+
+
+
+
+</Project>
