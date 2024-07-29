@@ -6,6 +6,8 @@
 1. dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
 2. dotnet test --no-build --verbosity normal
 ```
+![Видео без названия — сделано в Clipchamp (4)](https://github.com/user-attachments/assets/d619b193-c4f9-4b3c-8337-8e55bc311462)
+
 Если у вас не вышли никакие ошибки - можете со спокойной душой лить свой пр к нам в репозиторий
 
 ## 2. Авторизация, Регистрация и Аутентификация
