@@ -134,7 +134,7 @@ public class UnitTestBase : IDisposable
     /// </summary>
     /// <param name="dbSeeder">Seed тестовых данных</param>
     /// <returns></returns>
-    protected EfContext CreateInMemory(Action<EfContext> dbSeeder = null)
+    protected EfContext CreateInMemory(Action<EfContext>? dbSeeder = null)
     {
         var options = new DbContextOptionsBuilder<EfContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
