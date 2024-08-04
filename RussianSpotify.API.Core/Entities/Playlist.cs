@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
@@ -17,7 +15,7 @@ public class Playlist
     }
 
     /// <summary>
-    /// Ид альбома
+    /// Ид
     /// </summary>
     public Guid Id { get; protected set; }
 
@@ -75,4 +73,40 @@ public class Playlist
     /// Является ли альбомом
     /// </summary>
     public bool IsAlbum { get; set; }
+
+    /// <summary>
+    /// Создать тестовую сущность
+    /// </summary>
+    /// <param name="playlistName">Название плейлиста</param>
+    /// <param name="releaseDate">Дата опубликования</param>
+    /// <param name="id">Ид</param>
+    /// <param name="image">Фото</param>
+    /// <param name="author">Автор</param>
+    /// <param name="playsNumber">Кол-во прослушиваний</param>
+    /// <param name="isAlbum">Альбом</param>
+    /// <param name="songs">Песни</param>
+    /// <returns>Тестовая сущность</returns>
+    [Obsolete("Только для тестов")]
+    public static Playlist CreateForTest(
+        string playlistName,
+        DateTime releaseDate = default,
+        Guid? id = default,
+        File? image = default,
+        User? author = default,
+        uint playsNumber = default,
+        bool isAlbum = default,
+        List<Song>? songs = default)
+        => new()
+        {
+            Id = id ?? default,
+            PlaylistName = playlistName,
+            Image = image,
+            ImageId = image?.Id,
+            AuthorId = author?.Id ?? default,
+            Author = author,
+            ReleaseDate = releaseDate,
+            PlaysNumber = playsNumber,
+            IsAlbum = isAlbum,
+            Songs = songs,
+        };
 }

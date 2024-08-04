@@ -30,20 +30,20 @@ public class PostCreatePlaylistRequest
     /// <summary>
     /// Название плейлиста
     /// </summary>
-    public string PlaylistName { get; } = default!;
+    public string PlaylistName { get; set; } = default!;
 
     /// <summary>
     /// Картинка плейлиста
     /// </summary>
-    public Guid? ImageId { get; }
+    public Guid? ImageId { get; set;  }
 
     /// <summary>
     /// Песни
     /// </summary>
-    public List<Guid> SongIds { get; } = new();
+    public List<Guid> SongIds { get; set; } = new();
 
     /// <summary>
     /// Это альбом
     /// </summary>
-    public bool IsAlbum { get; }
+    public bool IsAlbum { get; set; }
 }

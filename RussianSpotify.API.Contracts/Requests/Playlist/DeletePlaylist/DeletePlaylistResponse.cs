@@ -1,7 +1,7 @@
 namespace RussianSpotify.Contracts.Requests.Playlist.DeletePlaylist;
 
 /// <summary>
-/// Ответ на запрос <see cref="DeletePlaylistRequest"/>
+/// Ответ для удаления плейлиста
 /// </summary>
 public class DeletePlaylistResponse
 {

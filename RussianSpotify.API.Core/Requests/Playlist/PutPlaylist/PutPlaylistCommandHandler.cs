@@ -42,8 +42,8 @@ public class PutPlaylistCommandHandler : IRequestHandler<PutPlaylistCommand, Put
     /// <inheritdoc />
     public async Task<PutPlaylistResponse> Handle(PutPlaylistCommand request, CancellationToken cancellationToken)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
+        
         try
         {
             await _dbContext.Database.BeginTransactionAsync(cancellationToken);
@@ -55,16 +55,13 @@ public class PutPlaylistCommandHandler : IRequestHandler<PutPlaylistCommand, Put
                 ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
 
             playlist.PlaylistName = request.PlaylistName ?? playlist.PlaylistName;
-            
-            var songsToDelete = playlist.Songs?
+
+            var songsToDelete = playlist.Songs!
+                .Where(x => request.SongsIds!.All(y => y != x.Id))
                 .Select(x => x.Id)
-                .ToList()
-                .Except(request.SongsIds ?? playlist.Songs
-                    .Select(x => x.Id)
-                    .ToList())
                 .ToList();
         
-            songsToDelete?.ForEach(x =>
+            songsToDelete.ForEach(x =>
             {
                 if (playlist.Songs?.Any(y => y.Id == x) == true)
                 {

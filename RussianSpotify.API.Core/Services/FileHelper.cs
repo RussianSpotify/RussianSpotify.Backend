@@ -7,18 +7,24 @@ namespace RussianSpotify.API.Core.Services;
 /// <inheritdoc/>
 public class FileHelper : IFileHelper
 {
+    private const string ImageFileStartsWith = "image/";
+    private const string AudioFileStartsWith = "audio/";
+    
     private readonly IS3Service _s3Service;
     private readonly IDbContext _dbContext;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="s3Service">Сервис S3</param>
+    /// <param name="dbContext">Контекст БД</param>
     public FileHelper(IS3Service s3Service, IDbContext dbContext)
     {
         _s3Service = s3Service;
         _dbContext = dbContext;
     }
-
-    private const string ImageFileStartsWith = "image/";
-    private const string AudioFileStartsWith = "audio/";
-
+    
+    /// <inheritdoc/>
     public bool IsImage(File file)
     {
         var fileContentType = file.ContentType;
@@ -28,6 +34,7 @@ public class FileHelper : IFileHelper
         return fileContentType.StartsWith(ImageFileStartsWith);
     }
 
+    /// <inheritdoc/>
     public bool IsAudio(File file)
     {
         var fileContentType = file.ContentType;
@@ -37,6 +44,7 @@ public class FileHelper : IFileHelper
         return fileContentType.StartsWith(AudioFileStartsWith);
     }
 
+    /// <inheritdoc/>
     public async Task DeleteFileAsync(File file, CancellationToken cancellationToken)
     {
         if (file is null)

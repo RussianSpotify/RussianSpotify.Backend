@@ -6,6 +6,11 @@ namespace RussianSpotify.Contracts.Requests.Playlist.GetFavouritePlaylistById;
 public class GetFavouritePlaylistByIdResponse
 {
     /// <summary>
+    /// Ид сущности
+    /// </summary>
+    public Guid Id { get; set; }
+    
+    /// <summary>
     /// Название плейлиста/альбома
     /// </summary>
     public string PlaylistName { get; set; } = default!;

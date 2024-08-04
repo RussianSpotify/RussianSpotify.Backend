@@ -58,23 +58,7 @@ public class EfContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new RoleConfiguration());
-        builder.ApplyConfiguration(new UserConfiguration());
-        builder.ApplyConfiguration(new SubscribeConfiguration());
-        builder.ApplyConfiguration(new PlaylistConfiguration());
-        builder.ApplyConfiguration(new SongConfiguration());
-        builder.ApplyConfiguration(new CategoryConfiguration());
-        builder.ApplyConfiguration(new FileConfiguration());
-        builder.ApplyConfiguration(new BucketConfiguration());
-        builder.ApplyConfiguration(new EmailNotificationConfiguration());
-
+        builder.ApplyConfigurationsFromAssembly(typeof(Entry).Assembly);
         base.OnModelCreating(builder);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.EnableSensitiveDataLogging();
-        optionsBuilder.UseNpgsql();
     }
 }
