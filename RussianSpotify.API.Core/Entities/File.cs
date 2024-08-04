@@ -71,4 +71,39 @@ public class File
     /// Пользователь, который загрузил файл
     /// </summary>
     public User? User { get; set; }
+
+    /// <summary>
+    /// Создать тестовую сущность
+    /// </summary>
+    /// <param name="id">ИД</param>
+    /// <param name="address">Адрес</param>
+    /// <param name="size">Размер</param>
+    /// <param name="fileName">Название файла</param>
+    /// <param name="contentType">Тип</param>
+    /// <param name="song">Песня</param>
+    /// <param name="playlist">Плейлист (Альбом)</param>
+    /// <param name="user">Пользователь</param>
+    /// <returns>Тестовая сущность</returns>
+    [Obsolete("Только для тестов")]
+    public static File CreateForTest(
+        Guid id = default,
+        string? address = default,
+        long? size = default,
+        string? fileName = default,
+        string? contentType = default,
+        Song? song = default,
+        Playlist? playlist = default,
+        User? user = default)
+        => new()
+        {
+            Id = id,
+            Address = address ?? string.Empty,
+            Size = size ?? 0,
+            FileName = fileName,
+            ContentType = contentType,
+            Song = song,
+            Playlist = playlist,
+            UserId = user?.Id ?? default,
+            User = user
+        };
 }

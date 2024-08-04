@@ -51,9 +51,9 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
             throw new ArgumentNullException(nameof(request));
 
         var currentUser = await _dbContext.Users
-                              .Include(x => x.AuthorPlaylists)
-                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
-                          ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
+            .Include(x => x.AuthorPlaylists)
+            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
+            ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
         var userRoles = await _userManager.GetRolesAsync(currentUser);
 
@@ -83,8 +83,8 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
         if (request.ImageId.HasValue)
         {
             var imageFromDb = await _dbContext.Files
-                                  .FirstOrDefaultAsync(x => x.Id == request.ImageId, cancellationToken)
-                              ?? throw new EntityNotFoundException<Entities.File>(request.ImageId.Value);
+                .FirstOrDefaultAsync(x => x.Id == request.ImageId, cancellationToken)
+                ?? throw new EntityNotFoundException<Entities.File>(request.ImageId.Value);
 
             if (!_fileHelper.IsImage(imageFromDb))
                 throw new PlaylistFileException("File is not Image");

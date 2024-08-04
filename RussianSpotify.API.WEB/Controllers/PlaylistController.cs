@@ -110,6 +110,8 @@ public class PlaylistController : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Плейлист/альбом</returns>
     [HttpGet("GetPlaylist/{playlistId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
     public async Task<GetFavouritePlaylistByIdResponse> GetPlaylistByIdAsync(
         [FromRoute] Guid playlistId,
         CancellationToken cancellationToken)
@@ -120,15 +122,10 @@ public class PlaylistController : ControllerBase
     /// </summary>
     /// <param name="playlistId">Id плейлиста</param>
     [HttpDelete("DeletePlaylist/{playlistId}")]
-    public async Task<DeletePlaylistResponse> DeletePlaylistAsync(Guid playlistId)
-    {
-        var command = new DeletePlaylistCommand(new DeletePlaylistRequest
-        {
-            PlaylistId = playlistId
-        });
-
-        return await _mediator.Send(command);
-    }
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<DeletePlaylistResponse> DeletePlaylistAsync([FromRoute] Guid playlistId)
+        => await _mediator.Send(new DeletePlaylistCommand(playlistId));
     
     /// <summary>
     /// Удалить плейлист из любимых

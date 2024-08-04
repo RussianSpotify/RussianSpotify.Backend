@@ -25,15 +25,15 @@ public class PutPlaylistRequest
     /// <summary>
     /// Название
     /// </summary>
-    public string? PlaylistName { get; }
+    public string? PlaylistName { get; set; }
 
     /// <summary>
     /// ИД фото
     /// </summary>
-    public Guid? ImageId { get; }
+    public Guid? ImageId { get; set; }
 
     /// <summary>
     /// ИД песней
     /// </summary>
-    public List<Guid>? SongsIds { get; }
+    public List<Guid>? SongsIds { get; set; }
 }

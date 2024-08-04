@@ -14,6 +14,12 @@ public class Song
     {
     }
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="songName">Название</param>
+    /// <param name="duration">Длительность</param>
+    /// <param name="category">Категория</param>
     public Song(string songName, double duration, Category category)
     {
         SongName = songName;
@@ -21,11 +27,19 @@ public class Song
         Category = category;
     }
 
+    /// <summary>
+    /// Добавить автора
+    /// </summary>
+    /// <param name="author">Автор</param>
     public void AddAuthor(User author)
     {
         Authors.Add(author);
     }
 
+    /// <summary>
+    /// Удалить автора
+    /// </summary>
+    /// <param name="author">Автор</param>
     public void RemoveAuthor(User author)
     {
         Authors.Remove(author);
@@ -52,16 +66,6 @@ public class Song
     public uint PlaysNumber { get; set; }
 
     /// <summary>
-    /// Плейлисты, которым принадлежит песни
-    /// </summary>
-    public List<Playlist> Playlists { get; protected set; } = new();
-
-    /// <summary>
-    /// Авторы
-    /// </summary>
-    public List<User> Authors { get; protected set; } = new();
-
-    /// <summary>
     /// Ид категории
     /// </summary>
     public Guid CategoryId { get; protected set; }
@@ -70,11 +74,6 @@ public class Song
     /// Nav-prop категории
     /// </summary>
     public Category Category { get; set; }
-
-    /// <summary>
-    /// Файлы (тут музыка и картинка)
-    /// </summary>
-    public List<File> Files { get; set; } = new();
 
     /// <summary>
     /// Картинка
@@ -90,4 +89,48 @@ public class Song
     /// Корзины
     /// </summary>
     public List<Bucket> Buckets { get; protected set; } = new();
+    
+    /// <summary>
+    /// Плейлисты, которым принадлежит песни
+    /// </summary>
+    public List<Playlist> Playlists { get; protected set; } = new();
+    
+    /// <summary>
+    /// Файлы (тут музыка и картинка)
+    /// </summary>
+    public List<File> Files { get; set; } = new();
+
+    /// <summary>
+    /// Авторы
+    /// </summary>
+    public List<User> Authors { get; protected set; } = new();
+
+    /// <summary>
+    /// Создать тестовую сущность
+    /// </summary>
+    /// <param name="id">ИД</param>
+    /// <param name="songName">Название</param>
+    /// <param name="duration">Длительность</param>
+    /// <param name="playsNumber">Кол-во прослушиваний</param>
+    /// <param name="category">Категория</param>
+    /// <param name="image">Фото</param>
+    /// <returns>Тестовая сущность</returns>
+    [Obsolete("Только для тестов")]
+    public static Song CreateForTest(
+        Guid id = default,
+        string? songName = default,
+        double? duration = default,
+        uint? playsNumber = default,
+        Category? category = default,
+        File? image = default)
+        => new()
+        {
+            Id = id,
+            SongName = songName ?? string.Empty,
+            Duration = duration ?? 0,
+            PlaysNumber = playsNumber ?? 0,
+            CategoryId = default,
+            Category = category ?? new Category(),
+            Image = image,
+        };
 }

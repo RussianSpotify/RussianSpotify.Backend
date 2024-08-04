@@ -23,6 +23,9 @@ public class PostSubscribeRequest
     public PostSubscribeRequest()
     {
     }
-
+    
+    /// <summary>
+    /// Срок подписки
+    /// </summary>
     public int SubscriptionLength { get; set; }
 }

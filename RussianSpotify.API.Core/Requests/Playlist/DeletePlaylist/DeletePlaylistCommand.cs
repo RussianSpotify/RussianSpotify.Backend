@@ -8,13 +8,17 @@ using Entities;
 /// <summary>
 /// Команда на удаление <see cref="Playlist"/>
 /// </summary>
-public class DeletePlaylistCommand : DeletePlaylistRequest, IRequest<DeletePlaylistResponse>
+public class DeletePlaylistCommand : IRequest<DeletePlaylistResponse>
 {
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="request">Запрос</param>
-    public DeletePlaylistCommand(DeletePlaylistRequest request) : base(request)
-    {
-    }
+    /// <param name="playlistId">ИД плейлист</param>
+    public DeletePlaylistCommand(Guid playlistId)
+        => PlaylistId = playlistId;
+
+    /// <summary>
+    /// Ид плейлиста
+    /// </summary>
+    public Guid PlaylistId { get; set; }
 }

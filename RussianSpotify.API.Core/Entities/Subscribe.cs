@@ -29,4 +29,28 @@ public class Subscribe
     /// ИД Пользователь
     /// </summary>
     public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Тестовая сущность
+    /// </summary>
+    /// <param name="id">Ид</param>
+    /// <param name="dateStart">Начало подписки</param>
+    /// <param name="dateEnd">Конец подписки</param>
+    /// <param name="user">Пользователь</param>
+    /// <returns>Тестовая сущность</returns>
+    [Obsolete("Только для тестов")]
+    public static Subscribe CreateForTest(
+        Guid? id = default,
+        DateTime? dateStart = default,
+        DateTime? dateEnd = default,
+        User? user = default)
+        => new()
+        {
+            Id = id ?? default,
+            DateStart = dateStart,
+            DateEnd = dateEnd,
+            User = user ?? new User(),
+            UserId = user?.Id ?? default,
+        };
+
 }

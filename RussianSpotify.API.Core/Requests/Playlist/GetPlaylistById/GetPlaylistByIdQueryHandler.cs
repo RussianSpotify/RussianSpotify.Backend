@@ -34,27 +34,19 @@ public class GetPlaylistByIdQueryHandler
         if (request is null)
             throw new ArgumentNullException(nameof(request));
 
-        var userId = _userContext.CurrentUserId;
-
-        if (userId is null)
-            throw new CurrentUserIdNotFound("UserId из Claims не был найден");
-
-        var playlist = await _dbContext.Playlists
-                           .Include(x => x.Author)
-                           .Include(x => x.Songs)
-                           .Include(x => x.Users)
-                           .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
-                       ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
-
-        return new GetFavouritePlaylistByIdResponse
-        {
-            PlaylistName = playlist.PlaylistName,
-            ImageId = playlist.ImageId,
-            IsAlbum = playlist.IsAlbum,
-            AuthorId = playlist.AuthorId,
-            AuthorName = playlist.Author?.UserName,
-            ReleaseDate = playlist.ReleaseDate,
-            IsInFavorite = playlist.Users!.Any(user => user.Id.Equals(userId.Value))
-        };
+        return await _dbContext.Playlists
+           .Select(x => new GetFavouritePlaylistByIdResponse
+           {
+               Id = x.Id,
+               PlaylistName = x.PlaylistName,
+               ImageId = x.ImageId,
+               IsAlbum = x.IsAlbum,
+               AuthorId = x.AuthorId,
+               AuthorName = x.Author!.UserName,
+               ReleaseDate = x.ReleaseDate,
+               IsInFavorite = x.Users!.Any(y => y.Id == _userContext.CurrentUserId)
+           })
+           .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
+            ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
     }
 }
