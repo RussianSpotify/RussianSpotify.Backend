@@ -35,19 +35,12 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, GetUser
         if (request is null)
             throw new ArgumentNullException(nameof(request));
 
-        var userId = _userContext.CurrentUserId;
-
-        if (userId is null)
-            throw new CurrentUserIdNotFound("User Id was not found");
-
-        var user = await _userManager.FindByIdAsync(userId.ToString()!);
-
-        if (user is null)
-            throw new NotFoundUserException($"User with id: {userId}");
+        var user = await _userManager
+            .FindByIdAsync(_userContext.CurrentUserId.ToString()!)
+            ?? throw new ForbiddenException();
 
         var roles = (await _userManager.GetRolesAsync(user)).ToList();
-
-
+        
         return new GetUserInfoResponse
         {
             UserId = user.Id,

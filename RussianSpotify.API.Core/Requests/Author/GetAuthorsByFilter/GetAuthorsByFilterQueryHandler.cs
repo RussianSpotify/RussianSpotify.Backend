@@ -23,7 +23,10 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="roleManager">Сервис для работы с ролями пользователей</param>
     /// <param name="filterHandler">Сервис для фильтра сущностей</param>
-    public GetAuthorsByFilterQueryHandler(IDbContext dbContext, IRoleManager roleManager, IFilterHandler filterHandler)
+    public GetAuthorsByFilterQueryHandler(
+        IDbContext dbContext,
+        IRoleManager roleManager,
+        IFilterHandler filterHandler)
     {
         _dbContext = dbContext;
         _roleManager = roleManager;
@@ -39,8 +42,11 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
 
         var query = _dbContext.Users.AsQueryable();
 
-        var filteredUsers =
-            await _filterHandler.GetByFilterAsync(query, request.FilterName, request.FilterValue, cancellationToken);
+        var filteredUsers = await _filterHandler.GetByFilterAsync(
+            query,
+            request.FilterName,
+            request.FilterValue,
+            cancellationToken);
 
         var filteredUsersToList = await filteredUsers
             .Include(i => i.AuthorPlaylists)

@@ -17,6 +17,11 @@ public class GetAuthorQueryHandler
     private readonly IDbContext _dbContext;
     private readonly IRoleManager _roleManager;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст БД</param>
+    /// <param name="roleManager">Взаимодействует с ролью пользователя</param>
     public GetAuthorQueryHandler(IDbContext dbContext, IRoleManager roleManager)
     {
         _dbContext = dbContext;

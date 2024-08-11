@@ -87,10 +87,10 @@ public class File
     [Obsolete("Только для тестов")]
     public static File CreateForTest(
         Guid id = default,
-        string? address = default,
-        long? size = default,
-        string? fileName = default,
-        string? contentType = default,
+        string? address = "address/",
+        long? size = 200,
+        string? fileName = "tester.txt",
+        string? contentType = "txt",
         Song? song = default,
         Playlist? playlist = default,
         User? user = default)

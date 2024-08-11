@@ -11,6 +11,7 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Playlist.PutPlaylist;
+using RussianSpotify.API.UnitTests.Requests.Builders;
 using File = RussianSpotify.API.Core.Entities.File;
 using ILogger = Castle.Core.Logging.ILogger;
 
@@ -22,6 +23,11 @@ namespace RussianSpotify.API.UnitTests;
 public class UnitTestBase : IDisposable
 {
     private const string CurrentUserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"; 
+    
+    /// <summary>
+    /// Пользователь для теста
+    /// </summary>
+    protected User User { get; private set; }
     
     /// <summary>
     /// Мок сервиса дат
@@ -53,12 +59,22 @@ public class UnitTestBase : IDisposable
     /// </summary>
     protected Mock<UserManager<User>> UserManager { get; set; }
     
+    /// <summary>
+    /// Мок Взаимодействия с ролью пользователя
+    /// </summary>
+    protected Mock<IRoleManager> RoleManager { get; set; }
     
     /// <summary>
     /// Конструктор
     /// </summary>
     protected UnitTestBase()
     {
+        User = new UserBuilder()
+            .SetUsername("Test Login")
+            .SetBirthday(new DateTime(2004, 02, 12))
+            .SetEmail("test@mail.ru")
+            .Build();
+        
         DateTimeProvider = new Mock<IDateTimeProvider>();
         DateTimeProvider.Setup(x => x.CurrentDate)
             .Returns(new DateTime(2004, 12, 12));
@@ -85,6 +101,13 @@ public class UnitTestBase : IDisposable
                 It.IsAny<File>(),
                 It.IsAny<CancellationToken>()))
             .Returns(() => Task.CompletedTask);
+
+        RoleManager = new Mock<IRoleManager>();
+        RoleManager.Setup(x => x.IsInRoleAsync(
+            It.IsAny<User>(),
+            It.IsAny<string>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
         
         var userStoreMock = new Mock<IUserStore<User>>();
         var optionsMock = new Mock<IOptions<IdentityOptions>>();
@@ -116,6 +139,9 @@ public class UnitTestBase : IDisposable
                 BaseRoles.AuthorRoleName,
                 BaseRoles.AdminRoleName,
             });
+
+        UserManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+            .ReturnsAsync(User);
     }
 
     /// <summary>
