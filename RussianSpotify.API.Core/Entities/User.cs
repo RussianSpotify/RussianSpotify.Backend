@@ -50,7 +50,7 @@ public class User : IdentityUser<Guid>
     /// <summary>
     /// День рождения пользователя
     /// </summary>
-    public DateTime? Birthday { get; protected set; }
+    public DateTime? Birthday { get; set; }
 
     /// <summary>
     /// Телефон пользователя
@@ -98,6 +98,7 @@ public class User : IdentityUser<Guid>
     /// <param name="id">Ид пользователя</param>
     /// <param name="login">Логин пользователя</param>
     /// <param name="birthday">Дата рождения</param>
+    /// <param name="userPhoto">Фото пользователя</param>
     /// <param name="email">E-mail пользователя</param>
     /// <param name="phone">Телефон</param>
     /// <param name="passwordHash">Хеш пароля</param>
@@ -107,15 +108,18 @@ public class User : IdentityUser<Guid>
         Guid? id = default,
         string login = default!,
         DateTime? birthday = default,
+        File? userPhoto = default,
         string email = default!,
         string phone = default!,
         string? passwordHash = default)
         => new()
         {
             Id = id ?? Guid.NewGuid(),
+            UserName = login,
             Birthday = birthday,
             Email = email,
             Phone = phone,
+            UserPhoto = userPhoto,
             PasswordHash = passwordHash
         };
 }
