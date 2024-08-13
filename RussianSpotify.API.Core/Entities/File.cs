@@ -1,15 +1,26 @@
+using RussianSpotify.API.Core.Abstractions;
+
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
 /// Файл
 /// </summary>
-public class File
+public class File : BaseEntity, ISoftDeletable, ITimeTrackable
 {
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="fileName">Назавние файла</param>
+    /// <param name="contentType">Тип файла</param>
+    /// <param name="address">Адрес в S3</param>
+    /// <param name="size">Размер</param>
+    /// <param name="user">Пользователь, который загрузил файл</param>
     public File(
         string fileName,
         string contentType,
         string address,
-        long size, User user)
+        long size,
+        User user)
     {
         FileName = fileName;
         ContentType = contentType;
@@ -21,16 +32,6 @@ public class File
     public File()
     {
     }
-
-    public void SetSong(Song song)
-    {
-        Song = song;
-    }
-
-    /// <summary>
-    /// Ид файла
-    /// </summary>
-    public Guid Id { get; protected set; }
 
     /// <summary>
     /// Адрес на песню в cloud
@@ -71,6 +72,18 @@ public class File
     /// Пользователь, который загрузил файл
     /// </summary>
     public User? User { get; set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
 
     /// <summary>
     /// Создать тестовую сущность

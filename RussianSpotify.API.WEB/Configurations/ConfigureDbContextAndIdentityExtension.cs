@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using RussianSpotift.API.Data.PostgreSQL;
+using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Core.Entities;
 
 namespace RussianSpotify.API.WEB.Configurations;
@@ -23,7 +23,10 @@ public static class ConfigureDbContextAndIdentityExtension
     public static IdentityBuilder
         AddDbContextWithIdentity(this IServiceCollection services, string connectionString) =>
         services.AddDbContext<EfContext>(
-                options => options.UseNpgsql(connectionString))
+                (sp, options) => options
+                    .UseNpgsql(connectionString)
+                    .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                    .AddInterceptors(sp.GetRequiredService<UpdateInterceptor>()))
             .AddIdentity<User, Role>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;

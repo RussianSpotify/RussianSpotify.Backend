@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
+using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.WEB.Configurations;
@@ -21,7 +22,10 @@ builder.Services.AddHangfireWorker();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 // Добавлен middleware для обработки исключений
-builder.Services.AddSingleton<ExceptionMiddleware>();
+builder.Services
+    .AddSingleton<ExceptionMiddleware>()
+    .AddSingleton<UpdateInterceptor>()
+    .AddSingleton<SoftDeleteInterceptor>();
 
 // Добавлен db контекст, настроен identity с юзерами и ролями, добавлен стор с identity таблицами
 builder.Services.AddDbContextWithIdentity(configuration.GetConnectionString("DefaultConnection")!);

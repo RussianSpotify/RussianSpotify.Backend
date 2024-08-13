@@ -1,3 +1,4 @@
+using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.Contracts.Enums;
 
 namespace RussianSpotify.API.Core.Entities;
@@ -5,7 +6,7 @@ namespace RussianSpotify.API.Core.Entities;
 /// <summary>
 /// Категория
 /// </summary>
-public class Category
+public class Category : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
     /// Конструктор
@@ -16,14 +17,21 @@ public class Category
     }
 
     /// <summary>
-    /// Ид категории
-    /// </summary>
-    public Guid Id { get; protected set; }
-
-    /// <summary>
     /// Имя категории
     /// </summary>
     public CategoryType CategoryName { get; set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
 
     /// <summary>
     /// Песни

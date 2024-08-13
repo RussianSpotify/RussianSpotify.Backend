@@ -1,14 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RussianSpotift.API.Data.PostgreSQL.Extensions;
 using RussianSpotify.API.Core.Entities;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
-public class SubscribeConfiguration : IEntityTypeConfiguration<Subscribe>
+/// <summary>
+/// Конфигурация для <see cref="Subscribe"/>
+/// </summary>
+public class SubscribeConfiguration : EntityTypeConfigurationBase<Subscribe>
 {
     /// <inheritdoc />
-    public void Configure(EntityTypeBuilder<Subscribe> builder)
+    protected override void ConfigureChild(EntityTypeBuilder<Subscribe> builder)
     {
+        builder.Property(p => p.DateStart)
+            .HasComment("Начало подписки");
+
+        builder.Property(p => p.DateEnd)
+            .HasComment("Конец подписки");
+        
+        builder.ConfigureSoftDeletableEntity();
+        builder.ConfigureTimeTrackableEntity();
+
+        builder.Property(p => p.UserId)
+            .HasComment("ИД Пользователь");
+        
         builder.HasOne(x => x.User)
             .WithOne(x => x.Subscribe);
     }

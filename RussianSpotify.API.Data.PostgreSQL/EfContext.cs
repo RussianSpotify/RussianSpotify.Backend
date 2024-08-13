@@ -58,7 +58,21 @@ public class EfContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        ConfigureGlobalFilters(builder);
+        
         builder.ApplyConfigurationsFromAssembly(typeof(Entry).Assembly);
         base.OnModelCreating(builder);
+    }
+
+    private static void ConfigureGlobalFilters(ModelBuilder builder)
+    {
+        builder.Entity<Bucket>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<Category>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<EmailNotification>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<File>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<Playlist>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<Song>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<Subscribe>().HasQueryFilter(x => !x.IsDeleted);
+        builder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
     }
 }

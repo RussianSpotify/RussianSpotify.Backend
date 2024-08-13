@@ -11,8 +11,4 @@ public class PostRegisterCommand : PostRegisterRequest, IRequest<PostRegisterRes
     public PostRegisterCommand(PostRegisterRequest request) : base(request)
     {
     }
-
-    public PostRegisterCommand()
-    {
-    }
 }

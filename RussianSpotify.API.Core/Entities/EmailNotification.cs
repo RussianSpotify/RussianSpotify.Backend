@@ -1,15 +1,12 @@
+using RussianSpotify.API.Core.Abstractions;
+
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
 /// Сущность уведомления
 /// </summary>
-public class EmailNotification
+public class EmailNotification : BaseEntity, ISoftDeletable, ITimeTrackable
 {
-    /// <summary>
-    /// ИД сущности
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Содержимое уведомления
     /// </summary>
@@ -24,6 +21,18 @@ public class EmailNotification
     /// Отправлено сообщение
     /// </summary>
     public DateTime? SentDate { get; set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
 
     /// <summary>
     /// Получатель
@@ -41,7 +50,7 @@ public class EmailNotification
         string body,
         string head,
         string emailTo)
-        => new EmailNotification
+        => new()
         {
             Body = body,
             Head = head,

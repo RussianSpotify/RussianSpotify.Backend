@@ -1,19 +1,12 @@
-using System.Collections.Immutable;
+using RussianSpotify.API.Core.Abstractions;
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
 /// Песня
 /// </summary>
-public class Song
+public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
 {
-    /// <summary>
-    /// Конструктор
-    /// </summary>
-    public Song()
-    {
-    }
-
     /// <summary>
     /// Конструктор
     /// </summary>
@@ -26,29 +19,13 @@ public class Song
         Duration = duration;
         Category = category;
     }
-
+    
     /// <summary>
-    /// Добавить автора
+    /// Конструктор
     /// </summary>
-    /// <param name="author">Автор</param>
-    public void AddAuthor(User author)
+    public Song()
     {
-        Authors.Add(author);
     }
-
-    /// <summary>
-    /// Удалить автора
-    /// </summary>
-    /// <param name="author">Автор</param>
-    public void RemoveAuthor(User author)
-    {
-        Authors.Remove(author);
-    }
-
-    /// <summary>
-    /// Ид сущности
-    /// </summary>
-    public Guid Id { get; protected set; }
 
     /// <summary>
     /// Имя песни
@@ -104,6 +81,18 @@ public class Song
     /// Авторы
     /// </summary>
     public List<User> Authors { get; protected set; } = new();
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
     /// Создать тестовую сущность
@@ -133,4 +122,22 @@ public class Song
             Category = category ?? new Category(),
             Image = image,
         };
+    
+    /// <summary>
+    /// Добавить автора
+    /// </summary>
+    /// <param name="author">Автор</param>
+    public void AddAuthor(User author)
+    {
+        Authors.Add(author);
+    }
+
+    /// <summary>
+    /// Удалить автора
+    /// </summary>
+    /// <param name="author">Автор</param>
+    public void RemoveAuthor(User author)
+    {
+        Authors.Remove(author);
+    }
 }
