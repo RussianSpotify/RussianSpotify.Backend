@@ -1,15 +1,12 @@
+using RussianSpotify.API.Core.Abstractions;
+
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
 /// Сущность подписка
 /// </summary>
-public class Subscribe
+public class Subscribe : BaseEntity, ISoftDeletable, ITimeTrackable
 {
-    /// <summary>
-    /// ИД подписки
-    /// </summary>
-    public Guid Id { get; protected set; }
-
     /// <summary>
     /// Начало подписки
     /// </summary>
@@ -29,6 +26,18 @@ public class Subscribe
     /// ИД Пользователь
     /// </summary>
     public Guid UserId { get; set; }
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
     /// Тестовая сущность
@@ -52,5 +61,4 @@ public class Subscribe
             User = user ?? new User(),
             UserId = user?.Id ?? default,
         };
-
 }

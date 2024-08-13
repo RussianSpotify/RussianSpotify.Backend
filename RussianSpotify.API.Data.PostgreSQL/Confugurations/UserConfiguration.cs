@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RussianSpotift.API.Data.PostgreSQL.Extensions;
 using RussianSpotify.API.Core.Entities;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
@@ -9,15 +10,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     /// <inheritdoc />
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder
-            .Property(p => p.Birthday);
+        builder.Property(p => p.Birthday);
 
-        builder
-            .Property(p => p.Phone);
+        builder.Property(p => p.Phone);
 
-        builder
-            .Property(p => p.IsConfirmed)
+        builder.Property(p => p.IsConfirmed)
             .IsRequired();
+        
+        builder.ConfigureSoftDeletableEntity();
+        builder.ConfigureTimeTrackableEntity();
 
         builder
             .HasOne(x => x.Subscribe)

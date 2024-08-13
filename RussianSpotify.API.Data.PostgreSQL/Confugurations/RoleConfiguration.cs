@@ -4,6 +4,9 @@ using RussianSpotify.API.Core.Entities;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
+/// <summary>
+/// Конфигурация для <see cref="Role"/>
+/// </summary>
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     /// <inheritdoc />

@@ -1,9 +1,11 @@
+using RussianSpotify.API.Core.Abstractions;
+
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
 /// Плейлист или альбом
 /// </summary>
-public class Playlist
+public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
     /// Конструктор
@@ -13,11 +15,6 @@ public class Playlist
         Songs = new List<Song>();
         Users = new List<User>();
     }
-
-    /// <summary>
-    /// Ид
-    /// </summary>
-    public Guid Id { get; protected set; }
 
     /// <summary>
     /// Название плейлиста
@@ -73,6 +70,18 @@ public class Playlist
     /// Является ли альбомом
     /// </summary>
     public bool IsAlbum { get; set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
 
     /// <summary>
     /// Создать тестовую сущность

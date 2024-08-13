@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Identity;
+using RussianSpotify.API.Core.Abstractions;
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
 /// Сущность пользователя
 /// </summary>
-public class User : IdentityUser<Guid>
+public class User : IdentityUser<Guid>, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
     /// Конструктор
@@ -91,6 +92,18 @@ public class User : IdentityUser<Guid>
     /// Песни пользователя
     /// </summary>
     public List<Song>? Songs { get; protected set; }
+    
+    /// <inheritdoc />
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? UpdatedAt { get; set; }
+    
+    /// <inheritdoc />
+    public bool IsDeleted { get; set; }
+
+    /// <inheritdoc />
+    public DateTime? DeletedAt { get; set; }
 
     /// <summary>
     /// Создать тестовую сущность

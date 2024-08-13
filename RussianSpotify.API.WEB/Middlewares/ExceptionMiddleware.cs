@@ -18,7 +18,8 @@ public class ExceptionMiddleware : IMiddleware
         }
         catch (ApplicationBaseException exception)
         {
-            context.Response.StatusCode = (int)exception.ResponseStatusCode;
+            if (exception.ResponseStatusCode != default)
+                context.Response.StatusCode = (int)exception.ResponseStatusCode;
 
             await context.Response.WriteAsJsonAsync(new { message = exception.Message });
         }
