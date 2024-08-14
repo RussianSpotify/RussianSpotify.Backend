@@ -1,4 +1,5 @@
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Core.Exceptions;
 
 namespace RussianSpotify.API.Core.Entities;
 
@@ -33,4 +34,16 @@ public class Bucket : BaseEntity, ISoftDeletable, ITimeTrackable
 
     /// <inheritdoc />
     public DateTime? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Добавить песню
+    /// </summary>
+    /// <param name="song">Песню</param>
+    public void AddSong(Song song)
+    {
+        if (Songs is null)
+            throw new NotIncludedException(nameof(Songs));
+        
+        Songs.Add(song);
+    }
 }

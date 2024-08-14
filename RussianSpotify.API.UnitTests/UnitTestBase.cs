@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -10,10 +9,9 @@ using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Requests.Playlist.PutPlaylist;
+using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.UnitTests.Requests.Builders;
 using File = RussianSpotify.API.Core.Entities.File;
-using ILogger = Castle.Core.Logging.ILogger;
 
 namespace RussianSpotify.API.UnitTests;
 
@@ -52,28 +50,42 @@ public class UnitTestBase : IDisposable
     /// <summary>
     ///  Помощник по работе с файлами
     /// </summary>
-    protected Mock<IFileHelper> FileHelper { get; set; }
+    protected Mock<IFileHelper> FileHelper { get; }
     
     /// <summary>
     /// Менеджер по пользователю
     /// </summary>
-    protected Mock<UserManager<User>> UserManager { get; set; }
+    protected Mock<UserManager<User>> UserManager { get; }
     
     /// <summary>
     /// Мок Взаимодействия с ролью пользователя
     /// </summary>
-    protected Mock<IRoleManager> RoleManager { get; set; }
+    protected Mock<IRoleManager> RoleManager { get; }
+    
+    /// <summary>
+    /// Мок S3 Service
+    /// </summary>
+    protected Mock<IS3Service> S3Service { get; }
     
     /// <summary>
     /// Конструктор
     /// </summary>
     protected UnitTestBase()
     {
-        User = new UserBuilder()
+        User = UserBuilder
+            .CreateBuilder()
+            .SetId(Guid.Parse(CurrentUserId))
             .SetUsername("Test Login")
             .SetBirthday(new DateTime(2004, 02, 12))
             .SetEmail("test@mail.ru")
             .Build();
+
+        S3Service = new Mock<IS3Service>();
+        S3Service.Setup(x => x.DownloadFileAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(FileContent.CreateForTest());
         
         DateTimeProvider = new Mock<IDateTimeProvider>();
         DateTimeProvider.Setup(x => x.CurrentDate)
@@ -173,6 +185,13 @@ public class UnitTestBase : IDisposable
 
         return context;
     }
+
+    /// <summary>
+    /// Добавить песни в бакет пользователя
+    /// </summary>
+    /// <param name="songs">Песни</param>
+    protected void SetUserSongs(List<Song> songs)
+        => User.Bucket!.Songs.AddRange(songs);
 
     /// <summary>
     /// Сконфигурировать логгер

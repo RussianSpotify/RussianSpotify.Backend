@@ -4,7 +4,7 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Playlist.RemovePlaylistFromFavorite;
 using Xunit;
 
-namespace RussianSpotify.API.UnitTests.Requests.Playlist;
+namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
 /// Тест для <see cref="RemovePlaylistFromFavoriteCommandHandler"/>

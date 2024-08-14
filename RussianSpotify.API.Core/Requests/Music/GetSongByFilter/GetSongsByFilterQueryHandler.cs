@@ -43,8 +43,11 @@ public class GetSongsByFilterQueryHandler
 
         var query = _dbContext.Songs.AsQueryable();
 
-        var filteredSongs =
-            await _filterHandler.GetByFilterAsync(query, request.FilterName, request.FilterValue, cancellationToken);
+        var filteredSongs = await _filterHandler.GetByFilterAsync(
+            query,
+            request.FilterName,
+            request.FilterValue,
+            cancellationToken);
 
         var totalCount = await filteredSongs.CountAsync(cancellationToken);
         

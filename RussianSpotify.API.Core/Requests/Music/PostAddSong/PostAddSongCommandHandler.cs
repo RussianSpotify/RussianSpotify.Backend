@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
 using RussianSpotify.Contracts.Requests.Music.AddSong;
 
@@ -22,7 +23,10 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
     /// <param name="dbContext">Конекст базы данных</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
     /// <param name="fileHelper">Сервис для работы с файлами</param>
-    public PostAddSongCommandHandler(IDbContext dbContext, IUserContext userContext, IFileHelper fileHelper)
+    public PostAddSongCommandHandler(
+        IDbContext dbContext,
+        IUserContext userContext,
+        IFileHelper fileHelper)
     {
         _dbContext = dbContext;
         _userContext = userContext;
@@ -34,10 +38,8 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
     {
         // Достаем категорию из бд
         var category = await _dbContext.Categories
-            .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken);
-
-        if (category is null)
-            throw new SongBadCategoryException("Category not found");
+            .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken)
+            ?? throw new EntityNotFoundException<Category>(request.Category.ToString());
 
         // Валидация названия песни
         if (string.IsNullOrEmpty(request.SongName) || string.IsNullOrWhiteSpace(request.SongName))
@@ -47,7 +49,10 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
         if (request.Duration < 0)
             throw new SongBadRequestException("Wrong song duration was provided");
 
-        var newSong = new Song(request.SongName, request.Duration, category);
+        var newSong = new Song(
+            request.SongName,
+            request.Duration,
+            category);
 
         // Если был введен Id картинки, добавляем его в песню
         if (request.ImageId is not null)
@@ -82,18 +87,10 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
 
             newSong.Files.Add(fileFromDb);
         }
-
-        // Достаем пользователя и добавляем как автора песни
-        var userId = _userContext.CurrentUserId;
-
-        if (userId is null)
-            throw new SongInternalException("Current user not found");
-
+        
         var userFromDb = await _dbContext.Users
-            .FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
-
-        if (userFromDb is null)
-            throw new BadSongAuthorException("Current user not found");
+            .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
+            ?? throw new ForbiddenException();
 
         // Вносим изменения в бд
         newSong.AddAuthor(userFromDb);

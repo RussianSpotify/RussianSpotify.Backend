@@ -7,7 +7,7 @@ using RussianSpotify.API.Core.Requests.Playlist.PutPlaylist;
 using RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 using Xunit;
 
-namespace RussianSpotify.API.UnitTests.Requests.Playlist;
+namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
 /// Тест для <see cref="PutPlaylistCommandHandler"/>

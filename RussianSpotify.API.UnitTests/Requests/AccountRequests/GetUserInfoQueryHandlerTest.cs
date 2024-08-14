@@ -1,17 +1,13 @@
 using RussianSpotify.API.Core.Requests.Account.GetUserInfo;
 using Xunit;
 
-namespace RussianSpotify.API.UnitTests.Requests.Account;
+namespace RussianSpotify.API.UnitTests.Requests.AccountRequests;
 
 /// <summary>
 /// Тест для <see cref="GetUserInfoQueryHandler"/>
 /// </summary>
 public class GetUserInfoQueryHandlerTest : UnitTestBase
 {
-    public GetUserInfoQueryHandlerTest()
-    {
-    }
-
     /// <summary>
     /// Обработчик должен вернуть информацию о сущности
     /// </summary>

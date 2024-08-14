@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
 using RussianSpotify.Contracts.Requests.Music.AddSongAuthor;
 
@@ -16,20 +17,20 @@ public class PostAddSongAuthorCommandHandler : IRequestHandler<PostAddSongAuthor
 {
     private readonly IDbContext _dbContext;
     private readonly IUserContext _userContext;
-    private readonly UserManager<User> _userManager;
     private readonly IRoleManager _roleManager;
 
     /// <summary>
     /// Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
-    /// <param name="userManager">Сервис для работы с пользователями</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
-    public PostAddSongAuthorCommandHandler(IDbContext dbContext, UserManager<User> userManager,
-        IUserContext userContext, IRoleManager roleManager)
+    /// <param name="roleManager">Взаимодействует с ролью пользователя</param>
+    public PostAddSongAuthorCommandHandler(
+        IDbContext dbContext,
+        IUserContext userContext,
+        IRoleManager roleManager)
     {
         _dbContext = dbContext;
-        _userManager = userManager;
         _userContext = userContext;
         _roleManager = roleManager;
     }
@@ -41,31 +42,25 @@ public class PostAddSongAuthorCommandHandler : IRequestHandler<PostAddSongAuthor
         // Достаем песню из бд
         var songFromDb = await _dbContext.Songs
             .Include(i => i.Authors)
-            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken);
+            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
+            ?? throw new EntityNotFoundException<Song>(request.SongId);
 
-        if (songFromDb is null)
-            throw new SongBadRequestException("Song not found");
+        if (songFromDb.Authors.All(i => i.Id != _userContext.CurrentUserId))
+            throw new ForbiddenException();
 
-        // Проверка, является ли текущий пользователь автором данной песни
-        var currentUserId = _userContext.CurrentUserId;
-        if (currentUserId is null)
-            throw new SongInternalException("Current User Id not found");
-
-        if (songFromDb.Authors.All(i => i.Id != currentUserId))
-            throw new SongForbiddenException("User is not Author of this Song");
-
-        if (songFromDb.Authors.Select(i => i.Email).Contains(request.AuthorEmail))
+        if (songFromDb.Authors.Any(x => x.Email == request.AuthorEmail))
             throw new SongBadRequestException("User is already author of this Song");
         
         // Достаем нового автора из бд
         var userFromDb = await _dbContext.Users
-            .FirstOrDefaultAsync(i => i.Email!.Equals(request.AuthorEmail), cancellationToken);
-
-        if (userFromDb is null)
-            throw new BadSongAuthorException("User not found");
+            .FirstOrDefaultAsync(i => i.Email!.Equals(request.AuthorEmail), cancellationToken)
+            ?? throw new EntityNotFoundException<User>(request.AuthorEmail);
 
         // Проверка, является ли добавляемый пользовател автором
-        var ifContainsAuthorRole = await _roleManager.IsInRoleAsync(userFromDb, BaseRoles.AuthorRoleName);
+        var ifContainsAuthorRole = await _roleManager.IsInRoleAsync(
+            userFromDb,
+            BaseRoles.AuthorRoleName,
+            cancellationToken);
         
         if (!ifContainsAuthorRole)
             throw new SongBadRequestException("User is not Author");

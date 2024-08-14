@@ -50,4 +50,26 @@ public class FileContent
     /// Название бакета
     /// </summary>
     public string? Bucket { get; set; }
+
+    /// <summary>
+    /// Создать тестовую сущность
+    /// </summary>
+    /// <param name="content">Бинарные данные файла</param>
+    /// <param name="fileName">Название файла</param>
+    /// <param name="contentType">Тип контента</param>
+    /// <param name="bucket">Название бакета</param>
+    /// <returns>Тестовая сущность</returns>
+    [Obsolete("Только для тестов")]
+    public static FileContent CreateForTest(
+        Stream? content = default,
+        string fileName = "testFile",
+        string contentType = ".mp3",
+        string bucket = "testBucket")
+        => new()
+        {
+            Content = content ?? new MemoryStream(),
+            FileName = fileName,
+            ContentType = contentType,
+            Bucket = bucket
+        };
 }

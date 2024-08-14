@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
 using RussianSpotify.Contracts.Requests.Music.EditSong;
 
@@ -35,17 +37,15 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         var songFromDb = await _dbContext.Songs
             .Include(i => i.Authors)
             .Include(i => i.Image)
-            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken);
-
-        if (songFromDb is null)
-            throw new SongBadRequestException("Song not found");
+            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
+            ?? throw new EntityNotFoundException<Song>(request.SongId);
 
         var songOldName = songFromDb.SongName;
 
         // Проверка, является ли текущий пользователь автором данной песни
         var currentUserId = _userContext.CurrentUserId;
         if (currentUserId is null)
-            throw new SongInternalException("Current User Id not found");
+            throw new ForbiddenException();
 
         if (songFromDb.Authors.All(i => i.Id != currentUserId))
             throw new SongForbiddenException("User is not Author of this Song");
@@ -61,6 +61,7 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
             // Валидация и добавление
             if (request.Duration < 0)
                 throw new SongBadRequestException("Wrong song duration was provided");
+            
             songFromDb.Duration = request.Duration.Value;
         }
 
@@ -69,10 +70,9 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         {
             // Получаем категорию из бд
             var categoryFromDb = await _dbContext.Categories
-                .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken);
-
-            if (categoryFromDb is null)
-                throw new SongBadCategoryException("Category not found");
+                .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken)
+                ?? throw new EntityNotFoundException<Category>(request.Category.ToString()!);
+            
             songFromDb.Category = categoryFromDb;
         }
 
@@ -82,10 +82,8 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         {
             // Достаем картину из бд
             var imageFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(i => i.Id == request.ImageId.Value, cancellationToken);
-
-            if (imageFromDb is null)
-                throw new SongBadImageException("File not found");
+                .FirstOrDefaultAsync(i => i.Id == request.ImageId.Value, cancellationToken)
+                ?? throw new EntityNotFoundException<Entities.File>(request.ImageId.Value);
 
             // Проверка, является ли файл картинкой и присвоение
             if (!_fileHelper.IsImage(imageFromDb))
@@ -103,14 +101,13 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         {
             // Достаем файл из бд
             var fileFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(i => i.Id == request.SongFileId.Value, cancellationToken);
-
-            if (fileFromDb is null)
-                throw new SongBadRequestException("Song File not found");
+                .FirstOrDefaultAsync(i => i.Id == request.SongFileId.Value, cancellationToken)
+                ?? throw new EntityNotFoundException<Entities.File>(request.SongFileId.Value);
 
             // Проверяем, является ли файл аудио и присвоение
             if (!_fileHelper.IsAudio(fileFromDb))
                 throw new SongBadFileException("File's content type is not Audio");
+            
             fileFromDb.Song = songFromDb;
         }
 

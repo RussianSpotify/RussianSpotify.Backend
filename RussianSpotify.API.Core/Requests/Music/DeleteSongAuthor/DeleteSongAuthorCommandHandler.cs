@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
 using RussianSpotify.Contracts.Requests.Music.DeleteSongAuthor;
 
@@ -32,30 +34,26 @@ public class DeleteSongAuthorCommandHandler : IRequestHandler<DeleteSongAuthorCo
         // Достаем песню из бд
         var song = await _dbContext.Songs
             .Include(i => i.Authors)
-            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken);
-
-        if (song is null)
-            throw new SongBadRequestException("Song not found");
+            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
+            ?? throw new EntityNotFoundException<Song>(request.SongId);
 
         // Достаем текущего пользователя из бд
         var currentUserId = _userContext.CurrentUserId;
         if (currentUserId is null)
-            throw new SongInternalException("Current User Id not found");
+            throw new ForbiddenException();
 
-        // Проверка на то, пользовател не пытается удалить самого себя
+        // Проверка на то, пользователь не пытается удалить самого себя
         if (currentUserId == request.AuthorId)
             throw new SongForbiddenException("Author can't remove themself");
 
         // Проверка, является ли текущий пользователь автором данной песни
         if (song.Authors.All(i => i.Id != currentUserId))
-            throw new SongForbiddenException("User is not Author of this Song");
+            throw new ForbiddenException();
 
         // Достаем автора, которого хотим удалить
         var songAuthorToDelete = song.Authors
-            .FirstOrDefault(i => i.Id == request.AuthorId);
-
-        if (songAuthorToDelete is null)
-            throw new BadSongAuthorException("User is not Author of this Song");
+            .FirstOrDefault(i => i.Id == request.AuthorId)
+            ?? throw new EntityNotFoundException<User>(request.AuthorId);
 
         // Вносим изменения в бд
         song.RemoveAuthor(songAuthorToDelete);
