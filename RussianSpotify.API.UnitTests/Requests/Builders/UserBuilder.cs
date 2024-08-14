@@ -10,6 +10,17 @@ internal class UserBuilder
 {
     private readonly User _user = User.CreateForTest();
 
+    private UserBuilder()
+    {
+    }
+
+    /// <summary>
+    /// Создать builder
+    /// </summary>
+    /// <returns></returns>
+    public static UserBuilder CreateBuilder()
+        => new();
+    
     /// <summary>
     /// Установить имя
     /// </summary>
@@ -17,6 +28,16 @@ internal class UserBuilder
     public UserBuilder SetUsername(string username)
     {
         _user.UserName = username;
+        return this;
+    }
+
+    /// <summary>
+    /// Проставить ИД
+    /// </summary>
+    /// <param name="id">ИД</param>
+    public UserBuilder SetId(Guid id)
+    {
+        _user.Id = id;
         return this;
     }
 

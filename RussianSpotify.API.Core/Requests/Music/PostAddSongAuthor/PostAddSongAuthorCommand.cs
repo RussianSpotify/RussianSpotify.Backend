@@ -12,7 +12,8 @@ public class PostAddSongAuthorCommand : AddSongAuthorRequest, IRequest<AddSongAu
     /// Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
-    public PostAddSongAuthorCommand(AddSongAuthorRequest request) : base(request)
+    public PostAddSongAuthorCommand(AddSongAuthorRequest request)
+        : base(request)
     {
     }
 }

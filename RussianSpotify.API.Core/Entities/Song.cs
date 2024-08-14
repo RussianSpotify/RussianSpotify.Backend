@@ -103,6 +103,8 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="playsNumber">Кол-во прослушиваний</param>
     /// <param name="category">Категория</param>
     /// <param name="image">Фото</param>
+    /// <param name="authors">Авторы</param>
+    /// <param name="files">Файлы (тут музыка и картинка)</param>
     /// <returns>Тестовая сущность</returns>
     [Obsolete("Только для тестов")]
     public static Song CreateForTest(
@@ -111,7 +113,9 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
         double? duration = default,
         uint? playsNumber = default,
         Category? category = default,
-        File? image = default)
+        File? image = default,
+        List<User>? authors = default,
+        List<File>? files = default)
         => new()
         {
             Id = id,
@@ -121,6 +125,8 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
             CategoryId = default,
             Category = category ?? new Category(),
             Image = image,
+            Authors = authors ?? new(),
+            Files = files ?? new(),
         };
     
     /// <summary>

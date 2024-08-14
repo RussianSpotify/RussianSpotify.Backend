@@ -7,7 +7,7 @@ using RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 using Xunit;
 using File = RussianSpotify.API.Core.Entities.File;
 
-namespace RussianSpotify.API.UnitTests.Requests.Playlist;
+namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
 /// Тест для <see cref="PostCreatePlaylistCommandHandler"/>

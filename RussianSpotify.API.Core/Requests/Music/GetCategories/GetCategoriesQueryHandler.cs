@@ -1,7 +1,7 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Extensions;
-using RussianSpotify.Contracts.Enums;
 using RussianSpotify.Contracts.Requests.Music.GetCategories;
 
 namespace RussianSpotify.API.Core.Requests.Music.GetCategories;
@@ -11,21 +11,28 @@ namespace RussianSpotify.API.Core.Requests.Music.GetCategories;
 /// </summary>
 public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, GetCategoriesResponse>
 {
+    private readonly IDbContext _dbContext;
+
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст БД</param>
+    public GetCategoriesQueryHandler(IDbContext dbContext)
+        => _dbContext = dbContext;
+
     /// <inheritdoc/>
-    public Task<GetCategoriesResponse> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<GetCategoriesResponse> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var resultList = new List<GetCategoriesResponseItem>();
-
-        foreach (CategoryType category in Enum.GetValues(typeof(CategoryType)))
-        {
-            var categoryDescription = category.GetDescription();
-            resultList.Add(new GetCategoriesResponseItem
+        ArgumentNullException.ThrowIfNull(request);
+        
+        var result = await _dbContext.Categories
+            .Select(x => new GetCategoriesResponseItem
             {
-                CategoryNumber = (int)category,
-                CategoryName = categoryDescription
-            });
-        }
+                CategoryNumber = (int)x.CategoryName,
+                CategoryName = x.CategoryName.GetDescription(),
+            })
+            .ToListAsync(cancellationToken);
 
-        return Task.FromResult(new GetCategoriesResponse(resultList));
+        return new GetCategoriesResponse(result);
     }
 }

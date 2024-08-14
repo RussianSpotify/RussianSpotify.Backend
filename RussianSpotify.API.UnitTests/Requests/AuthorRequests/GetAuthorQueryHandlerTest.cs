@@ -4,7 +4,7 @@ using RussianSpotify.API.Core.Requests.Author.GetAuthor;
 using RussianSpotify.Contracts.Requests.Author.GetAuthor;
 using Xunit;
 
-namespace RussianSpotify.API.UnitTests.Requests.Author;
+namespace RussianSpotify.API.UnitTests.Requests.AuthorRequests;
 
 /// <summary>
 /// Тест для <see cref="GetAuthorQueryHandler"/>

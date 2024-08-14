@@ -15,8 +15,7 @@ public class GetSongContentByIdQueryHandler : IRequestHandler<GetSongContentById
 {
     private readonly IDbContext _dbContext;
     private readonly IS3Service _s3Service;
-
-
+    
     /// <summary>
     /// Конструктор
     /// </summary>
@@ -39,9 +38,9 @@ public class GetSongContentByIdQueryHandler : IRequestHandler<GetSongContentById
             throw new ArgumentNullException(nameof(request));
 
         var songFromDb = await _dbContext.Songs
-                             .Include(x => x.Files)
-                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
-                         ?? throw new EntityNotFoundException<Song>(request.Id);
+            .Include(x => x.Files)
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+            ?? throw new EntityNotFoundException<Song>(request.Id);
 
         songFromDb.Files = songFromDb.Files
             .Where(x => x.Id != songFromDb.ImageId)
@@ -51,9 +50,9 @@ public class GetSongContentByIdQueryHandler : IRequestHandler<GetSongContentById
             throw new ApplicationBaseException("У песни не может быть две ссылки на трек");
 
         var songFromS3 = await _s3Service.DownloadFileAsync(
-                             songFromDb.Files.First().Address,
-                             cancellationToken: cancellationToken)
-                         ?? throw new EntityNotFoundException<Entities.File>(songFromDb.Files.First().Address);
+            songFromDb.Files.First().Address,
+            cancellationToken: cancellationToken)
+            ?? throw new EntityNotFoundException<Entities.File>(songFromDb.Files.First().Address);
 
         songFromDb.PlaysNumber++;
 
