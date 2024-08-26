@@ -1,11 +1,8 @@
-using System.Net;
-using System.Threading.Channels;
-using Amazon.Runtime;
-using Amazon.S3;
-using Amazon.S3.Model;
 using Microsoft.Extensions.Logging;
+using Minio;
+using Minio.DataModel.Args;
+using Minio.Exceptions;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Models;
 
 namespace RussianSpotify.Data.S3;
@@ -14,61 +11,101 @@ public class S3Service : IS3Service
 {
     private const string DefaultContentType = "application/octet-stream";
 
-    /// <summary>
-    /// Поле метаданных для Названия файла
-    /// </summary>
-    private const string FilenameMetadataField = "x-amz-meta-filename";
-
-    private readonly S3Options _s3Options;
-    private readonly IAmazonS3 _client;
+    private readonly MinioOptions _minioOptions;
     private readonly ILogger<S3Service> _logger;
+    private readonly IMinioClient _minioClient;
 
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="s3Options">Настройки для S3</param>
-    /// <param name="client">Клиент http</param>
-    /// <param name="factory">Фабрика</param>
+    /// <param name="minioOptions">Настройки для S3</param>
     /// <param name="logger">Логгер</param>
+    /// <param name="minioClient">Клиент Minio</param>
     public S3Service(
-        S3Options s3Options,
-        IAmazonS3 client,
-        S3HttpClientFactory factory,
-        ILogger<S3Service> logger)
+        MinioOptions minioOptions,
+        ILogger<S3Service> logger,
+        IMinioClient minioClient)
     {
-        _s3Options = s3Options;
-        _client = client;
+        _minioOptions = minioOptions;
         _logger = logger;
-        var config = (AmazonS3Config)_client.Config;
-        config.HttpClientFactory = factory;
-        config.ForcePathStyle = true;
+        _minioClient = minioClient;
     }
-
+    
     /// <inheritdoc />
     public async Task<string> UploadAsync(
         FileContent fileContent,
-        bool needAutoCloseStream = true,
         CancellationToken cancellationToken = default)
     {
         if (fileContent.FileName == null)
             throw new ArgumentNullException(nameof(fileContent.FileName));
-
+    
         if (fileContent.Content == null)
             throw new ArgumentNullException(nameof(fileContent.Content));
 
-        var putObject = new PutObjectRequest
+        var minioFileLocation = ContentKey(fileContent.FileName);
+
+        await BucketExistAsync(_minioOptions.BucketName, cancellationToken);
+        
+        var putArgs = new PutObjectArgs()
+            .WithBucket(_minioOptions.BucketName)
+            .WithObject(minioFileLocation)
+            .WithStreamData(fileContent.Content)
+            .WithObjectSize(fileContent.Content.Length);
+
+        await _minioClient.PutObjectAsync(putArgs, cancellationToken);
+        return minioFileLocation;
+    }
+
+    /// <inheritdoc />
+    public async Task<string> GetFileUrlAsync(
+        string key,
+        string? bucket = default,
+        CancellationToken cancellationToken = default)
+    {
+        try
         {
-            BucketName = string.IsNullOrEmpty(fileContent.Bucket) ? _s3Options.BucketName : fileContent.Bucket,
-            Key = ContentKey(fileContent.FileName),
-            InputStream = fileContent.Content,
-            ContentType = string.IsNullOrEmpty(fileContent.ContentType) ? DefaultContentType : fileContent.ContentType,
-            AutoCloseStream = needAutoCloseStream,
-        };
+            await BucketExistAsync(bucket ?? _minioOptions.BucketName, cancellationToken);
+            
+            var presignedGetObjectArgs = new PresignedGetObjectArgs()
+                .WithBucket(bucket ?? _minioOptions.BucketName)
+                .WithObject(key)
+                .WithExpiry(604000);
+            
+            return await _minioClient
+                .PresignedGetObjectAsync(presignedGetObjectArgs)
+                .ConfigureAwait(false);
+        }
+        catch (MinioException e)
+        {
+            _logger.LogCritical($"Cannot get file url: {key} \nError: {e.Message}");
+            throw;
+        }
+    }
 
-        putObject.Metadata.Add(FilenameMetadataField, Uri.EscapeDataString(fileContent.FileName));
+    /// <inheritdoc />
+    public async Task DeleteAsync(
+        string key,
+        string? bucket = default,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentNullException(nameof(key));
 
-        await _client.PutObjectAsync(putObject, cancellationToken);
-        return putObject.Key;
+        try
+        {
+            await BucketExistAsync(bucket ?? _minioOptions.BucketName, cancellationToken);
+            
+            var args = new RemoveObjectArgs()
+                .WithBucket(bucket ?? _minioOptions.BucketName)
+                .WithObject(key);
+
+            await _minioClient.RemoveObjectAsync(args, cancellationToken).ConfigureAwait(false);
+        }
+        catch (MinioException e)
+        {
+            _logger.LogCritical(e.ServerMessage);
+            throw;
+        }
     }
 
     /// <inheritdoc />
@@ -79,64 +116,52 @@ public class S3Service : IS3Service
     {
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
-
-        var request = new GetObjectRequest
-        {
-            BucketName = string.IsNullOrEmpty(bucket) ? _s3Options.BucketName : bucket,
-            Key = key,
-        };
-
+    
         try
         {
-            var response = await _client.GetObjectAsync(request, cancellationToken: cancellationToken);
+            await BucketExistAsync(bucket ?? _minioOptions.BucketName, cancellationToken);
+            
+            var downloadStream = new MemoryStream();
+            var args = new GetObjectArgs()
+                .WithBucket(_minioOptions.BucketName)
+                .WithObject(key)
+                .WithCallbackStream(x =>
+                {
+                    x.CopyTo(downloadStream);
+                    downloadStream.Seek(0, SeekOrigin.Begin);
+                });
 
-            if (response?.ResponseStream == null)
-                return null;
-
-            var fileNameFromS3 = response.Metadata?.Keys.Contains(FilenameMetadataField) == true
-                ? Uri.UnescapeDataString(response.Metadata[FilenameMetadataField])
-                : "unnamed";
-
+            var stat = await _minioClient.GetObjectAsync(args, cancellationToken);
             return new FileContent(
-                content: response.ResponseStream,
-                fileName: fileNameFromS3,
-                contentType: response.Headers?.ContentType ?? DefaultContentType,
-                bucket: response.BucketName);
+                content: downloadStream,
+                fileName: stat.ObjectName,
+                contentType: stat.ContentType ?? DefaultContentType,
+                bucket: _minioOptions.BucketName);
         }
-        catch (AmazonServiceException e)
+        catch (MinioException e)
         {
-            Console.WriteLine(e.Message);
-            if (e.StatusCode == HttpStatusCode.NotFound)
-            {
-                _logger.LogCritical($"Bucket not found...");
-            }
-
+            _logger.LogCritical(e.ServerMessage);
             throw;
         }
     }
-
-    /// <inheritdoc/>
-    public async Task DeleteAsync(string key, string? bucket = default, CancellationToken cancellationToken = default)
+    
+    private async Task BucketExistAsync(string bucket, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(key))
-            throw new ArgumentNullException(nameof(key));
+        var beArgs = new BucketExistsArgs()
+            .WithBucket(bucket);
+        
+        var isBucketFound = await _minioClient
+            .BucketExistsAsync(beArgs, cancellationToken)
+            .ConfigureAwait(false);
 
-        var request = new DeleteObjectRequest
-        {
-            BucketName = string.IsNullOrEmpty(bucket) ? _s3Options.BucketName : bucket,
-            Key = key
-        };
-
-        try
-        {
-            var response = await _client.DeleteObjectAsync(request, cancellationToken);
-        }
-        catch (AmazonServiceException e)
-        {
-            _logger.LogError(e.Message);
-            var internalException = new InternalException(e.Message);
-            throw internalException;
-        }
+        if (isBucketFound)
+            return;
+        
+        var mbArgs = new MakeBucketArgs()
+            .WithBucket(_minioOptions.BucketName);
+        
+        await _minioClient
+            .MakeBucketAsync(mbArgs, cancellationToken).ConfigureAwait(false);
     }
 
     private string ContentKey(string? fileName)

@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.FileExceptions;
 
 namespace RussianSpotify.API.Core.Requests.File.DeleteFile;
@@ -21,7 +22,9 @@ public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="fileHelper">Сервис-помощник для работы с файлами в S3</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
-    public DeleteFileCommandHandler(IDbContext dbContext, IS3Service s3Service, IUserContext userContext,
+    public DeleteFileCommandHandler(
+        IDbContext dbContext,
+        IUserContext userContext,
         IFileHelper fileHelper)
     {
         _dbContext = dbContext;
@@ -33,17 +36,13 @@ public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand>
     public async Task Handle(DeleteFileCommand request, CancellationToken cancellationToken)
     {
         var fileFromDb = await _dbContext.Files
-            .FirstOrDefaultAsync(i => i.Id == request.FileId, cancellationToken);
+            .FirstOrDefaultAsync(i => i.Id == request.FileId, cancellationToken)
+            ?? throw new EntityNotFoundException<Entities.File>(request.FileId);
 
-        if (fileFromDb is null)
-            throw new FileBadRequestException("File not found");
+        if (!_userContext.CurrentUserId.HasValue)
+            throw new ForbiddenException();
 
-        var currentUserId = _userContext.CurrentUserId;
-
-        if (currentUserId is null)
-            throw new FileInternalException("Current User Id not found");
-
-        if (fileFromDb.UserId != currentUserId.Value && _userContext.RoleName != BaseRoles.AdminRoleName)
+        if (fileFromDb.UserId != _userContext.CurrentUserId && _userContext.RoleName != BaseRoles.AdminRoleName)
             throw new FileBadRequestException("You cant delete this file!");
 
         await _fileHelper.DeleteFileAsync(fileFromDb, cancellationToken);

@@ -34,7 +34,7 @@ builder.Services.AddDbContextWithIdentity(configuration.GetConnectionString("Def
 builder.Services.AddAuthenticationWithJwtAndExternalServices(configuration);
 
 // Добавлен S3 Storage
-builder.Services.AddS3Storage(builder.Configuration.GetSection("S3").Get<S3Options>()!);
+builder.Services.AddS3Storage(builder.Configuration.GetSection("MinioS3").Get<MinioOptions>()!);
 
 // Response Compression 
 builder.Services.AddResponseCompression();
@@ -43,7 +43,8 @@ builder.Services.AddResponseCompression();
 builder.Services.AddCors(opt
     => opt.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy
+            .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
     })

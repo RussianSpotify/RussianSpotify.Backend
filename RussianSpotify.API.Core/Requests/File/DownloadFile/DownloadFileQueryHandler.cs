@@ -33,16 +33,16 @@ public class DownloadFileQueryHandler : IRequestHandler<DownloadFileQuery, Downl
             throw new ArgumentNullException(nameof(request));
 
         var fileFromDb = await _dbContext.Files
-                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
-                         ?? throw new EntityNotFoundException<Entities.File>(request.Id);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+            ?? throw new EntityNotFoundException<Entities.File>(request.Id);
 
         var file = await _s3Service
-                       .DownloadFileAsync(fileFromDb.Address, cancellationToken: cancellationToken)
-                   ?? throw new EntityNotFoundException<FileContent>(fileFromDb.Address);
+            .DownloadFileAsync(fileFromDb.Address, cancellationToken: cancellationToken)
+            ?? throw new EntityNotFoundException<FileContent>(fileFromDb.Address);
 
         return new DownloadFileResponse(
             content: file.Content,
-            fileName: file.FileName,
-            contentType: file.ContentType ?? string.Empty);
+            fileName: fileFromDb.FileName ?? file.FileName,
+            contentType: file.ContentType);
     }
 }

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 using RussianSpotify.API.Core.Requests.File.DeleteFile;
 using RussianSpotify.API.Core.Requests.File.DownloadFile;
+using RussianSpotify.API.Core.Requests.File.GetFileUrl;
 using RussianSpotify.API.Core.Requests.File.GetImageById;
 using RussianSpotify.API.Core.Requests.File.UploadFile;
 using RussianSpotify.Contracts.Requests.File.DeleteFile;
+using RussianSpotify.Contracts.Requests.File.GetFileUrl;
 using RussianSpotify.Contracts.Requests.File.UploadFile;
 
 namespace RussianSpotify.API.WEB.Controllers;
@@ -56,6 +58,22 @@ public class FileController : FileBaseController
 
         return GetFileStreamResult(file, Response.Headers);
     }
+
+    /// <summary>
+    /// Получить файл в виде URL
+    /// </summary>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="id">Идентификатор файла</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Файл в виде URL</returns>
+    [HttpGet("{id}/GetFileUrl")]
+    [ProducesResponseType(type: typeof(GetFileUrlResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<GetFileUrlResponse> GetFileUrlAsync(
+        [FromServices] IMediator mediator,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
+        => await mediator.Send(new GetFileUrlQuery(id), cancellationToken);
 
     /// <summary>
     /// Получить изображение по ИД

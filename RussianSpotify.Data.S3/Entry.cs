@@ -1,7 +1,6 @@
-using Amazon.Extensions.NETCore.Setup;
-using Amazon.Runtime;
-using Amazon.S3;
 using Microsoft.Extensions.DependencyInjection;
+using Minio;
+using Minio.AspNetCore;
 using RussianSpotify.API.Core.Abstractions;
 
 namespace RussianSpotify.Data.S3;
@@ -12,7 +11,7 @@ namespace RussianSpotify.Data.S3;
 public static class Entry
 {
     public static IServiceCollection AddS3Storage(
-        this IServiceCollection serviceCollection, S3Options options)
+        this IServiceCollection serviceCollection, MinioOptions options)
     {
         if (options is null)
             throw new ArgumentNullException(nameof(options));
@@ -29,29 +28,17 @@ public static class Entry
         if (string.IsNullOrEmpty(options.ServiceUrl))
             throw new ArgumentException(nameof(options.ServiceUrl));
 
+
+        serviceCollection.AddMinio(minioOptions =>
+        {
+            minioOptions.Endpoint = options.ServiceUrl;
+            minioOptions.AccessKey = options.AccessKey;
+            minioOptions.SecretKey = options.SecretKey;
+            
+        });
+        
         serviceCollection.AddSingleton(options);
-        serviceCollection.AddSingleton<IS3Service, S3Service>();
-
-        serviceCollection
-            .AddHttpClient<S3HttpClientFactory>(opt => opt.Timeout = options.TimeOut)
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                var handler = new HttpClientHandler();
-                if (options.IsIgnoreCertificateErrors)
-                    handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
-
-                return handler;
-            })
-            .Services
-            .AddAWSService<IAmazonS3>(new AWSOptions()
-            {
-                Credentials = new BasicAWSCredentials(options.AccessKey, options.SecretKey),
-                DefaultClientConfig =
-                {
-                    ServiceURL = options.ServiceUrl,
-                    MaxErrorRetry = 0
-                }
-            });
+        serviceCollection.AddScoped<IS3Service, S3Service>();
 
         return serviceCollection;
     }
