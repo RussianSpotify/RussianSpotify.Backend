@@ -45,6 +45,7 @@ public class GetImageByIdQueryHandler : IRequestHandler<GetImageByIdQuery, GetIm
 
         using var memoryStream = new MemoryStream();
         await imageFromS3.Content.CopyToAsync(memoryStream, cancellationToken);
+        memoryStream.Seek(0, SeekOrigin.Begin); 
 
         return new GetImageByIdResponse(
             content: memoryStream.ToArray(),

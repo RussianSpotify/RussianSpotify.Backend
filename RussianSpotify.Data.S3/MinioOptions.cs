@@ -1,9 +1,9 @@
 namespace RussianSpotify.Data.S3;
 
 /// <summary>
-/// Настройки для AWS S3
+/// Настройки для Minio S3
 /// </summary>
-public class S3Options
+public class MinioOptions
 {
     /// <summary>
     /// Логин
@@ -24,11 +24,6 @@ public class S3Options
     /// Название бакета
     /// </summary>
     public string BucketName { get; set; } = default!;
-
-    /// <summary>
-    /// Игнорировать проблемы с сертификатом
-    /// </summary>
-    public bool IsIgnoreCertificateErrors { get; set; } = true;
 
     /// <summary>
     /// Таймаут

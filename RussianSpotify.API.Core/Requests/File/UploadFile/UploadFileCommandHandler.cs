@@ -1,6 +1,7 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions.FileExceptions;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.File.UploadFile;
 
@@ -21,7 +22,10 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
     /// <param name="s3Service">Сервис S3</param>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
-    public UploadFileCommandHandler(IS3Service s3Service, IDbContext dbContext, IUserContext userContext)
+    public UploadFileCommandHandler(
+        IS3Service s3Service,
+        IDbContext dbContext,
+        IUserContext userContext)
     {
         _s3Service = s3Service;
         _dbContext = dbContext;
@@ -34,16 +38,9 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
         if (request is null)
             throw new ArgumentNullException(nameof(request));
 
-        var currentUserId = _userContext.CurrentUserId;
-
-        if (currentUserId is null)
-            throw new FileInternalException("Current User Id not found");
-
-        var currentUser = _dbContext.Users
-            .FirstOrDefault(i => i.Id == currentUserId.Value);
-
-        if (currentUser is null)
-            throw new FileInternalException("Current User not found");
+        var currentUser = await _dbContext.Users
+            .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
+            ?? throw new ForbiddenException();
 
         var filesToSave = new List<Entities.File>();
         foreach (var file in request.Files)
@@ -68,14 +65,16 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
                 contentType: file.ContentType,
                 address: address,
                 size: file.FileStream.Length,
-                currentUser));
+                user: currentUser));
         }
 
         await _dbContext.Files.AddRangeAsync(filesToSave, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new UploadFileResponse(filesToSave.Select(x => new UploadFileResponseItem(
-            x.FileName ?? string.Empty,
-            x.Id)));
+        return new UploadFileResponse(
+            filesToSave
+                .Select(x => new UploadFileResponseItem(
+                    x.FileName ?? string.Empty,
+                    x.Id)));
     }
 }
