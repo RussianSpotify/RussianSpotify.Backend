@@ -25,11 +25,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 // Добавлен слой с db контекстом
 builder.Services.AddPostgreSQLLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = configuration.GetConnectionString("RedisConnection");
-    options.InstanceName = "Redis";
-});
+builder.Services.AddRedis(configuration);
 
 // Добавлен middleware для обработки исключений
 builder.Services
