@@ -1,41 +1,55 @@
+using System.Text;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Enums;
-using RussianSpotify.API.Core.Exceptions.AuthExceptions;
+using RussianSpotify.API.Core.Exceptions;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmEmail;
 
 /// <summary>
 /// Обработчик для <see cref="PostConfirmEmailCommand"/>
 /// </summary>
-public class PostConfirmEmailCommandHandler :
-    IRequestHandler<PostConfirmEmailCommand>
+public class PostConfirmEmailCommandHandler : IRequestHandler<PostConfirmEmailCommand>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IDbContext _dbContext;
+    private readonly IDistributedCache _distributedCache;
 
-    public PostConfirmEmailCommandHandler(UserManager<User> userManager)
-        => _userManager = userManager;
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="distributedCache">Кеш</param>
+    /// <param name="dbContext">Контекст БД</param>
+    public PostConfirmEmailCommandHandler(IDistributedCache distributedCache, IDbContext dbContext)
+    {
+        _distributedCache = distributedCache;
+        _dbContext = dbContext;
+    }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest}"/>
+    /// <inheritdoc />
     public async Task Handle(PostConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (string.IsNullOrWhiteSpace(request.EmailVerificationCodeFromUser))
+            throw new RequiredFieldException("Код");
 
-        if (user is null)
-            throw new NotFoundUserException(AuthErrorMessages.UserNotFound);
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
+            ?? throw new EntityNotFoundException<User>(request.Email);
 
-        var verificationResult =
-            await _userManager.ConfirmEmailAsync(user, request.EmailVerificationCodeFromUser);
+        var exceptedCode = await _distributedCache
+            .GetStringAsync(request.Email, cancellationToken)
+            ?? throw new NotFoundException("Код для данного пользователя не найден");
+        
+        if (!exceptedCode.Equals(request.EmailVerificationCodeFromUser))
+            throw new ValidationException("Введен неверный код");
 
-        if (!verificationResult.Succeeded)
-            throw new WrongConfirmationTokenException(AuthErrorMessages.WrongConfirmationToken);
+        user.IsConfirmed = true;
+        await _distributedCache.RemoveAsync(request.Email, cancellationToken);
 
-        user.EmailConfirmed = true;
-
-        await _userManager.UpdateAsync(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -10,6 +10,21 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     /// <inheritdoc />
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.Property(p => p.UserName)
+            .HasComment("Логин пользователя")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .IsRequired();
+
+        builder.Property(p => p.Email)
+            .HasComment("Почта пользователя")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .IsRequired();
+
+        builder.Property(p => p.PasswordHash)
+            .HasComment("Хеш пароля")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .IsRequired();
+        
         builder.Property(p => p.Birthday);
 
         builder.Property(p => p.Phone);
@@ -20,6 +35,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ConfigureSoftDeletableEntity();
         builder.ConfigureTimeTrackableEntity();
 
+        builder.HasMany(x => x.Roles)
+            .WithMany(y => y.Users);
+        
         builder
             .HasOne(x => x.Subscribe)
             .WithOne(y => y.User)

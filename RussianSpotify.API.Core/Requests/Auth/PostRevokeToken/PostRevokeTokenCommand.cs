@@ -8,11 +8,12 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostRevokeToken;
 /// </summary>
 public class PostRevokeTokenCommand : PostRevokeTokenRequest, IRequest
 {
-    public PostRevokeTokenCommand(PostRevokeTokenRequest request) : base(request)
-    {
-    }
-
-    public PostRevokeTokenCommand()
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    public PostRevokeTokenCommand(PostRevokeTokenRequest request)
+        : base(request)
     {
     }
 }

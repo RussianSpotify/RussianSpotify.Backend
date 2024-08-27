@@ -12,6 +12,14 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
     /// <inheritdoc />
     public void Configure(EntityTypeBuilder<Role> builder)
     {
+        builder.Property(p => p.Name)
+            .HasComment("Название роли")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .IsRequired();
+
+        builder.HasMany(x => x.Users)
+            .WithMany(y => y.Roles);
+        
         builder.HasMany(x => x.Privileges)
             .WithOne(y => y.Role)
             .HasForeignKey(y => y.RoleId)

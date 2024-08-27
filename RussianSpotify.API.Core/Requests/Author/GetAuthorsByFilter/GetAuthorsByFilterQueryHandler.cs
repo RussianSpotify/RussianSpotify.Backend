@@ -34,7 +34,8 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
     }
 
     /// <inheritdoc/>
-    public async Task<GetAuthorsByFilterResponse> Handle(GetAuthorsByFilterQuery request,
+    public async Task<GetAuthorsByFilterResponse> Handle(
+        GetAuthorsByFilterQuery request,
         CancellationToken cancellationToken)
     {
         if (request is null)
@@ -49,13 +50,14 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
             cancellationToken);
 
         var filteredUsersToList = await filteredUsers
-            .Include(i => i.AuthorPlaylists)
+            .Include(x => x.AuthorPlaylists)
+            .Include(x => x.Roles)
             .ToListAsync(cancellationToken);
 
         var authors = new List<User>();
         
         foreach (var user in filteredUsersToList)
-            if (await _roleManager.IsInRoleAsync(user, BaseRoles.AuthorRoleName, cancellationToken))
+            if (_roleManager.IsInRole(user, BaseRoles.AuthorRoleName))
                 authors.Add(user);
         
         authors = authors
@@ -69,7 +71,7 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
             .Select(i => new GetAuthorsByFilterResponseItem
             {
                 AuthorId = i.Id,
-                AuthorName = i.UserName ?? "",
+                AuthorName = i.UserName,
                 ImageId = i.UserPhotoId ?? new Guid(),
                 Albums = i.AuthorPlaylists
                     .Take(request.PlaylistCount)

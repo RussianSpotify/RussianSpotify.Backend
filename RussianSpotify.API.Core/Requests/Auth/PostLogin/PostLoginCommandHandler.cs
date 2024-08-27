@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
@@ -15,69 +19,90 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostLogin;
 /// </summary>
 public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLoginResponse>
 {
-    private readonly UserManager<User> _userManager;
-    private readonly IJwtGenerator _jwtGenerator;
-    private readonly IUserClaimsManager _claimsManager;
+    private readonly IDbContext _dbContext;
+    private readonly ITokenFactory _tokenFactory;
     private readonly IEmailSender _emailSender;
+    private readonly IPasswordService _passwordService;
+    private readonly IUserClaimsManager _userClaimsManager;
+    private readonly IJwtGenerator _jwtGenerator;
+    private readonly IDistributedCache _distributedCache;
 
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="userManager">UserManager{User} из Identity</param>
-    /// <param name="jwtGenerator">Генератор JWT</param>
-    /// <param name="claimsManager">ClaimsManager <see cref="IUserClaimsManager"/> </param>
-    /// <param name="emailSender">EmailSender <see cref="IEmailSender"/> </param>
-    public PostLoginCommandHandler(UserManager<User> userManager,
-        IJwtGenerator jwtGenerator, IUserClaimsManager claimsManager, IEmailSender emailSender)
+    /// <param name="tokenFactory">Фабрика токенов для почты</param>
+    /// <param name="dbContext">Интерфейс контекста бд</param>
+    /// <param name="emailSender">Позволяет отправлять письма на почту</param>
+    /// <param name="passwordService">Сервис для хеширования паролей</param>
+    /// <param name="userClaimsManager">Отвечает за клэймы юзера</param>
+    /// <param name="jwtGenerator">Отвечает за генерацию JWT</param>
+    /// <param name="distributedCache">Кеш</param>
+    public PostLoginCommandHandler(
+        ITokenFactory tokenFactory,
+        IDbContext dbContext,
+        IEmailSender emailSender,
+        IPasswordService passwordService,
+        IUserClaimsManager userClaimsManager,
+        IJwtGenerator jwtGenerator,
+        IDistributedCache distributedCache)
     {
-        _userManager = userManager;
-        _jwtGenerator = jwtGenerator;
-        _claimsManager = claimsManager;
+        _tokenFactory = tokenFactory;
+        _dbContext = dbContext;
         _emailSender = emailSender;
+        _passwordService = passwordService;
+        _userClaimsManager = userClaimsManager;
+        _jwtGenerator = jwtGenerator;
+        _distributedCache = distributedCache;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc />
     public async Task<PostLoginResponse> Handle(PostLoginCommand request, CancellationToken cancellationToken)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
+        
+        var user = await _dbContext.Users
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
+            ?? throw new EntityNotFoundException<User>(request.Email);
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
-
-        if (user is null)
-            throw new NotFoundUserException(AuthErrorMessages.UserNotFound);
-
-        if (!user.EmailConfirmed)
+        if (!user.IsConfirmed)
         {
-            var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationToken = _tokenFactory.GetToken();
 
-            var messageTemplate =
-                await EmailTemplateHelper.GetEmailTemplateAsync(Templates.SendEmailConfirmationMessage,
-                    cancellationToken);
+            var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
+                Templates.SendEmailConfirmationMessage,
+                cancellationToken);
 
             var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
 
             var message = messageTemplate.ReplacePlaceholders(placeholders);
+            
+            await _distributedCache.RemoveAsync(request.Email, cancellationToken);
+            await _distributedCache.SetStringAsync(
+                request.Email,
+                confirmationToken,
+                cancellationToken);
 
-            await _emailSender.SendEmailAsync(user.Email!,
-                message, cancellationToken);
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                message,
+                cancellationToken);
 
             throw new NotConfirmedEmailException(AuthErrorMessages.NotConfirmedEmail);
         }
 
-        var isCorrectPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+        var isCorrectPassword = _passwordService.VerifyPassword(request.Password, user.PasswordHash);
 
         if (!isCorrectPassword)
-            throw new WrongPasswordException(AuthErrorMessages.WrongPassword);
+            throw new ValidationException("Пароль или логин неверный");
 
-        var userClaims = await _claimsManager.GetUserClaimsAsync(user, cancellationToken);
+        var userClaims = _userClaimsManager.GetUserClaims(user);
 
         user.AccessToken = _jwtGenerator.GenerateToken(userClaims);
         user.RefreshToken = _jwtGenerator.GenerateRefreshToken();
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(TokenConfiguration.RefreshTokenExpiryDays);
 
-        await _userManager.UpdateAsync(user);
-
-        return new PostLoginResponse { AccessToken = user.AccessToken, RefreshToken = user.RefreshToken };
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return new PostLoginResponse(user.AccessToken, user.RefreshToken);
     }
 }

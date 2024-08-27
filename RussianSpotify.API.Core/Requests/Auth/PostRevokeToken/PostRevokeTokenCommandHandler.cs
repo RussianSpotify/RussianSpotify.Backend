@@ -1,8 +1,8 @@
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Enums;
-using RussianSpotify.API.Core.Exceptions.AuthExceptions;
+using RussianSpotify.API.Core.Exceptions;
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostRevokeToken;
 
@@ -11,23 +11,32 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostRevokeToken;
 /// </summary>
 public class PostRevokeTokenCommandHandler : IRequestHandler<PostRevokeTokenCommand>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IDbContext _dbContext;
+    private readonly IUserContext _userContext;
 
-    public PostRevokeTokenCommandHandler(UserManager<User> userManager)
-        => _userManager = userManager;
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Контекст БД</param>
+    /// <param name="userContext">Контекс текущего пользоавтеля</param>
+    public PostRevokeTokenCommandHandler(IDbContext dbContext, IUserContext userContext)
+    {
+        _dbContext = dbContext;
+        _userContext = userContext;
+    }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc />
     public async Task Handle(PostRevokeTokenCommand request, CancellationToken cancellationToken)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
-
-        var user = await _userManager.FindByEmailAsync(request.Email);
-
-        if (user is null)
-            throw new NotFoundUserException(AuthErrorMessages.UserNotFound);
+        ArgumentNullException.ThrowIfNull(request);
+        
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(
+                x => x.Email == request.Email && _userContext.CurrentUserId == x.Id,
+                cancellationToken)
+            ?? throw new EntityNotFoundException<User>(request.Email);
 
         user.RefreshToken = null;
-        await _userManager.UpdateAsync(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

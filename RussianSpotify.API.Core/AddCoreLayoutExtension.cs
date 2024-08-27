@@ -35,7 +35,10 @@ public static class AddCoreLayoutExtension
         services.AddScoped<IFileHelper, FileHelper>();
         services.AddScoped<IRoleManager, RoleManager>();
         services.AddScoped<IFilterHandler, FilterHandler>();
-
+        services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<ITokenFactory, TokenFactory>();
+        services.AddScoped<IPasswordChanger, PasswordChanger>();
+        
         return services;
     }
 }

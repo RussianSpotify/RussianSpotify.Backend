@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RussianSpotift.API.Data.PostgreSQL.Confugurations;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using File = RussianSpotify.API.Core.Entities.File;
@@ -10,26 +8,25 @@ namespace RussianSpotift.API.Data.PostgreSQL;
 /// <summary>
 /// Контекст БД
 /// </summary>
-public class EfContext
-    : IdentityDbContext<User, Role, Guid>, IDbContext
+public class EfContext : DbContext, IDbContext
 {
-    /// <summary>
-    /// Пустой конструктор
-    /// </summary>
-    public EfContext()
-    {
-    }
-
     /// <summary>
     /// Конструктор
     /// </summary>
-    public EfContext(DbContextOptions options)
+    public EfContext(DbContextOptions<EfContext> options)
         : base(options)
     {
     }
 
-    /// <inheritdoc cref="IdentityDbContext{TUser,TRole,TKey,TUserClaim,TUserRole,TUserLogin,TRoleClaim,TUserToken}.Roles" />
-    public override DbSet<Role> Roles { get; set; } = default!;
+    public EfContext()
+    {
+    }
+    
+    /// <inheritdoc />
+    public DbSet<User> Users { get; set; }
+
+    /// <inheritdoc />
+    public DbSet<Role> Roles { get; set; }
 
     /// <inheritdoc />
     public DbSet<RolePrivilege> Privileges { get; set; } = default!;
@@ -61,7 +58,6 @@ public class EfContext
         ConfigureGlobalFilters(builder);
         
         builder.ApplyConfigurationsFromAssembly(typeof(Entry).Assembly);
-        base.OnModelCreating(builder);
     }
 
     private static void ConfigureGlobalFilters(ModelBuilder builder)

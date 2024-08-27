@@ -57,10 +57,9 @@ public class PostAddSongAuthorCommandHandler : IRequestHandler<PostAddSongAuthor
             ?? throw new EntityNotFoundException<User>(request.AuthorEmail);
 
         // Проверка, является ли добавляемый пользовател автором
-        var ifContainsAuthorRole = await _roleManager.IsInRoleAsync(
+        var ifContainsAuthorRole = _roleManager.IsInRole(
             userFromDb,
-            BaseRoles.AuthorRoleName,
-            cancellationToken);
+            BaseRoles.AuthorRoleName);
         
         if (!ifContainsAuthorRole)
             throw new SongBadRequestException("User is not Author");

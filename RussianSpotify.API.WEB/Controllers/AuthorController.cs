@@ -37,7 +37,8 @@ public class AuthorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<GetAuthorResponse> Author([FromQuery] GetAuthorRequest request,
+    public async Task<GetAuthorResponse> Author(
+        [FromQuery] GetAuthorRequest request,
         CancellationToken cancellationToken)
     {
         var query = new GetAuthorQuery(request);

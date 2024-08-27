@@ -52,13 +52,13 @@ public class Subscribe : BaseEntity, ISoftDeletable, ITimeTrackable
         Guid? id = default,
         DateTime? dateStart = default,
         DateTime? dateEnd = default,
-        User? user = default)
+        User? user = default!)
         => new()
         {
             Id = id ?? default,
             DateStart = dateStart,
             DateEnd = dateEnd,
-            User = user ?? new User(),
+            User = user ?? new User("123", "123", "123"),
             UserId = user?.Id ?? default,
         };
 }

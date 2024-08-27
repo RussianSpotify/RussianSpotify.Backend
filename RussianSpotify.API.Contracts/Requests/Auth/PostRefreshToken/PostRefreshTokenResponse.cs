@@ -1,14 +1,28 @@
 namespace RussianSpotify.Contracts.Requests.Auth.PostRefreshToken;
 
+/// <summary>
+/// Ответ на обновление токена
+/// </summary>
 public class PostRefreshTokenResponse
 {
     /// <summary>
-    /// JWT
+    /// Конструктор
     /// </summary>
-    public string AccessToken { get; set; } = default!;
+    /// <param name="accessToken"></param>
+    /// <param name="refreshToken"></param>
+    public PostRefreshTokenResponse(string accessToken, string refreshToken)
+    {
+        AccessToken = accessToken;
+        RefreshToken = refreshToken;
+    }
 
     /// <summary>
-    /// Токен для обновления JWT
+    /// Токен доступа
     /// </summary>
-    public string RefreshToken { get; set; } = default!;
+    public string AccessToken { get; set; }
+
+    /// <summary>
+    /// Токен обновления
+    /// </summary>
+    public string RefreshToken { get; set; }
 }

@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Core.Exceptions;
 
 namespace RussianSpotify.API.Core.Services;
 
 /// <inheritdoc cref="IRoleManager"/>
 public class RoleManager : IRoleManager
 {
-    private readonly UserManager<User> _userManager;
-
-    public RoleManager(UserManager<User> userManager)
-    {
-        _userManager = userManager;
-    }
-
     /// <inheritdoc cref="IRoleManager"/>
-    public async Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken = new())
+    public bool IsInRole(User user, string roleName)
     {
-        var roles = await _userManager.GetRolesAsync(user);
+        if (user.Roles is null)
+            throw new NotIncludedException(nameof(user.Roles));
+        
+        var roles = user.Roles
+            .Select(x => x.Name)
+            .ToList();
 
         return roles.Contains(roleName);
     }

@@ -48,7 +48,7 @@ public class DbSeeder : IDbSeeder
 
         var rolesToSeed = BaseRoles
             .Where(x => !existsRolesInDb.Contains(x.Key))
-            .Select(x => new Role { Id = x.Key, Name = x.Value, NormalizedName = x.Value.ToUpper() })
+            .Select(x => new Role { Id = x.Key, Name = x.Value })
             .ToList();
 
         rolesToSeed.ForEach(x =>

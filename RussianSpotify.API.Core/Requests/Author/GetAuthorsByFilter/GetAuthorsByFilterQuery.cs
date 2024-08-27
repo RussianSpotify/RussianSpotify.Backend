@@ -1,5 +1,4 @@
 using MediatR;
-using RussianSpotify.Contracts.Models;
 using RussianSpotify.Contracts.Requests.Author.GetAuthorsByFilter;
 
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthorsByFilter;

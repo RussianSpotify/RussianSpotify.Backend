@@ -19,9 +19,9 @@ public static class Entry
 
         serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Entry).Assembly));
         serviceCollection.AddScoped<IDbSeeder, DbSeeder>();
-        serviceCollection.AddDbContext<EfContext>();
         serviceCollection.AddScoped<IDbContext, EfContext>();
         serviceCollection.AddTransient<Migrator>();
         serviceCollection.AddLogging();
+        serviceCollection.AddHttpContextAccessor();
     }
 }
