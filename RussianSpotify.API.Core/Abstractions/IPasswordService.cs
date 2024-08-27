@@ -19,6 +19,6 @@ public interface IPasswordService
     /// </summary>
     /// <param name="password">Пароль</param>
     /// <param name="hash">Хеш пароля</param>
-    /// <returns>Верны</returns>
+    /// <returns>Верны ли</returns>
     public bool VerifyPassword(string password, string hash);
 }

@@ -64,7 +64,7 @@ public interface IDbContext
     /// Сохранить изменения
     /// </summary>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>-</returns>
+    /// <returns>Кол-во затронутых записей</returns>
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     
     /// <summary>
