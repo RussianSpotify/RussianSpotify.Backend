@@ -58,7 +58,7 @@ public class Subscribe : BaseEntity, ISoftDeletable, ITimeTrackable
             Id = id ?? default,
             DateStart = dateStart,
             DateEnd = dateEnd,
-            User = user,
+            User = user ?? new User("123", "123", "123"),
             UserId = user?.Id ?? default,
         };
 }
