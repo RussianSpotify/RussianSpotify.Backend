@@ -46,14 +46,12 @@ public class PostConfirmPasswordResetCommandHandler : IRequestHandler<PostConfir
             ?? throw new EntityNotFoundException<User>(request.Email);
 
         var code = await _distributedCache
-            .GetAsync($"{Prefix}{request.Email}", cancellationToken);
+            .GetStringAsync($"{Prefix}{request.Email}", cancellationToken);
 
         if (code is null)
             throw new NotFoundException("Код не найден.");
-
-        var codeToString = Encoding.UTF8.GetString(code);
         
-        if (!request.VerificationCodeFromUser.Equals(codeToString))
+        if (!request.VerificationCodeFromUser.Equals(code))
             throw new ValidationException("Код неверный");
         
         var newHash = _passwordService.HashPassword(request.NewPassword);

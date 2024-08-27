@@ -78,9 +78,9 @@ public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLog
             var message = messageTemplate.ReplacePlaceholders(placeholders);
             
             await _distributedCache.RemoveAsync(request.Email, cancellationToken);
-            await _distributedCache.SetAsync(
+            await _distributedCache.SetStringAsync(
                 request.Email,
-                Encoding.UTF8.GetBytes(confirmationToken),
+                confirmationToken,
                 cancellationToken);
 
             await _emailSender.SendEmailAsync(

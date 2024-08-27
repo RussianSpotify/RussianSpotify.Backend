@@ -94,7 +94,7 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
         var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = token };
 
         var message = messageTemplate.ReplacePlaceholders(placeholders);
-        await _cache.SetAsync(request.Email, Encoding.UTF8.GetBytes(token), cancellationToken);
+        await _cache.SetStringAsync(request.Email, token, cancellationToken);
         
         await _emailSender.SendEmailAsync(
             user.Email,

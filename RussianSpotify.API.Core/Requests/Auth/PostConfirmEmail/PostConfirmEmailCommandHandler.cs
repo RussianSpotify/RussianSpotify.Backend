@@ -40,11 +40,9 @@ public class PostConfirmEmailCommandHandler : IRequestHandler<PostConfirmEmailCo
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
             ?? throw new EntityNotFoundException<User>(request.Email);
 
-        var exceptedCodeBytes = await _distributedCache
-            .GetAsync(request.Email, cancellationToken)
+        var exceptedCode = await _distributedCache
+            .GetStringAsync(request.Email, cancellationToken)
             ?? throw new NotFoundException("Код для данного пользователя не найден");
-        
-        var exceptedCode = Encoding.UTF8.GetString(exceptedCodeBytes);
         
         if (!exceptedCode.Equals(request.EmailVerificationCodeFromUser))
             throw new ValidationException("Введен неверный код");

@@ -63,9 +63,9 @@ public class PostResetPasswordCommandHandler : IRequestHandler<PostResetPassword
         
         var message = messageTemplate.ReplacePlaceholders(placeholders);
 
-        await _distributedCache.SetAsync(
+        await _distributedCache.SetStringAsync(
             $"{Prefix}{request.Email}",
-            Encoding.UTF8.GetBytes(confirmToken),
+            confirmToken,
             cancellationToken);
         
         await _emailSender.SendEmailAsync(request.Email, message, cancellationToken);
