@@ -8,11 +8,12 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmEmail;
 /// </summary>
 public class PostConfirmEmailCommand : PostConfirmEmailRequest, IRequest
 {
-    public PostConfirmEmailCommand(PostConfirmEmailRequest request) : base(request)
-    {
-    }
-
-    public PostConfirmEmailCommand()
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    public PostConfirmEmailCommand(PostConfirmEmailRequest request)
+        : base(request)
     {
     }
 }

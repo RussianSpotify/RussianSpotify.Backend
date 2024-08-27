@@ -8,7 +8,6 @@ using RussianSpotify.API.Core.Requests.Auth.PostRefreshToken;
 using RussianSpotify.API.Core.Requests.Auth.PostRegister;
 using RussianSpotify.API.Core.Requests.Auth.PostResetPassword;
 using RussianSpotify.API.Core.Requests.Auth.PostRevokeToken;
-using RussianSpotify.API.Core.Requests.Auth.PostValidatePasswordResetConfirmationToken;
 using RussianSpotify.Contracts.Requests.Auth.PostConfirmEmail;
 using RussianSpotify.Contracts.Requests.Auth.PostConfirmPasswordReset;
 using RussianSpotify.Contracts.Requests.Auth.PostLogin;
@@ -16,7 +15,6 @@ using RussianSpotify.Contracts.Requests.Auth.PostRefreshToken;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 using RussianSpotify.Contracts.Requests.Auth.PostResetPassword;
 using RussianSpotify.Contracts.Requests.Auth.PostRevokeToken;
-using RussianSpotify.Contracts.Requests.Auth.PostValidatePasswordResetConfirmationToken;
 
 namespace RussianSpotify.API.WEB.Controllers;
 
@@ -27,163 +25,111 @@ namespace RussianSpotify.API.WEB.Controllers;
 [Route("api/[controller]/")]
 public class AuthController : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    /// <summary>
-    /// Конструктор
-    /// </summary>
-    /// <param name="mediator"></param>
-    public AuthController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-    /// <summary>
-    /// Логинит пользователя и возвращает JWT токен, если пользователь залогинился
-    /// </summary>
-    /// <param name="request">Post Login Request(Email и Password)</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>JWT токен</returns>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если у пользователя некорректные данные, которые не прошли валидацию</response>
-    /// <response code="401">Если у пользователя некорректные данные(неверная почта или пароль)</response>
-    [HttpPost("Login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<PostLoginResponse> Login([FromBody] PostLoginRequest request,
-        CancellationToken cancellationToken)
-    {
-        var command = new PostLoginCommand(request);
-        var response = await _mediator.Send(command, cancellationToken);
-        return response;
-    }
-
     /// <summary>
     /// Регистрация пользователя
     /// </summary>
-    /// <param name="request">Post Register Request(Email, UserName, Password, PasswordConfirm)</param>
-    /// <param name="cancellationToken"></param>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если у пользователя некорректные данные, которые не прошли валидацию</response>
-    /// <response code="500">Если пользователь уже есть в системе</response>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("Register")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<PostRegisterResponse> Register([FromBody] PostRegisterRequest request,
+    [ProducesResponseType(type: typeof(PostRegisterResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<PostRegisterResponse> RegisterAsync(
+        [FromServices] IMediator mediator,
+        [FromBody] PostRegisterRequest request,
         CancellationToken cancellationToken)
-    {
-        var command = new PostRegisterCommand(request);
-        return await _mediator.Send(command, cancellationToken);
-    }
+        => await mediator.Send(new PostRegisterCommand(request), cancellationToken);
 
     /// <summary>
-    /// Сброс пароля
+    /// Войти в систему
     /// </summary>
-    /// <param name="request">Post Reset Request(Email)</param>
-    /// <param name="cancellationToken"></param>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если у пользователя некорректные данные, которые не прошли валидацию</response>
-    /// <response code="500">Если не получилось изменить пароль</response>
-    [HttpPost("ResetPassword")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<PostResetPasswordResponse> ResetPassword([FromBody] PostResetPasswordRequest request,
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Пара токенов</returns>
+    [HttpPost("Login")]
+    [ProducesResponseType(type: typeof(PostLoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<PostLoginResponse> LoginAsync(
+        [FromServices] IMediator mediator,
+        [FromBody] PostLoginRequest request,
         CancellationToken cancellationToken)
-    {
-        var command = new PostResetPasswordCommand(request);
-        return await _mediator.Send(command, cancellationToken);
-    }
-
-    /// <summary>
-    /// Обновление JWT
-    /// </summary>
-    /// <param name="request">Post Refresh Token Request(JWT, Refresh Token)</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Post Refresh Token Response(JWT, Refresh Token)</returns>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если у пользователя просрочен RefreshToken или в JWT нет нужных Claims</response>
-    [HttpPost("RefreshToken")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<PostRefreshTokenResponse> RefreshToken([FromBody] PostRefreshTokenRequest request,
-        CancellationToken cancellationToken)
-    {
-        var command = new PostRefreshTokenCommand(request);
-        return await _mediator.Send(command, cancellationToken);
-    }
-
-    /// <summary>
-    /// Удаление Refresh Token
-    /// </summary>
-    /// <param name="request">PostRevokeTokenRequest(Email)</param>
-    /// <param name="cancellationToken"></param>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если пользователя с таким Email нет</response>
-    /// <response code="401">Если пользователь не авторизован</response>
-    [Authorize]
-    [HttpPost("RevokeToken")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task RevokeToken([FromBody] PostRevokeTokenRequest request, CancellationToken cancellationToken)
-    {
-        var command = new PostRevokeTokenCommand(request);
-        await _mediator.Send(command, cancellationToken);
-    }
+        => await mediator.Send(new PostLoginCommand(request), cancellationToken);
 
     /// <summary>
     /// Подтверждение почты
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если пользователь ввёл неверный код подтверждение</response>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("ConfirmEmail")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task ConfirmEmail([FromBody] PostConfirmEmailRequest request,
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task ConfirmEmailAsync(
+        [FromServices] IMediator mediator,
+        [FromBody] PostConfirmEmailRequest request,
         CancellationToken cancellationToken)
-    {
-        var command = new PostConfirmEmailCommand(request);
-        await _mediator.Send(command, cancellationToken);
-    }
+        => await mediator.Send(new PostConfirmEmailCommand(request), cancellationToken);
 
     /// <summary>
-    /// Валидация токена подтверждения сброса пароля
+    /// Обновление JWT
     /// </summary>
-    /// <param name="request">PostValidatePasswordResetConfirmationTokenRequest(VerificationCodeFromUser)</param>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если пользователь ввёл неверный код подтверждение</response>
-    [HttpPost("ValidatePasswordResetConfirmationToken")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task ValidatePasswordResetConfirmationToken(
-        [FromBody] PostValidatePasswordResetConfirmationTokenRequest request,
+    [HttpPost("RefreshToken")]
+    [ProducesResponseType(type: typeof(PostRefreshTokenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<PostRefreshTokenResponse> RefreshToken(
+        [FromServices] IMediator mediator,
+        [FromBody] PostRefreshTokenRequest request,
         CancellationToken cancellationToken)
-    {
-        var command = new PostValidatePasswordResetConfirmationTokenCommand(request);
-        await _mediator.Send(command, cancellationToken);
-    }
+        => await mediator.Send(new PostRefreshTokenCommand(request), cancellationToken);
+
+    /// <summary>
+    /// Удаление Refresh Token
+    /// </summary>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [Authorize]
+    [HttpPost("RevokeToken")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task RevokeToken(
+        [FromServices] IMediator mediator,
+        [FromBody] PostRevokeTokenRequest request,
+        CancellationToken cancellationToken)
+        => await mediator.Send(new PostRevokeTokenCommand(request), cancellationToken);
+
+    /// <summary>
+    /// Сброс пароля
+    /// </summary>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    [HttpPost("ResetPassword")]
+    [ProducesResponseType(type: typeof(PostResetPasswordResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(type: typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<PostResetPasswordResponse> ResetPassword(
+        [FromServices] IMediator mediator,
+        [FromBody] PostResetPasswordRequest request,
+        CancellationToken cancellationToken)
+        => await mediator.Send(new PostResetPasswordCommand(request), cancellationToken);
 
     /// <summary>
     /// Подтверждение сброса пароля
     /// </summary>
-    /// <param name="request">PostConfirmPasswordResetRequest</param>
+    /// <param name="mediator">Медиатор CQRS</param>
+    /// <param name="request">Запрос</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <response code="200">Если всё хорошо</response>
-    /// <response code="400">Если пришёл неверный код подтверждение, или пароли не совпадают,
-    /// или текщий пароль равен новому</response>
     [HttpPost("ConfirmPasswordReset")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task ConfirmPasswordReset([FromBody] PostConfirmPasswordResetRequest request,
+    public async Task ConfirmPasswordReset(
+        [FromServices] IMediator mediator,
+        [FromBody] PostConfirmPasswordResetRequest request,
         CancellationToken cancellationToken)
-    {
-        var command = new PostConfirmPasswordResetCommand(request);
-        await _mediator.Send(command, cancellationToken);
-    }
+        => await mediator.Send(new PostConfirmPasswordResetCommand(request), cancellationToken);
 }

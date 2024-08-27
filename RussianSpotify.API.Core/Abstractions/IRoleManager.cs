@@ -13,5 +13,5 @@ public interface IRoleManager
     /// <param name="user">User</param>
     /// <param name="roleName">Имя роли</param>
     /// <returns>Принадлежит ли user роли под именем roleName</returns>
-    public Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken = new());
+    public bool IsInRole(User user, string roleName);
 }

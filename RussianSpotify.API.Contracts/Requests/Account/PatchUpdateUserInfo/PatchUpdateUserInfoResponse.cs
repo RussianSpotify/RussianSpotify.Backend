@@ -6,12 +6,23 @@ namespace RussianSpotify.Contracts.Requests.Account.PatchUpdateUserInfo;
 public class PatchUpdateUserInfoResponse
 {
     /// <summary>
-    /// JWT
+    /// Конструктор
     /// </summary>
-    public string AccessToken { get; set; } = default!;
+    /// <param name="accessToken">Токен доступа</param>
+    /// <param name="refreshToken">Токен обновления</param>
+    public PatchUpdateUserInfoResponse(string accessToken, string refreshToken)
+    {
+        AccessToken = accessToken;
+        RefreshToken = refreshToken;
+    }
 
     /// <summary>
-    /// Refresh Token
+    /// Токен доступа
     /// </summary>
-    public string RefreshToken { get; set; } = default!;
+    public string AccessToken { get; set; }
+
+    /// <summary>
+    /// Токен обновления
+    /// </summary>
+    public string RefreshToken { get; set; }
 }

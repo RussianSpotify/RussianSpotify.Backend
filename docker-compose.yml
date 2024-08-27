@@ -14,5 +14,11 @@ services:
       - "9000:9000"
       - "9001:9001"
 
+  redis:
+    container_name: RussianSpotify.API.Redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
 volumes:
   minio_data:

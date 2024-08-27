@@ -8,6 +8,7 @@ using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.WEB.Middlewares;
 using RussianSpotify.API.Worker;
 using RussianSpotify.Data.S3;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -21,14 +22,20 @@ builder.Services.AddHangfireWorker();
 // Добавлен медиатр
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
+// Добавлен слой с db контекстом
+builder.Services.AddPostgreSQLLayout();
+builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = configuration.GetConnectionString("RedisConnection");
+    options.InstanceName = "Redis";
+});
+
 // Добавлен middleware для обработки исключений
 builder.Services
     .AddSingleton<ExceptionMiddleware>()
     .AddSingleton<UpdateInterceptor>()
     .AddSingleton<SoftDeleteInterceptor>();
-
-// Добавлен db контекст, настроен identity с юзерами и ролями, добавлен стор с identity таблицами
-builder.Services.AddDbContextWithIdentity(configuration.GetConnectionString("DefaultConnection")!);
 
 // Добавлена аутентификация и jwt bearer
 builder.Services.AddAuthenticationWithJwtAndExternalServices(configuration);
@@ -49,9 +56,6 @@ builder.Services.AddCors(opt
             .AllowAnyHeader();
     })
 );
-
-// Добавлен слой с db контекстом
-builder.Services.AddPostgreSQLLayout();
 
 // Добавлен слой Core
 builder.Services.AddCoreLayout();

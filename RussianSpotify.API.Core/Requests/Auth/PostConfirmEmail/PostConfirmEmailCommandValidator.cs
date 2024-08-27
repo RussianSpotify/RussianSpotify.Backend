@@ -6,8 +6,7 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmEmail;
 /// <summary>
 /// Валидатор для <see cref="PostConfirmEmailCommand"/>
 /// </summary>
-public class PostConfirmEmailCommandValidator :
-    AbstractValidator<PostConfirmEmailCommand>
+public class PostConfirmEmailCommandValidator : AbstractValidator<PostConfirmEmailCommand>
 {
     public PostConfirmEmailCommandValidator()
     {

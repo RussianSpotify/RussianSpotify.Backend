@@ -1,11 +1,8 @@
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.AccountExceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Account.PatchUpdateUserInfo;
@@ -18,40 +15,40 @@ namespace RussianSpotify.API.Core.Requests.Account.PatchUpdateUserInfo;
 public class PatchUpdateUserInfoCommandHandler
     : IRequestHandler<PatchUpdateUserInfoCommand, PatchUpdateUserInfoResponse>
 {
-    private readonly UserManager<User> _userManager;
     private readonly IUserContext _userContext;
     private readonly IUserClaimsManager _claimsManager;
     private readonly IJwtGenerator _jwtGenerator;
     private readonly IEmailSender _emailSender;
     private readonly IFileHelper _fileHelper;
     private readonly IDbContext _dbContext;
+    private readonly IPasswordChanger _passwordChanger;
 
     /// <summary>
-    /// 
+    /// Конструктор
     /// </summary>
-    /// <param name="userManager">UserManager{User} из Identity</param>
     /// <param name="userContext">UserContext <see cref="IUserContext"/></param>
     /// <param name="claimsManager">Claims Manager <see cref="IUserClaimsManager"/>/></param>
     /// <param name="jwtGenerator">Генератор JWT токенов</param>
     /// <param name="emailSender">Email sender <see cref="IEmailSender"/></param>
-    /// <param name="fileHelper"></param>
-    /// <param name="dbContext"></param>
+    /// <param name="fileHelper">Сервис-помощник для работы с файлами</param>
+    /// <param name="dbContext">Интерфейс контекста бд</param>
+    /// <param name="passwordChanger">Сервис по смене пароля</param>
     public PatchUpdateUserInfoCommandHandler(
-        UserManager<User> userManager,
         IUserContext userContext,
         IUserClaimsManager claimsManager,
         IJwtGenerator jwtGenerator,
         IEmailSender emailSender,
         IFileHelper fileHelper,
-        IDbContext dbContext)
+        IDbContext dbContext,
+        IPasswordChanger passwordChanger)
     {
-        _userManager = userManager;
         _userContext = userContext;
         _claimsManager = claimsManager;
         _jwtGenerator = jwtGenerator;
         _emailSender = emailSender;
         _fileHelper = fileHelper;
         _dbContext = dbContext;
+        _passwordChanger = passwordChanger;
     }
 
     /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
@@ -61,28 +58,20 @@ public class PatchUpdateUserInfoCommandHandler
         if (request is null)
             throw new ArgumentNullException(nameof(request));
 
-        var userId = _userContext.CurrentUserId;
-
-        if (userId is null)
-            throw new CurrentUserIdNotFound("User Id was not found");
-
         var user = await _dbContext.Users.Include(i => i.UserPhoto)
-            .FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
+            .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
+            ?? throw new ForbiddenException();
 
-        if (user is null)
-            throw new NotFoundUserException($"User with id: {userId}");
-
-        user.UserName = !string.IsNullOrWhiteSpace(request.UserName) ? request.UserName : user.UserName;
+        user.UserName = !string.IsNullOrWhiteSpace(request.UserName)
+            ? request.UserName
+            : user.UserName;
 
         if (request.FilePhotoId is not null)
         {
-            Console.WriteLine(request.FilePhotoId.Value);
             // Достаем картину из бд
             var imageFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(i => i.Id == request.FilePhotoId.Value, cancellationToken);
-
-            if (imageFromDb is null)
-                throw new UserBadImageException("File not found");
+                .FirstOrDefaultAsync(i => i.Id == request.FilePhotoId.Value, cancellationToken)
+                ?? throw new EntityNotFoundException<Entities.File>(request.FilePhotoId.Value);
 
             // Проверка, является ли файл картинкой и присвоение
             if (!_fileHelper.IsImage(imageFromDb))
@@ -95,44 +84,24 @@ public class PatchUpdateUserInfoCommandHandler
             user.UserPhoto = imageFromDb;
         }
 
-        var claims = await _claimsManager.GetUserClaimsAsync(user, cancellationToken);
+        var claims = _claimsManager.GetUserClaims(user);
 
         user.AccessToken = _jwtGenerator.GenerateToken(claims);
         user.RefreshToken = _jwtGenerator.GenerateRefreshToken();
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(TokenConfiguration.RefreshTokenExpiryDays);
 
-        var message =
-            await EmailTemplateHelper.GetEmailTemplateAsync(Templates.SendUserInfoUpdatedNotification,
-                cancellationToken);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        var changePasswordResult = IdentityResult.Success;
+        var message = await EmailTemplateHelper.GetEmailTemplateAsync(
+            Templates.SendUserInfoUpdatedNotification,
+            cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(request.NewPassword)
             && !string.IsNullOrWhiteSpace(request.NewPasswordConfirm)
             && request.NewPasswordConfirm!.Equals(request.NewPassword, StringComparison.Ordinal))
-        {
-            var identityUser = await _userManager.Users
-                .FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
+            _passwordChanger.ChangePassword(user, request.CurrentPassword!, request.NewPassword);
 
-            if (string.IsNullOrWhiteSpace(identityUser!.PasswordHash))
-            {
-                var token = await _userManager.GeneratePasswordResetTokenAsync(identityUser);
-                changePasswordResult = await _userManager.ResetPasswordAsync(identityUser, token, request.NewPassword);
-            }
-            else
-                changePasswordResult =
-                    await _userManager.ChangePasswordAsync(identityUser,
-                        request.CurrentPassword!, request.NewPassword);
-        }
+        await _emailSender.SendEmailAsync(user.Email, message, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        if (!changePasswordResult.Succeeded)
-            throw new InvalidChangePasswordException(string.Join("\n",
-                changePasswordResult.Errors.Select(x => x.Description)));
-
-        await _emailSender.SendEmailAsync(user.Email!, message, cancellationToken);
-
-        return new PatchUpdateUserInfoResponse { AccessToken = user.AccessToken, RefreshToken = user.RefreshToken };
+        return new PatchUpdateUserInfoResponse(user.AccessToken, user.RefreshToken);
     }
 }

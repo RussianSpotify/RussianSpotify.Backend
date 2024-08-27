@@ -8,11 +8,12 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostRefreshToken;
 /// </summary>
 public class PostRefreshTokenCommand : PostRefreshTokenRequest, IRequest<PostRefreshTokenResponse>
 {
-    public PostRefreshTokenCommand(PostRefreshTokenRequest request) : base(request)
-    {
-    }
-
-    public PostRefreshTokenCommand()
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    public PostRefreshTokenCommand(PostRefreshTokenRequest request)
+        : base(request)
     {
     }
 }

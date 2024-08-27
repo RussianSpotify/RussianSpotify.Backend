@@ -1,10 +1,10 @@
+using System.Text;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Enums;
-using RussianSpotify.API.Core.Exceptions.AccountExceptions;
-using RussianSpotify.API.Core.Exceptions.AuthExceptions;
+using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Auth.PostResetPassword;
@@ -14,41 +14,62 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostResetPassword;
 /// <summary>
 /// Обработчик для <see cref="PostResetPasswordCommand"/>
 /// </summary>
-public class PostResetPasswordCommandHandler :
-    IRequestHandler<PostResetPasswordCommand, PostResetPasswordResponse>
+public class PostResetPasswordCommandHandler : IRequestHandler<PostResetPasswordCommand, PostResetPasswordResponse>
 {
-    private readonly UserManager<User> _userManager;
-
+    private const string Prefix = "Reset_";
+    
+    private readonly IDbContext _dbContext;
     private readonly IEmailSender _emailSender;
+    private readonly IDistributedCache _distributedCache;
+    private readonly ITokenFactory _tokenFactory;
 
-    public PostResetPasswordCommandHandler(UserManager<User> userManager, IEmailSender emailSender)
-        => (_userManager, _emailSender) = (userManager, emailSender);
-
-
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
-    public async Task<PostResetPasswordResponse> Handle(PostResetPasswordCommand request,
-        CancellationToken cancellationToken)
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Интерфейс контекста бд</param>
+    /// <param name="emailSender">Позволяет отправлять письма на почту</param>
+    /// <param name="distributedCache">Кеш</param>
+    /// <param name="tokenFactory">Фабрика токенов для почты</param>
+    public PostResetPasswordCommandHandler(
+        IDbContext dbContext,
+        IEmailSender emailSender,
+        IDistributedCache distributedCache,
+        ITokenFactory tokenFactory)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
+        _dbContext = dbContext;
+        _emailSender = emailSender;
+        _distributedCache = distributedCache;
+        _tokenFactory = tokenFactory;
+    }
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+    /// <inheritdoc />
+    public async Task<PostResetPasswordResponse> Handle(PostResetPasswordCommand request, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(request);
 
-        if (user is null)
-            throw new NotFoundUserException(AuthErrorMessages.UserNotFound);
+        var user = await _dbContext.Users
+            .AnyAsync(x => request.Email == x.Email, cancellationToken);
 
-        var confirmationToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        if (!user)
+            throw new EntityNotFoundException<User>(request.Email);
+        
+        var confirmToken = _tokenFactory.GetToken();
+        
+        var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
+            Templates.SendPasswordResetConfirmationMessage,
+            cancellationToken);
 
-        var messageTemplate =
-            await EmailTemplateHelper.GetEmailTemplateAsync(Templates.SendPasswordResetConfirmationMessage,
-                cancellationToken);
-
-        var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
-
+        var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmToken };
+        
         var message = messageTemplate.ReplacePlaceholders(placeholders);
 
+        await _distributedCache.SetAsync(
+            $"{Prefix}{request.Email}",
+            Encoding.UTF8.GetBytes(confirmToken),
+            cancellationToken);
+        
         await _emailSender.SendEmailAsync(request.Email, message, cancellationToken);
 
-        return new PostResetPasswordResponse { Email = request.Email };
+        return new PostResetPasswordResponse(request.Email);
     }
 }

@@ -1,7 +1,9 @@
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -20,7 +22,12 @@ namespace RussianSpotify.API.UnitTests;
 /// </summary>
 public class UnitTestBase : IDisposable
 {
-    private const string CurrentUserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"; 
+    private const string CurrentUserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
+
+    /// <summary>
+    /// Тестовый код для редиса (в тестах использовать его)
+    /// </summary>
+    protected const string CodeForRedis = "111111111111";
     
     /// <summary>
     /// Пользователь для теста
@@ -53,11 +60,6 @@ public class UnitTestBase : IDisposable
     protected Mock<IFileHelper> FileHelper { get; }
     
     /// <summary>
-    /// Менеджер по пользователю
-    /// </summary>
-    protected Mock<UserManager<User>> UserManager { get; }
-    
-    /// <summary>
     /// Мок Взаимодействия с ролью пользователя
     /// </summary>
     protected Mock<IRoleManager> RoleManager { get; }
@@ -66,6 +68,31 @@ public class UnitTestBase : IDisposable
     /// Мок S3 Service
     /// </summary>
     protected Mock<IS3Service> S3Service { get; }
+    
+    /// <summary>
+    /// Мок Сервис для работы с паролями
+    /// </summary>
+    protected Mock<IPasswordService> PasswordService { get; }
+    
+    /// <summary>
+    /// Мок Фабрика токенов для почты
+    /// </summary>
+    protected Mock<ITokenFactory> TokenFactory { get; }
+    
+    /// <summary>
+    /// Мок сервиса почты
+    /// </summary>
+    protected Mock<IEmailSender> EmailSender { get; }
+    
+    /// <summary>
+    /// Мок Кеша
+    /// </summary>
+    protected Mock<IDistributedCache> Cache { get; }
+    
+    /// <summary>
+    /// Мок Отвечает за клэймы юзера
+    /// </summary>
+    protected Mock<IUserClaimsManager> UserClaimsManager { get; } 
     
     /// <summary>
     /// Конструктор
@@ -79,6 +106,47 @@ public class UnitTestBase : IDisposable
             .SetBirthday(new DateTime(2004, 02, 12))
             .SetEmail("test@mail.ru")
             .Build();
+
+        UserClaimsManager = new Mock<IUserClaimsManager>();
+        UserClaimsManager.Setup(x => x.GetUserClaims(It.IsAny<User>()))
+            .Returns(new List<Claim>()
+            {
+                new(ClaimTypes.Role, "хуй")
+            });
+
+        EmailSender = new Mock<IEmailSender>();
+        EmailSender.Setup(
+                x => x.SendEmailAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        Cache = new Mock<IDistributedCache>();
+        Cache.Setup(
+                x => x.SetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<byte[]>(),
+                    It.IsAny<DistributedCacheEntryOptions>(),
+                    It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        Cache.Setup(
+                x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Encoding.UTF8.GetBytes(CodeForRedis));
+        Cache.Setup(x => x.RemoveAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        PasswordService = new Mock<IPasswordService>();
+        PasswordService
+            .Setup(x => x.HashPassword(It.IsAny<string>()))
+            .Returns("1213");
+        PasswordService
+            .Setup(x => x.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(true);
+
+        TokenFactory = new Mock<ITokenFactory>();
+        TokenFactory.Setup(x => x.GetToken())
+            .Returns("22222222");
 
         S3Service = new Mock<IS3Service>();
         S3Service.Setup(x => x.DownloadFileAsync(
@@ -94,6 +162,16 @@ public class UnitTestBase : IDisposable
         JwtGenerator = new Mock<IJwtGenerator>();
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<List<Claim>>()))
             .Returns(Guid.NewGuid().ToString);
+        JwtGenerator.Setup(x => x.GenerateRefreshToken())
+            .Returns(Guid.NewGuid().ToString);
+        JwtGenerator.Setup(x => x.GetPrincipalFromExpiredToken(It.IsAny<string>()))
+            .Returns(new ClaimsPrincipal(identities: new List<ClaimsIdentity>()
+            {
+                new(claims: new List<Claim>()
+                {
+                    new(ClaimTypes.Email, User.Email)
+                })
+            }));
 
         UserContext = new Mock<IUserContext>();
         UserContext.Setup(x => x.CurrentUserId)
@@ -115,45 +193,10 @@ public class UnitTestBase : IDisposable
             .Returns(() => Task.CompletedTask);
 
         RoleManager = new Mock<IRoleManager>();
-        RoleManager.Setup(x => x.IsInRoleAsync(
-            It.IsAny<User>(),
-            It.IsAny<string>(),
-            It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-        
-        var userStoreMock = new Mock<IUserStore<User>>();
-        var optionsMock = new Mock<IOptions<IdentityOptions>>();
-        var passwordHasherMock = new Mock<IPasswordHasher<User>>();
-        var userValidators = new List<IUserValidator<User>>();
-        var passwordValidators = new List<IPasswordValidator<User>>();
-        var lookupNormalizerMock = new Mock<ILookupNormalizer>();
-        var identityErrorDescriberMock = new Mock<IdentityErrorDescriber>();
-        var serviceProviderMock = new Mock<IServiceProvider>();
-        var loggerMock = new Mock<ILogger<UserManager<User>>>();
-
-
-        UserManager = new Mock<UserManager<User>>(
-            userStoreMock.Object,
-            optionsMock.Object,
-            passwordHasherMock.Object,
-            userValidators,
-            passwordValidators,
-            lookupNormalizerMock.Object,
-            identityErrorDescriberMock.Object,
-            serviceProviderMock.Object,
-            loggerMock.Object
-        );
-
-        UserManager.Setup(x => x.GetRolesAsync(It.IsAny<User>()))
-            .ReturnsAsync(new List<string>
-            {
-                BaseRoles.UserRoleName,
-                BaseRoles.AuthorRoleName,
-                BaseRoles.AdminRoleName,
-            });
-
-        UserManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-            .ReturnsAsync(User);
+        RoleManager.Setup(x => x.IsInRole(
+                It.IsAny<User>(),
+                It.IsAny<string>()))
+            .Returns(true);
     }
 
     /// <summary>

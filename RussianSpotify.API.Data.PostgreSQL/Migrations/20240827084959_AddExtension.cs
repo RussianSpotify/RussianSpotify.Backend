@@ -5,7 +5,7 @@
 namespace RussianSpotift.API.Data.PostgreSQL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddExtensionUUID4 : Migration
+    public partial class AddExtension : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,6 +16,7 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+
         }
     }
 }

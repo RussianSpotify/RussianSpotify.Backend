@@ -8,11 +8,12 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostLogin;
 /// </summary>
 public class PostLoginCommand : PostLoginRequest, IRequest<PostLoginResponse>
 {
-    public PostLoginCommand(PostLoginRequest request) : base(request)
-    {
-    }
-
-    public PostLoginCommand()
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="request"></param>
+    public PostLoginCommand(PostLoginRequest request)
+        : base(request)
     {
     }
 }

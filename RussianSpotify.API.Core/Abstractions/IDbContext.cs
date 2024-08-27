@@ -60,7 +60,15 @@ public interface IDbContext
     /// </summary>
     public DbSet<EmailNotification> EmailNotifications { get; set; }
 
+    /// <summary>
+    /// Сохранить изменения
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>-</returns>
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     
+    /// <summary>
+    /// Фасад базы
+    /// </summary>
     public DatabaseFacade Database { get; }
 }

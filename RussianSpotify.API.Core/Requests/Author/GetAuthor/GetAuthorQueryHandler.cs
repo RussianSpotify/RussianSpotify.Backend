@@ -36,14 +36,15 @@ public class GetAuthorQueryHandler
 
         var usersWithSameNames = await _dbContext.Users
             .AsNoTracking()
-            .Where(x => x.UserName!.ToLower().Equals(request.Name.ToLower()))
+            .Include(x => x.Roles)
+            .Where(x => x.UserName.ToLower().Equals(request.Name.ToLower()))
             .ToListAsync(cancellationToken);
 
         User? author = null;
         
         foreach (var userWithSameName in usersWithSameNames)
         {
-            if (await _roleManager.IsInRoleAsync(userWithSameName, BaseRoles.AuthorRoleName, cancellationToken))
+            if (_roleManager.IsInRole(userWithSameName, BaseRoles.AuthorRoleName))
                 author = userWithSameName;
         }
 
@@ -52,7 +53,7 @@ public class GetAuthorQueryHandler
 
         return new GetAuthorResponse
         {
-            Name = author.UserName!,
+            Name = author.UserName,
             AuthorPhotoId = author.UserPhotoId
         };
     }

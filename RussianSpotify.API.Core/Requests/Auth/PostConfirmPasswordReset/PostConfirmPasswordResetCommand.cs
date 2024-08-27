@@ -12,14 +12,8 @@ public class PostConfirmPasswordResetCommand : PostConfirmPasswordResetRequest, 
     /// Конструктор
     /// </summary>
     /// <param name="request">PostConfirmPasswordResetRequest</param>
-    public PostConfirmPasswordResetCommand(PostConfirmPasswordResetRequest request) : base(request)
-    {
-    }
-
-    /// <summary>
-    /// Пустой конструктор
-    /// </summary>
-    public PostConfirmPasswordResetCommand()
+    public PostConfirmPasswordResetCommand(PostConfirmPasswordResetRequest request)
+        : base(request)
     {
     }
 }

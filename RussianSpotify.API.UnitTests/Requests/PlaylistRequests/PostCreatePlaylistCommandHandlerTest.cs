@@ -54,7 +54,6 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
         var handler = new PostCreatePlaylistCommandHandler(
             _dbContext,
             UserContext.Object,
-            UserManager.Object,
             DateTimeProvider.Object,
             FileHelper.Object);
 

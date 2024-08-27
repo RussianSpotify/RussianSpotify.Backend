@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
@@ -14,19 +15,20 @@ namespace RussianSpotify.API.Core.Requests.Account.GetUserInfo;
 /// </summary>
 public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, GetUserInfoResponse>
 {
-    private readonly UserManager<User> _userManager;
-
     private readonly IUserContext _userContext;
+    private readonly IDbContext _dbContext;
 
     /// <summary>
     /// Конструктор
     /// </summary>
-    /// <param name="userManager">UserManager{User} из Identity</param>
-    /// <param name="userContext">UserContext <see cref="IUserContext"/></param>
-    public GetUserInfoQueryHandler(UserManager<User> userManager, IUserContext userContext)
+    /// <param name="userContext">Контекс текущего пользоавтеля</param>
+    /// <param name="dbContext">Интерфейс контекста бд</param>
+    public GetUserInfoQueryHandler(
+        IUserContext userContext,
+        IDbContext dbContext)
     {
-        _userManager = userManager;
         _userContext = userContext;
+        _dbContext = dbContext;
     }
 
     /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
@@ -34,20 +36,21 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, GetUser
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-
-        var user = await _userManager
-            .FindByIdAsync(_userContext.CurrentUserId.ToString()!)
+        
+        var user = await _dbContext.Users
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
             ?? throw new ForbiddenException();
-
-        var roles = (await _userManager.GetRolesAsync(user)).ToList();
         
         return new GetUserInfoResponse
         {
             UserId = user.Id,
-            Email = user.Email!,
-            UserName = user.UserName!,
-            Roles = roles,
-            UserPhotoId = user.UserPhotoId
+            Email = user.Email,
+            UserName = user.UserName,
+            UserPhotoId = user.UserPhotoId,
+            Roles = user.Roles
+                .Select(x => x.Name)
+                .ToList(),
         };
     }
 }

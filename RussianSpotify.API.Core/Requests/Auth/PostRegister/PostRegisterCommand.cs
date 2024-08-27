@@ -4,11 +4,16 @@ using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 namespace RussianSpotify.API.Core.Requests.Auth.PostRegister;
 
 /// <summary>
-/// Команда для регистрации пользователя
+/// Команда на регистрацию
 /// </summary>
 public class PostRegisterCommand : PostRegisterRequest, IRequest<PostRegisterResponse>
 {
-    public PostRegisterCommand(PostRegisterRequest request) : base(request)
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    public PostRegisterCommand(PostRegisterRequest request)
+        : base(request)
     {
     }
 }

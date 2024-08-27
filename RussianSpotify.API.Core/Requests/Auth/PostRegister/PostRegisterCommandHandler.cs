@@ -1,91 +1,109 @@
+using System.Text;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.AccountExceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
+using Role = RussianSpotify.API.Core.Entities.Role;
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostRegister;
 
 /// <summary>
 /// Обработчик для <see cref="PostRegisterCommand"/>
 /// </summary>
-public class PostRegisterCommandHandler
-    : IRequestHandler<PostRegisterCommand, PostRegisterResponse>
+public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, PostRegisterResponse>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IDbContext _dbContext;
+    private readonly IPasswordService _passwordService;
+    private readonly ITokenFactory _tokenFactory;
     private readonly IEmailSender _emailSender;
-    private readonly IRoleManager _roleManager;
+    private readonly IDistributedCache _cache;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="dbContext">Интерфейс контекста бд</param>
+    /// <param name="passwordService">Сервис хеширования паролей</param>
+    /// <param name="tokenFactory">Фабрика токенов для почты</param>
+    /// <param name="emailSender">Сервис почты</param>
+    /// <param name="cache">Кещ</param>
     public PostRegisterCommandHandler(
-        UserManager<User> userManager,
+        IDbContext dbContext,
+        IPasswordService passwordService,
+        ITokenFactory tokenFactory,
         IEmailSender emailSender,
-        IRoleManager roleManager)
+        IDistributedCache cache)
     {
-        _userManager = userManager;
+        _dbContext = dbContext;
+        _passwordService = passwordService;
+        _tokenFactory = tokenFactory;
         _emailSender = emailSender;
-        _roleManager = roleManager;
+        _cache = cache;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc />
     public async Task<PostRegisterResponse> Handle(PostRegisterCommand request, CancellationToken cancellationToken)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var isExistSameUser = await _dbContext.Users
+            .AnyAsync(x => x.Email == request.Email, cancellationToken);
 
-        if (user is not null)
+        if (isExistSameUser)
             throw new EmailAlreadyRegisteredException(AuthErrorMessages.UserWithSameEmail);
 
         if (request.Role == BaseRoles.AuthorRoleName)
         {
-            var authorWithSameName = await _userManager.FindByNameAsync(request.UserName);
-            if (authorWithSameName is not null &&
-                await _roleManager.IsInRoleAsync(authorWithSameName, BaseRoles.AuthorRoleName, cancellationToken))
+            var authorWithSameUsername = await _dbContext.Users
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync(x => x.UserName.ToLower() == request.UserName.ToLower(), cancellationToken);
+
+            if (authorWithSameUsername != null && authorWithSameUsername.Roles.Any(x => x.Id == BaseRoles.AuthorId))
                 throw new BadRequestException($"Автор с именем: {request.UserName} уже существует");
         }
 
-        user = new User
-        {
-            Email = request.Email, UserName = request.UserName,
-            SecurityStamp = Guid.NewGuid().ToString(),
-            EmailConfirmed = false
-        };
-
+        var passwordHash = _passwordService.HashPassword(request.Password);
+        
+        var user = new User(
+            userName: request.UserName,
+            email: request.Email,
+            passwordHash: passwordHash);
+        
         if (request.Role.Equals(BaseRoles.AdminRoleName, StringComparison.OrdinalIgnoreCase))
-            throw new UserCannotBeAdminException("User can not be register as Admin");
+            throw new UserCannotBeAdminException("Пользователь не может быть админом");
+        
+        var baseRole = await _dbContext.Roles
+            .FirstOrDefaultAsync(x => x.Name == request.Role, cancellationToken)
+            ?? throw new EntityNotFoundException<Role>(request.Role);
+        
+        user.AddRole(baseRole);
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+        var token = _tokenFactory.GetToken();
+        
+        var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
+            Templates.SendEmailConfirmationMessage,
+            cancellationToken);
 
-        if (!result.Succeeded)
-            throw new RegisterUserException(
-                string.Join("\n", result.Errors.Select(error => error.Description)));
-
-        var addToRoleResult = await _userManager.AddToRoleAsync(user, request.Role.ToUpper());
-
-        if (!addToRoleResult.Succeeded)
-            await _userManager.AddToRoleAsync(user, BaseRoles.UserRoleName.ToUpper());
-
-        var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-        var messageTemplate =
-            await EmailTemplateHelper.GetEmailTemplateAsync(Templates.SendEmailConfirmationMessage,
-                cancellationToken);
-
-        var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
+        var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = token };
 
         var message = messageTemplate.ReplacePlaceholders(placeholders);
+        await _cache.SetAsync(request.Email, Encoding.UTF8.GetBytes(token), cancellationToken);
+        
+        await _emailSender.SendEmailAsync(
+            user.Email,
+            message,
+            cancellationToken);
 
-        await _emailSender.SendEmailAsync(user.Email,
-            message, cancellationToken);
-
-        return new PostRegisterResponse { Email = request.Email };
+        _dbContext.Users.Add(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        return new PostRegisterResponse(request.Email);
     }
 }

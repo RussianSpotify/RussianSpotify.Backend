@@ -18,7 +18,6 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
     private readonly IDbContext _dbContext;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserContext _userContext;
-    private readonly UserManager<User> _userManager;
     private readonly IFileHelper _fileHelper;
 
     /// <summary>
@@ -32,13 +31,11 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
     public PostCreatePlaylistCommandHandler(
         IDbContext dbContext,
         IUserContext userContext,
-        UserManager<User> userManager,
         IDateTimeProvider dateTimeProvider,
         IFileHelper fileHelper)
     {
         _dbContext = dbContext;
         _userContext = userContext;
-        _userManager = userManager;
         _dateTimeProvider = dateTimeProvider;
         _fileHelper = fileHelper;
     }
@@ -55,7 +52,7 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
             .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
             ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
-        var userRoles = await _userManager.GetRolesAsync(currentUser);
+        var userRoles = new List<string>();
 
         var isArtist = userRoles.Contains(BaseRoles.AdminRoleName) || userRoles.Contains(BaseRoles.AuthorRoleName);
 

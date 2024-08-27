@@ -1,10 +1,11 @@
+using System.Text;
+using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.AccountExceptions;
-using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmPasswordReset;
 
@@ -13,31 +14,53 @@ namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmPasswordReset;
 /// </summary>
 public class PostConfirmPasswordResetCommandHandler : IRequestHandler<PostConfirmPasswordResetCommand>
 {
-    private readonly UserManager<User> _userManager;
+    private const string Prefix = "Reset_";
+    
+    private readonly IDbContext _dbContext;
+    private readonly IDistributedCache _distributedCache;
+    private readonly IPasswordService _passwordService;
 
-    public PostConfirmPasswordResetCommandHandler(UserManager<User> userManager)
-        => _userManager = userManager;
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="distributedCache">Кеш</param>
+    /// <param name="dbContext">Интерфейс контекста бд</param>
+    /// <param name="passwordService">Сервис для хеширования паролей</param>
+    public PostConfirmPasswordResetCommandHandler(
+        IDistributedCache distributedCache,
+        IDbContext dbContext,
+        IPasswordService passwordService)
+    {
+        _distributedCache = distributedCache;
+        _dbContext = dbContext;
+        _passwordService = passwordService;
+    }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest, TResponse}"/>
+    /// <inheritdoc />
     public async Task Handle(PostConfirmPasswordResetCommand request, CancellationToken cancellationToken)
     {
-        if (request is null)
-            throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
+        
+        var user =  await _dbContext.Users
+            .FirstOrDefaultAsync(x => request.Email == x.Email, cancellationToken)
+            ?? throw new EntityNotFoundException<User>(request.Email);
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var code = await _distributedCache
+            .GetAsync($"{Prefix}{request.Email}", cancellationToken);
 
-        if (user is null)
-            throw new NotFoundUserException(AuthErrorMessages.UserNotFound);
+        if (code is null)
+            throw new NotFoundException("Код не найден.");
 
-        var passwordResetResult = await _userManager.ResetPasswordAsync(user,
-            request.VerificationCodeFromUser, request.NewPassword);
-
-        if (!passwordResetResult.Succeeded)
-            throw new BadRequestException(string.Join("\n", passwordResetResult.Errors));
-
-        user.SecurityStamp = _userManager.GenerateNewAuthenticatorKey();
+        var codeToString = Encoding.UTF8.GetString(code);
+        
+        if (!request.VerificationCodeFromUser.Equals(codeToString))
+            throw new ValidationException("Код неверный");
+        
+        var newHash = _passwordService.HashPassword(request.NewPassword);
+        user.PasswordHash = newHash;
         user.RefreshToken = null;
 
-        await _userManager.UpdateAsync(user);
+        await _distributedCache.RemoveAsync($"{Prefix}{request.Email}", cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
