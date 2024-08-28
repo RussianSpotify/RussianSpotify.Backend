@@ -5,9 +5,11 @@ using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.WEB.Configurations;
+using RussianSpotify.API.WEB.CorsPolicy;
 using RussianSpotify.API.WEB.Middlewares;
 using RussianSpotify.API.Worker;
 using RussianSpotify.Data.S3;
+using Serilog;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenWithAuth();
 builder.Services.AddHangfireWorker();
+builder.Services.AddCustomLogging();
 
 // Добавлен медиатр
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
@@ -43,15 +46,7 @@ builder.Services.AddS3Storage(builder.Configuration.GetSection("MinioS3").Get<Mi
 builder.Services.AddResponseCompression();
 
 // Настройка CORS
-builder.Services.AddCors(opt
-    => opt.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    })
-);
+builder.Services.AddCustomCors();
 
 // Добавлен слой Core
 builder.Services.AddCoreLayout();
@@ -76,7 +71,6 @@ await migrator.MigrateAsync();
 
 app.UseResponseCompression();
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -88,13 +82,15 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseHangfireWorker(builder.Configuration.GetSection("Hangfire").Get<HangfireOptions>()!);
 
 // Настройка CORS
-app.UseCors("AllowAll");
+app.UseCors(CorsPolicyConstants.AllowAll);
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHealthChecks("/minio-health")
+    .RequireCors(CorsPolicyConstants.AllowAll);
 app.MapControllers();
 
 app.Run();

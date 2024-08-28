@@ -41,7 +41,7 @@ public class S3Service : IS3Service
     
         if (fileContent.Content == null)
             throw new ArgumentNullException(nameof(fileContent.Content));
-
+        
         var minioFileLocation = ContentKey(fileContent.FileName);
 
         await BucketExistAsync(_minioOptions.BucketName, cancellationToken);
