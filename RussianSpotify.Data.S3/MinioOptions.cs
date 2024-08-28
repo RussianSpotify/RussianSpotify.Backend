@@ -6,6 +6,11 @@ namespace RussianSpotify.Data.S3;
 public class MinioOptions
 {
     /// <summary>
+    /// Название клиента
+    /// </summary>
+    public string MinioClient { get; set; } = default!;
+    
+    /// <summary>
     /// Логин
     /// </summary>
     public string AccessKey { get; set; } = default!;

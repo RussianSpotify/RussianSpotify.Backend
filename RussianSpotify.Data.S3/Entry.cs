@@ -1,7 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Minio;
 using Minio.AspNetCore;
+using Minio.AspNetCore.HealthChecks;
 using RussianSpotify.API.Core.Abstractions;
+using IMinioClientFactory = Minio.AspNetCore.IMinioClientFactory;
 
 namespace RussianSpotify.Data.S3;
 
@@ -10,8 +13,9 @@ namespace RussianSpotify.Data.S3;
 /// </summary>
 public static class Entry
 {
-    public static IServiceCollection AddS3Storage(
-        this IServiceCollection serviceCollection, MinioOptions options)
+    public static void AddS3Storage(
+        this IServiceCollection serviceCollection,
+        MinioOptions options)
     {
         if (options is null)
             throw new ArgumentNullException(nameof(options));
@@ -27,19 +31,30 @@ public static class Entry
 
         if (string.IsNullOrEmpty(options.ServiceUrl))
             throw new ArgumentException(nameof(options.ServiceUrl));
-
-
-        serviceCollection.AddMinio(minioOptions =>
+        
+        serviceCollection.AddMinio(name: options.MinioClient, minioOptions =>
         {
             minioOptions.Endpoint = options.ServiceUrl;
-            minioOptions.AccessKey = options.AccessKey;
-            minioOptions.SecretKey = options.SecretKey;
-            
+            minioOptions.ConfigureClient(client =>
+            {
+                client.WithSSL(false);
+                client.WithEndpoint(options.ServiceUrl);
+                client.WithCredentials(options.AccessKey, options.SecretKey);
+            });
         });
+
+        serviceCollection.AddHealthChecks()
+            .AddCheck<MinioHealthCheck>(
+                name: nameof(MinioHealthCheck),
+                HealthStatus.Healthy,
+                new[] { "external", "storage" })
+            .AddMinio(
+                factory: provider => provider.GetRequiredService<IMinioClient>(),
+                name: options.MinioClient,
+                bucket: options.BucketName,
+                failureStatus: HealthStatus.Healthy);
         
         serviceCollection.AddSingleton(options);
         serviceCollection.AddScoped<IS3Service, S3Service>();
-
-        return serviceCollection;
     }
 }
