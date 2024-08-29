@@ -1,7 +1,5 @@
 # Russian Spotify Web Api
 
-![example workflow](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg)
-
 ## 1. Как запустить проект
 
 ### Docker-Compose File:
