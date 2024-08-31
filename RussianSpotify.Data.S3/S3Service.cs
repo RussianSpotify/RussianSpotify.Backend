@@ -36,24 +36,32 @@ public class S3Service : IS3Service
         FileContent fileContent,
         CancellationToken cancellationToken = default)
     {
-        if (fileContent.FileName == null)
-            throw new ArgumentNullException(nameof(fileContent.FileName));
+        try
+        {
+            if (fileContent.FileName == null)
+                throw new ArgumentNullException(nameof(fileContent.FileName));
     
-        if (fileContent.Content == null)
-            throw new ArgumentNullException(nameof(fileContent.Content));
+            if (fileContent.Content == null)
+                throw new ArgumentNullException(nameof(fileContent.Content));
         
-        var minioFileLocation = ContentKey(fileContent.FileName);
+            var minioFileLocation = ContentKey(fileContent.FileName);
 
-        await BucketExistAsync(_minioOptions.BucketName, cancellationToken);
+            await BucketExistAsync(_minioOptions.BucketName, cancellationToken);
         
-        var putArgs = new PutObjectArgs()
-            .WithBucket(_minioOptions.BucketName)
-            .WithObject(minioFileLocation)
-            .WithStreamData(fileContent.Content)
-            .WithObjectSize(fileContent.Content.Length);
+            var putArgs = new PutObjectArgs()
+                .WithBucket(_minioOptions.BucketName)
+                .WithObject(minioFileLocation)
+                .WithStreamData(fileContent.Content)
+                .WithObjectSize(fileContent.Content.Length);
 
-        await _minioClient.PutObjectAsync(putArgs, cancellationToken);
-        return minioFileLocation;
+            await _minioClient.PutObjectAsync(putArgs, cancellationToken);
+            return minioFileLocation;
+        }
+        catch (Exception e)
+        {
+            _logger.LogCritical($"Cannot upload file url: {fileContent.FileName} \nError: {e.Message}");
+            throw;
+        }
     }
 
     /// <inheritdoc />
