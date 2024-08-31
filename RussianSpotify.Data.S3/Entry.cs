@@ -4,7 +4,6 @@ using Minio;
 using Minio.AspNetCore;
 using Minio.AspNetCore.HealthChecks;
 using RussianSpotify.API.Core.Abstractions;
-using IMinioClientFactory = Minio.AspNetCore.IMinioClientFactory;
 
 namespace RussianSpotify.Data.S3;
 
