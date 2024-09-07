@@ -42,8 +42,9 @@
 3. Создаем новый проект ![image](https://github.com/user-attachments/assets/102fa88a-ffce-4a75-a9d9-52a2e200ea67)
 4. В данном разделе указываем Фронт URL и бэк URL ![image](https://github.com/user-attachments/assets/0d24325c-9123-4587-9be6-5bab2a81b8ba)
 5. Проект создан
-6. Далее заходим в раздел Credentials и во втором разделе OAuth 2.0 Client IDs выбираем наш проект
-7. В ClientId вставляем ключ который будет у вас в OAuth 2.0 Client IDs и там же ClientSecret
+6. Далее заходим в раздел Credentials и во втором разделе OAuth 2.0 Client IDs выбираем наш проект ![image](https://github.com/user-attachments/assets/206c807e-6386-43ba-81b5-ff12801a06f8)
+7. В ClientId вставляем ключ который будет у вас в OAuth 2.0 Client IDs и там же ClientSecret![image](https://github.com/user-attachments/assets/6094f13e-bf8b-413b-9924-f55651fef91a)
+
 
 
 
