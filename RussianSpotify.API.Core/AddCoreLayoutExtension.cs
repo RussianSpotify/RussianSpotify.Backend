@@ -2,6 +2,7 @@ using System.Reflection;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using RussianSpotify.API.Client;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Common.Behaviors;
 using RussianSpotify.API.Core.Services;
@@ -40,5 +41,21 @@ public static class AddCoreLayoutExtension
         services.AddScoped<IPasswordChanger, PasswordChanger>();
         
         return services;
+    }
+
+    /// <summary>
+    /// Добавить интеграцию с сервисом Google
+    /// </summary>
+    /// <param name="services">Сервисы</param>
+    /// <param name="options">Настройки</param>
+    /// <returns>Сервисы</returns>
+    public static void AddGoogleService(this IServiceCollection services, HttpApiClientOptions options)
+    {
+        services.AddHttpClient<IGoogleClient, GoogleClient>((_, client) =>
+        {
+            client.BaseAddress = new Uri(options.BaseAddress);
+        });
+        
+        services.AddScoped<IGoogleService, GoogleService>();
     }
 }

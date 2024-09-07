@@ -12,7 +12,7 @@ public static class BaseCookieOptions
     /// </summary>
     public static readonly CookieOptions Options = new()
     {
-        Expires = DateTime.UtcNow.AddHours(1)
+        Expires = DateTime.UtcNow.AddHours(5),
     };
 
     /// <summary>

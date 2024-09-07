@@ -29,9 +29,11 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.20" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\RussianSpotify.API.Client\RussianSpotify.API.Client.csproj" />
         <ProjectReference Include="..\RussianSpotify.API.Contracts\RussianSpotify.API.Contracts.csproj" />
     </ItemGroup>
 

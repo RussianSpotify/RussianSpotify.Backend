@@ -37,18 +37,9 @@ public static class ConfigureAuthenticationExtension
                 ValidIssuer = configuration["JWT:ValidIssuer"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!))
             };
-        }).AddYandex(config =>
-        {
-            config.ClientId = configuration["Authentication:Yandex:AppId"]!;
-            config.ClientSecret = configuration["Authentication:Yandex:AppSecret"]!;
-        }).AddVkontakte(config =>
-        {
-            config.ClientId = configuration["Authentication:VK:AppId"]!;
-            config.ClientSecret = configuration["Authentication:VK:AppSecret"]!;
-            config.Scope.Add("email");
         }).AddGoogle(config =>
         {
-            config.ClientId = configuration["Authentication:Google:AppId"]!;
-            config.ClientSecret = configuration["Authentication:Google:AppSecret"]!;
+            config.ClientId = configuration["Authentication:Google:ClientId"]!;
+            config.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
         });
 }
