@@ -2,6 +2,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotift.API.Data.PostgreSQL.Interceptors;
+using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.WEB.Configurations;
@@ -35,6 +36,8 @@ builder.Services
     .AddSingleton<ExceptionMiddleware>()
     .AddSingleton<UpdateInterceptor>()
     .AddSingleton<SoftDeleteInterceptor>();
+
+builder.Services.AddGoogleService(configuration.GetSection("GoogleService").Get<HttpApiClientOptions>()!);
 
 // Добавлена аутентификация и jwt bearer
 builder.Services.AddAuthenticationWithJwtAndExternalServices(configuration);

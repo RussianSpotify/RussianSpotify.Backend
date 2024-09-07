@@ -28,6 +28,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="playlists">Плейлисты</param>
     /// <param name="authorPlaylists">Плейлисты автора</param>
     /// <param name="songs">Песни</param>
+    /// <param name="roles">Роли</param>
     public User(
         string userName,
         string email,
@@ -41,7 +42,8 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         Subscribe? subscribe = default,
         List<Playlist>? playlists = default,
         List<Playlist>? authorPlaylists = default,
-        List<Song>? songs = default)
+        List<Song>? songs = default,
+        List<Role>? roles = default)
     {
         UserName = userName;
         Email = email;
@@ -56,7 +58,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         Playlists = playlists ?? new List<Playlist>();
         AuthorPlaylists = authorPlaylists ?? new List<Playlist>();
         Songs = songs ?? new List<Song>();
-        Roles = new List<Role>();
+        Roles = roles ?? new List<Role>();
     }
 
     /// <summary>
