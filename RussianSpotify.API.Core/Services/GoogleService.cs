@@ -54,7 +54,7 @@ public class GoogleService : IGoogleService
         }
         catch (Exception e)
         {
-            throw new ApplicationBaseException("Не удалось получить ответ от Google");
+            throw new ApplicationBaseException($"Не удалось получить ответ от Google {e.Message}");
         }
     }
 }
