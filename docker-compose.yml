@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: RussianSpotify.API.WEB/Dockerfile
-    image: irekkkarimov/russian-spotify-backend
+    image: karantuligor/russian-spotify-backend
     container_name: RussianSpotify.API.UI
     depends_on:
       - redis
