@@ -31,7 +31,7 @@ jobs:
       - name: Install docker-compose
         run: | 
           sudo apt install docker-compose
-          sudo apt install paramiko
+          pip install paramiko
 
       - name: Deploy backend on VPS
         run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
