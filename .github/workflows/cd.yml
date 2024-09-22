@@ -28,6 +28,9 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
+      - name: Install docker-compose
+        run: sudo apt install docker-compose
+
       - name: Deploy backend on VPS
         run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" --pull up -d
         
