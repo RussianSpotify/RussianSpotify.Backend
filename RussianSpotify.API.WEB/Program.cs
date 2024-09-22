@@ -19,7 +19,12 @@ configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGenWithAuth();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSwaggerGenWithAuth();
+}
+
 builder.Services.AddHangfireWorker();
 builder.Services.AddCustomLogging();
 
