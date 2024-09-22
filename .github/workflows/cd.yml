@@ -29,11 +29,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy backend on VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: root
-          password: ${{ secrets.SSH_PASSWORD }}
-          key: ${{ secrets.SSH_KEY }}
-          script: docker compose up --pull -d
+        run: docker compose up --host "ssh@${{ secrets.SSH_HOST }}" -d
         
