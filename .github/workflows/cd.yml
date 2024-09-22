@@ -29,5 +29,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy backend on VPS
-        run: docker compose up --host "ssh@${{ secrets.SSH_HOST }}" -d
+        run: docker compose --host "ssh://root@${{ secrets.SSH_HOST }}" --pull up -d
         
