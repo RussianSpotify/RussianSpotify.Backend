@@ -1,11 +1,11 @@
-name: Docker Image CI
+name: Deploy to VPS
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  deploy:
+  build-push-compose:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the repository
@@ -18,3 +18,17 @@ jobs:
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker compose push
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Deploy backend on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
