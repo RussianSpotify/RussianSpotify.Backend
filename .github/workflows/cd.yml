@@ -32,5 +32,5 @@ jobs:
         run: sudo apt install docker-compose
 
       - name: Deploy backend on VPS
-        run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" --pull up -d
+        run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
         
