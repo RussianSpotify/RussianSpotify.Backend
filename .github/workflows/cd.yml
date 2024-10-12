@@ -28,15 +28,23 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
-      - name: Setup ssh key
-        run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: ls
 
-      - name: Adding known hosts
-        run: ssh-keyscan -H ${{secrets.SSH_HOST}} >> "$HOME/.ssh/known_hosts"
+      # - name: Setup ssh key
+      #   run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
 
-      - name: Copy docker-compose to VPS
-        run: scp -r $HOME/docker/docker-compose.yml root@${{ secrets.SSH_HOST }}:docker-compose.yml
-             && ${{ secrets.SSH_PASSWORD }}
+      # - name: Adding known hosts
+      #   run: ssh-keyscan -H ${{secrets.SSH_HOST}} >> "$HOME/.ssh/known_hosts"
+
+      # - name: Copy docker-compose to VPS
+      #   run: scp -r $HOME/docker/docker-compose.yml root@${{ secrets.SSH_HOST }}:docker-compose.yml
+      #        && ${{ secrets.SSH_PASSWORD }}
 
       # - name: Deploy backend on VPS
       #   run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d && ${{ secrets.SSH_PASSWORD }}
