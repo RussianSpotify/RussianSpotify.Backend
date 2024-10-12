@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ secrets.SSH_PASSWORD }}
-          # key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           source: "docker-compose.yml"
           target: "$HOME/docker"
 
@@ -44,7 +44,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ secrets.SSH_PASSWORD }}
-          script: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+                    cd $HOME/docker
+                    docker compose up -d
 
       # - name: Setup ssh key
       #   run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
