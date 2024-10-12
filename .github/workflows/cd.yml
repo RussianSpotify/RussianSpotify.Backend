@@ -1,12 +1,13 @@
-name: Docker Image CI
+name: Deploy to VPS
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  deploy:
+  build-push-compose:
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
@@ -18,3 +19,23 @@ jobs:
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker compose push
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-push-compose
+    
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Install docker-compose
+        run: | 
+          sudo apt install docker-compose
+          pip install paramiko
+
+      - name: Setup ssh key
+        run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
+
+      - name: Deploy backend on VPS
+        run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
+        
