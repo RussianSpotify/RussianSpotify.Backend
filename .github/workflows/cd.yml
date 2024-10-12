@@ -40,5 +40,5 @@ jobs:
           pip install paramiko
 
       - name: Deploy backend on VPS
-        run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
+        run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d && ${{ secrets.SSH_PASSWORD }}
         
