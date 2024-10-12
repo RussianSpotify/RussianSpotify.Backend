@@ -34,11 +34,11 @@ jobs:
       - name: Adding known hosts
         run: ssh-keyscan -H ${{secrets.SSH_HOST}} >> "$HOME/.ssh/known_hosts"
 
-      - name: Install docker-compose
+      - name: Copy docker-compose to VPS
         run: | 
-          sudo apt install docker-compose && ls $HOME
-          pip install paramiko
+              scp -r $HOME/docker/docker-compose.yml root@${{ secrets.SSH_HOST }}:docker-compose.yml
+              ${{ secrets.SSH_PASSWORD }}
 
-      - name: Deploy backend on VPS
-        run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d && ${{ secrets.SSH_PASSWORD }}
+      # - name: Deploy backend on VPS
+      #   run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d && ${{ secrets.SSH_PASSWORD }}
         
