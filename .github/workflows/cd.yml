@@ -34,11 +34,7 @@ jobs:
           pip install paramiko
 
       - name: Setup ssh key
-      - run: set -eu
-      - run: mkdir "$HOME/.ssh"
-      - run: echo "${{secretc.SSH_KEY}}" > "$HOME/.ssh/key"
-      - run: chmod 600 "$HOME/.ssh/key"
-      
+        run: set -eu && mkdir "$HOME/.ssh" && echo "${{secretc.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
 
       - name: Deploy backend on VPS
         run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
