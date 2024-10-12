@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ secrets.SSH_PASSWORD }}
-          key: ${{ secrets.SSH_KEY }}
+          # key: ${{ secrets.SSH_KEY }}
           source: "docker-compose.yml"
           target: "$HOME/docker"
 
@@ -44,7 +44,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ secrets.SSH_PASSWORD }}
-          key: ${{ secrets.SSH_KEY }}
+          # key: ${{ secrets.SSH_KEY }}
           script: |
                     cd $HOME/docker
                     docker compose up -d
