@@ -28,13 +28,16 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
+      - name: Setup ssh key
+        run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
+
+      - name: Adding known hosts
+        run: ssh-keyscan -H ${{secrets.SSH_HOST}} >> "$HOME/.ssh/knows_hosts"
+
       - name: Install docker-compose
         run: | 
           sudo apt install docker-compose
           pip install paramiko
-
-      - name: Setup ssh key
-        run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
 
       - name: Deploy backend on VPS
         run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
