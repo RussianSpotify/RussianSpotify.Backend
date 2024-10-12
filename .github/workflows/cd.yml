@@ -33,10 +33,12 @@ jobs:
           sudo apt install docker-compose
           pip install paramiko
 
-      - name: Load ssh key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Setup ssh key
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{secretc.SSH_KEY}}" > "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/key"
+      
 
       - name: Deploy backend on VPS
         run: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
