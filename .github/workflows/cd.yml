@@ -36,7 +36,7 @@ jobs:
 
       - name: Install docker-compose
         run: | 
-          sudo apt install docker-compose && sudo chmod +x /usr/local/bin/docker-compose;
+          sudo apt install docker-compose && ls .
           pip install paramiko
 
       - name: Deploy backend on VPS
