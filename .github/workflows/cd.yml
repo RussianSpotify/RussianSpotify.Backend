@@ -38,13 +38,13 @@ jobs:
           source: "docker-compose.yml"
           target: "$HOME/docker"
 
-      - name: executing remote ssh commands using password
+      - name: Starting docker-compose
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ secrets.SSH_PASSWORD }}
-          script: ls
+          script: docker-compose --host "ssh://root@${{ secrets.SSH_HOST }}" up -d
 
       # - name: Setup ssh key
       #   run: set -eu && mkdir "$HOME/.ssh" && echo "${{secrets.SSH_KEY}}" > "$HOME/.ssh/key" && chmod 600 "$HOME/.ssh/key"
