@@ -61,7 +61,7 @@ services:
       EmailSettings__EmailAddress: "s1chess@yandex.ru"
       EmailSettings__Password: "qsmylcfruascxvhi"
       EmailSettings__SMTPServerHost: "smtp.yandex.ru"
-      EmailSettings__SMTPServerPort: "465"
+      EmailSettings__SMTPServerPort: "587"
     ports:
       - "80:80"
     networks:
