@@ -62,7 +62,6 @@ services:
       EmailSettings__Password: "qsmylcfruascxvhi"
       EmailSettings__SMTPServerHost: "smtp.yandex.ru"
       EmailSettings__SMTPServerPort: "465"
-      RedirectUrl: http://176.57.208.209:3000
     ports:
       - "80:80"
     networks:
