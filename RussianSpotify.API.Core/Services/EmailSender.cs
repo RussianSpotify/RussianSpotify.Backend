@@ -75,10 +75,9 @@ public class EmailSender : IEmailSender
         CancellationToken cancellationToken)
     {
         using var client = new SmtpClient();
-        Console.WriteLine(emailConfiguration["SMTPServerHost"]);
-        Console.WriteLine(emailConfiguration["SMTPServerPort"]);
+        
         await client.ConnectAsync(emailConfiguration["SMTPServerHost"],
-            int.Parse(emailConfiguration["SMTPServerPort"]!), true, cancellationToken);
+            int.Parse(emailConfiguration["SMTPServerPort"]!), false, cancellationToken);
 
         await client.AuthenticateAsync(emailConfiguration["EmailAddress"],
             emailConfiguration["Password"], cancellationToken);
