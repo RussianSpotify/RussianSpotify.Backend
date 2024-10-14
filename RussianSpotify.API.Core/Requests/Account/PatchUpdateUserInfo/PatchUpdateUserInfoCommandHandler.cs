@@ -59,6 +59,7 @@ public class PatchUpdateUserInfoCommandHandler
             throw new ArgumentNullException(nameof(request));
 
         var user = await _dbContext.Users.Include(i => i.UserPhoto)
+                       .Include(i => i.Roles)
             .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
             ?? throw new ForbiddenException();
 
