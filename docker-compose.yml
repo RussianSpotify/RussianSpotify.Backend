@@ -62,9 +62,10 @@ services:
       EmailSettings__Password: "qsmylcfruascxvhi"
       EmailSettings__SMTPServerHost: "smtp.yandex.ru"
       EmailSettings__SMTPServerPort: "465"
-      ValidAudience: "176.57.208.209"
-      ValidIssuer: "176.57.208.209"
-      Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"
+      JWT__ValidAudience: "176.57.208.209"
+      JWT__ValidIssuer: "176.57.208.209"
+      JWT__Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"
+      RedirectUrl: "http://176.57.208.209:3000"
     ports:
       - "80:80"
     networks:
