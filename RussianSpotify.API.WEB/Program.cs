@@ -38,7 +38,7 @@ builder.Services.AddRedis(configuration);
 
 // Добавлен middleware для обработки исключений
 builder.Services
-    .AddSingleton<ExceptionMiddleware>()
+    // .AddSingleton<ExceptionMiddleware>()
     .AddSingleton<UpdateInterceptor>()
     .AddSingleton<SoftDeleteInterceptor>();
 
@@ -86,7 +86,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Добавлено использование middleware для обработки исключений
-app.UseMiddleware<ExceptionMiddleware>();
+// app.UseMiddleware<ExceptionMiddleware>();
 app.UseHangfireWorker(builder.Configuration.GetSection("Hangfire").Get<HangfireOptions>()!);
 
 // Настройка CORS
