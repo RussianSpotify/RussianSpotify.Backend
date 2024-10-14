@@ -77,7 +77,7 @@ public class EmailSender : IEmailSender
         using var client = new SmtpClient();
         
         await client.ConnectAsync(emailConfiguration["SMTPServerHost"],
-            int.Parse(emailConfiguration["SMTPServerPort"]!), false, cancellationToken);
+            int.Parse(emailConfiguration["SMTPServerPort"]!), true, cancellationToken);
 
         await client.AuthenticateAsync(emailConfiguration["EmailAddress"],
             emailConfiguration["Password"], cancellationToken);
