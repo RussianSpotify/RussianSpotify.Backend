@@ -14,4 +14,9 @@ public static class DefaultsPagination
     /// Страница
     /// </summary>
     public const int PageNumber = 1;
+
+    /// <summary>
+    /// Обычная размерность чата
+    /// </summary>
+    public const int ChatPageSize = 100;
 }

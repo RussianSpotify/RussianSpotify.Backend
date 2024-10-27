@@ -101,6 +101,13 @@ public class UnitTestBase : IDisposable
     {
         User = UserBuilder
             .CreateBuilder()
+            .SetRoles(new List<Role>()
+            {
+                new()
+                {
+                    Name = BaseRoles.AdminRoleName
+                }
+            })
             .SetId(Guid.Parse(CurrentUserId))
             .SetUsername("Test Login")
             .SetBirthday(new DateTime(2004, 02, 12))

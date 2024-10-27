@@ -41,6 +41,25 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                     b.ToTable("bucket_song", (string)null);
                 });
 
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.Property<Guid>("ChatsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("chats_id");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("users_id");
+
+                    b.HasKey("ChatsId", "UsersId")
+                        .HasName("pk_chat_user");
+
+                    b.HasIndex("UsersId")
+                        .HasDatabaseName("ix_chat_user_users_id");
+
+                    b.ToTable("chat_user", (string)null);
+                });
+
             modelBuilder.Entity("PlaylistSong", b =>
                 {
                     b.Property<Guid>("PlaylistsId")
@@ -160,6 +179,25 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .HasName("pk_categories");
 
                     b.ToTable("categories", (string)null);
+                });
+
+            modelBuilder.Entity("RussianSpotify.API.Core.Entities.Chat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Название чата");
+
+                    b.HasKey("Id")
+                        .HasName("pk_chats");
+
+                    b.ToTable("chats", (string)null);
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.EmailNotification", b =>
@@ -295,6 +333,53 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .HasDatabaseName("ix_files_user_id");
 
                     b.ToTable("files", (string)null);
+                });
+
+            modelBuilder.Entity("RussianSpotify.API.Core.Entities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("chat_id")
+                        .HasComment("Идентификатор чата");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()")
+                        .HasComment("Дата создания");
+
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("message_text")
+                        .HasComment("Текст сообщения");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasComment("Дата обновления");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id")
+                        .HasComment("Идентификатор пользователя");
+
+                    b.HasKey("Id")
+                        .HasName("pk_messages");
+
+                    b.HasIndex("ChatId")
+                        .HasDatabaseName("ix_messages_chat_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_messages_user_id");
+
+                    b.ToTable("messages", (string)null);
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Playlist", b =>
@@ -676,6 +761,23 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .HasConstraintName("fk_bucket_song_songs_songs_id");
                 });
 
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.HasOne("RussianSpotify.API.Core.Entities.Chat", null)
+                        .WithMany()
+                        .HasForeignKey("ChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_chat_user_chats_chats_id");
+
+                    b.HasOne("RussianSpotify.API.Core.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_chat_user_users_users_id");
+                });
+
             modelBuilder.Entity("PlaylistSong", b =>
                 {
                     b.HasOne("RussianSpotify.API.Core.Entities.Playlist", null)
@@ -743,6 +845,27 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                     b.Navigation("Playlist");
 
                     b.Navigation("Song");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RussianSpotify.API.Core.Entities.Message", b =>
+                {
+                    b.HasOne("RussianSpotify.API.Core.Entities.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_chats_chat_id");
+
+                    b.HasOne("RussianSpotify.API.Core.Entities.User", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_users_user_id");
+
+                    b.Navigation("Chat");
 
                     b.Navigation("User");
                 });
@@ -865,6 +988,11 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                     b.Navigation("Songs");
                 });
 
+            modelBuilder.Entity("RussianSpotify.API.Core.Entities.Chat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Playlist", b =>
                 {
                     b.Navigation("PlaylistUsers");
@@ -887,6 +1015,8 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                     b.Navigation("Bucket");
 
                     b.Navigation("Files");
+
+                    b.Navigation("Messages");
 
                     b.Navigation("PlaylistUsers");
 

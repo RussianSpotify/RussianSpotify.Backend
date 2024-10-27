@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.AccountExceptions;
@@ -39,6 +40,7 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, GetUser
         
         var user = await _dbContext.Users
             .Include(x => x.Roles)
+            .Include(x => x.Chats)
             .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
             ?? throw new ForbiddenException();
         
@@ -48,9 +50,13 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, GetUser
             Email = user.Email,
             UserName = user.UserName,
             UserPhotoId = user.UserPhotoId,
+            ChatId = user.Roles.Any(x => x.Name == BaseRoles.AdminRoleName)
+                ? null
+                : user.Chats.FirstOrDefault()?.Id,
             Roles = user.Roles
                 .Select(x => x.Name)
                 .ToList(),
+
         };
     }
 }

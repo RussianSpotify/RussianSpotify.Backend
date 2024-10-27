@@ -29,4 +29,9 @@ public class GetUserInfoResponse
     /// Id фото в профиле юзера
     /// </summary>
     public Guid? UserPhotoId { get; set; } = default!;
+
+    /// <summary>
+    /// Чат обычного пользователя
+    /// </summary>
+    public Guid? ChatId { get; set; }
 }

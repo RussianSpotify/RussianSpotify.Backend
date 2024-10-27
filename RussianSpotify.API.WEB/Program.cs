@@ -5,13 +5,12 @@ using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Core.Services;
 using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.WEB.CorsPolicy;
 using RussianSpotify.API.WEB.Middlewares;
 using RussianSpotify.API.Worker;
 using RussianSpotify.Data.S3;
-using Serilog;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -35,6 +34,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 builder.Services.AddPostgreSQLLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddRedis(configuration);
+builder.Services.AddSignalR();
 
 // Добавлен middleware для обработки исключений
 builder.Services
@@ -100,5 +100,6 @@ app.UseAuthorization();
 app.MapHealthChecks("/minio-health")
     .RequireCors(CorsPolicyConstants.AllowAll);
 app.MapControllers();
+app.MapHub<ChatHub>("/chat-hub");
 
 app.Run();
