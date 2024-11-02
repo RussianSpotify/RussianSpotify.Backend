@@ -37,6 +37,19 @@ public static class ConfigureAuthenticationExtension
                 ValidIssuer = configuration["JWT:ValidIssuer"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!))
             };
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    if (!string.IsNullOrEmpty(accessToken)
+                        && !string.IsNullOrEmpty(context.Request.Path.Value)
+                        && context.Request.Path.Value.Contains("/chat-hub"))
+                        context.Token = accessToken;
+
+                    return Task.CompletedTask;
+                }
+            };
         }).AddGoogle(config =>
         {
             config.ClientId = configuration["Authentication:Google:ClientId"]!;

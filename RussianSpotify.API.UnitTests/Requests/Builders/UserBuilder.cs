@@ -32,6 +32,16 @@ internal class UserBuilder
     }
 
     /// <summary>
+    /// Добавить роли для пользователя
+    /// </summary>
+    /// <param name="roles">Роли</param>
+    public UserBuilder SetRoles(List<Role> roles)
+    {
+        _user.Roles = roles;
+        return this;
+    }
+
+    /// <summary>
     /// Проставить ИД
     /// </summary>
     /// <param name="id">ИД</param>

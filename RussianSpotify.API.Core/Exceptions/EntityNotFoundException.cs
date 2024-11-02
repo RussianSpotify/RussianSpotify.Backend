@@ -16,6 +16,7 @@ public class EntityNotFoundException<TEntity> : ApplicationBaseException
         [typeof(User)] = "Не найден пользователь",
         [typeof(Entities.Playlist)] = "Не найден альбом/плейлист",
         [typeof(Song)] = "Не найдена песня",
+        [typeof(Chat)] = "Чат не найден"
     };
 
     public EntityNotFoundException(string message)

@@ -53,6 +53,12 @@ public class EfContext : DbContext, IDbContext
     public DbSet<EmailNotification> EmailNotifications { get; set; }
 
     /// <inheritdoc />
+    public DbSet<Chat> Chats { get; set; }
+    
+    /// <inheritdoc />
+    public DbSet<Message> Messages { get; set; }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder builder)
     {
         ConfigureGlobalFilters(builder);

@@ -37,6 +37,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasMany(x => x.Roles)
             .WithMany(y => y.Users);
+
+        builder.HasMany(x => x.Messages)
+            .WithOne(y => y.User)
+            .HasForeignKey(y => y.UserId)
+            .HasPrincipalKey(x => x.Id);
+
+        builder.HasMany(x => x.Chats)
+            .WithMany(y => y.Users);
         
         builder
             .HasOne(x => x.Subscribe)

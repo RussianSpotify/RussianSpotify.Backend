@@ -61,6 +61,16 @@ public interface IDbContext
     public DbSet<EmailNotification> EmailNotifications { get; set; }
 
     /// <summary>
+    /// Чаты
+    /// </summary>
+    public DbSet<Chat> Chats { get; set; }
+
+    /// <summary>
+    /// Сообщения
+    /// </summary>
+    public DbSet<Message> Messages { get; set; }
+    
+    /// <summary>
     /// Сохранить изменения
     /// </summary>
     /// <param name="cancellationToken">Токен отмены</param>

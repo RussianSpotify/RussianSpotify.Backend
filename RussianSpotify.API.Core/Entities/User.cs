@@ -59,6 +59,8 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         AuthorPlaylists = authorPlaylists ?? new List<Playlist>();
         Songs = songs ?? new List<Song>();
         Roles = roles ?? new List<Role>();
+        Chats = new List<Chat>();
+        Messages = new();
     }
 
     /// <summary>
@@ -157,6 +159,16 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     public Subscribe? Subscribe { get; set; }
 
     /// <summary>
+    /// Чаты
+    /// </summary>
+    public List<Chat> Chats { get; set; }
+
+    /// <summary>
+    /// Сообщения, отправленные пользователем
+    /// </summary>
+    public List<Message> Messages { get; set; }
+
+    /// <summary>
     /// Понравившиеся плейлисты
     /// </summary>
     public List<Playlist>? Playlists { get; set; }
@@ -203,6 +215,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="email">E-mail пользователя</param>
     /// <param name="phone">Телефон</param>
     /// <param name="passwordHash">Хеш пароля</param>
+    /// <param name="roles">Роли</param>
     /// <returns></returns>
     [Obsolete("Только для тестов")]
     public static User CreateForTest(
@@ -212,7 +225,8 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         File? userPhoto = default,
         string? email = default!,
         string? phone = default!,
-        string? passwordHash = default)
+        string? passwordHash = default,
+        List<Role>? roles = default)
         => new()
         {
             Id = id ?? Guid.NewGuid(),
@@ -223,6 +237,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
             Phone = phone,
             UserPhoto = userPhoto,
             _passwordHash = passwordHash ?? string.Empty, 
+            Roles = roles ?? new List<Role>(),
         };
 
     /// <summary>
