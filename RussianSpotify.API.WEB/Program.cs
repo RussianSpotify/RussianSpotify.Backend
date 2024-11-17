@@ -6,6 +6,7 @@ using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Core.Services;
+using RussianSpotify.API.MessageBroker;
 using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.WEB.CorsPolicy;
 using RussianSpotify.API.WEB.Middlewares;
@@ -35,6 +36,9 @@ builder.Services.AddPostgreSQLLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddRedis(configuration);
 builder.Services.AddSignalR();
+
+// RabbitMQ
+builder.Services.AddRabbitMq(configuration.GetSection("RabbitMq").Get<RabbitMqOptions>()!);
 
 // Добавлен middleware для обработки исключений
 builder.Services

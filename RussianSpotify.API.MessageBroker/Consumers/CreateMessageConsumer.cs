@@ -5,7 +5,7 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Models.ChatModels;
 
-namespace RussianSpotify.API.Core.Consumers;
+namespace RussianSpotify.API.MessageBroker.Consumers;
 
 /// <summary>
 /// Consumer на создание сообщения
