@@ -6,7 +6,7 @@ using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Core.Services;
-using RussianSpotify.API.MessageBroker;
+using RussianSpotify.API.Shared.Options;
 using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.WEB.CorsPolicy;
 using RussianSpotify.API.WEB.Middlewares;

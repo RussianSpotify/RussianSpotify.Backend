@@ -17,7 +17,7 @@
         <PackageReference Include="AspNet.Security.OAuth.Vkontakte" Version="7.0.4" />
         <PackageReference Include="AspNet.Security.OAuth.Yandex" Version="7.0.4" />
         <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
-        <PackageReference Include="MassTransit" Version="8.3.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.20" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.20" />
@@ -45,7 +45,6 @@
     <ItemGroup>
       <ProjectReference Include="..\RussianSpotify.API.Core\RussianSpotify.API.Core.csproj" />
       <ProjectReference Include="..\RussianSpotify.API.Data.PostgreSQL\RussianSpotify.API.Data.PostgreSQL.csproj" />
-      <ProjectReference Include="..\RussianSpotify.API.MessageBroker\RussianSpotify.API.MessageBroker.csproj" />
       <ProjectReference Include="..\RussianSpotify.API.Worker\RussianSpotify.API.Worker.csproj" />
       <ProjectReference Include="..\RussianSpotify.Data.S3\RussianSpotify.Data.S3.csproj" />
     </ItemGroup>

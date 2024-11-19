@@ -1,4 +1,4 @@
-namespace RussianSpotify.API.MessageBroker;
+namespace RussianSpotify.API.Shared.Options;
 
 public class RabbitMqOptions
 {
