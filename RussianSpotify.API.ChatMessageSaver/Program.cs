@@ -1,7 +1,6 @@
 using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.ChatMessageSaver.Configurations;
-using RussianSpotify.API.Core;
 using RussianSpotify.API.Shared.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +15,6 @@ builder.Services.AddCustomDbContext(builder.Configuration.GetConnectionString("D
 builder.Services
     .AddSingleton<UpdateInterceptor>()
     .AddSingleton<SoftDeleteInterceptor>();
-
-builder.Services.AddCoreLayout();
 
 var app = builder.Build();
 
