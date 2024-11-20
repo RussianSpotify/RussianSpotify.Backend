@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.Client",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.Shared", "RussianSpotify.API.Shared\RussianSpotify.API.Shared.csproj", "{29A00849-003C-436F-896F-9682E9216154}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.ChatMessageSaver", "RussianSpotify.API.ChatMessageSaver\RussianSpotify.API.ChatMessageSaver.csproj", "{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,7 @@ Global
 		{82AD743A-E2B7-4D13-9D26-6196F9DB64E6} = {6E7523E3-058B-42E1-A8FE-731D58E46BC6}
 		{7FB305BE-5D37-40CF-8382-58EEC2D360FD} = {6E7523E3-058B-42E1-A8FE-731D58E46BC6}
 		{29A00849-003C-436F-896F-9682E9216154} = {6E7523E3-058B-42E1-A8FE-731D58E46BC6}
+		{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3} = {6E7523E3-058B-42E1-A8FE-731D58E46BC6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{93621E9D-982B-478A-8811-ACB7C67693F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -80,5 +83,9 @@ Global
 		{29A00849-003C-436F-896F-9682E9216154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29A00849-003C-436F-896F-9682E9216154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29A00849-003C-436F-896F-9682E9216154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

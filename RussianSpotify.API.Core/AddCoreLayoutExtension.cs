@@ -1,12 +1,10 @@
 using System.Reflection;
 using FluentValidation;
-using MassTransit;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using RussianSpotify.API.Client;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Common.Behaviors;
-using RussianSpotify.API.Core.Consumers;
 using RussianSpotify.API.Core.Services;
 using RussianSpotify.API.Core.Services.Filters;
 
@@ -26,18 +24,6 @@ public static class AddCoreLayoutExtension
     {
         services.AddMediatR(config
             => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        
-        services.AddMassTransit(busConfigurator =>
-        {
-            busConfigurator.SetKebabCaseEndpointNameFormatter();
-
-            busConfigurator.AddConsumer<CreateMessageConsumer>();
-            busConfigurator.UsingInMemory((context, configurator) =>
-            {
-                configurator.ConfigureEndpoints(context);
-            });
-        });
-        
         services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddSignalR();
