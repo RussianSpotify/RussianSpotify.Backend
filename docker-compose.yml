@@ -64,11 +64,6 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "User ID=postgres;Password=root;Host=postgres_db;Port=5432;Database=RussianSpotify.API.Data"
       ConnectionStrings__RedisConnection: "redis:6379"
-      MinioS3__MinioClient: "RussianSpotify"
-      MinioS3__AccessKey: "russianSpotifyMinio"
-      MinioS3__SecretKey: "russianSpotifyMinioPassword"
-      MinioS3__ServiceUrl: "minio:9000"
-      MinioS3__BucketName: "russian-spotify"
       EmailSettings__FromName: "RussianSpotify"
       EmailSettings__EmailAddress: "s1chess@yandex.ru"
       EmailSettings__Password: "qsmylcfruascxvhi"
@@ -79,11 +74,43 @@ services:
       JWT__ValidIssuer: "176.57.208.209"
       JWT__Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"
       RedirectUrl: "http://176.57.208.209:3000"
+      GrpcOptions__Services__0__Name: "File"
+      GrpcOptions__Services__0__ServerUri: "http://files_service:81"
     ports:
       - "80:80"
     networks:
       - russianspotify_network
-        
+      
+  files_service:
+    build:
+      context: .
+      dockerfile: RussianSpotify.API.Files/Dockerfile
+    image: karantuligor/russian-spotify-files-service
+    container_name: RussianSpotify.API.Files
+    depends_on:
+      - postgres_db
+      - minio
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      MinioOptions__MinioClient: "RussianSpotify"
+      MinioOptions__AccessKey: "russianSpotifyMinio"
+      MinioOptions__SecretKey: "russianSpotifyMinioPassword"
+      MinioOptions__ServiceUrl: "minio:9000"
+      MinioOptions__BucketName: "russian-spotify"
+      JWT__ValidAudience: "176.57.208.209"
+      JWT__ValidIssuer: "176.57.208.209"
+      JWT__Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"
+      DbContextOptions__ConnectionString: "User ID=postgres;Password=root;Host=postgres_db;Port=5432;Database=RussianSpotify.API.Files.Data"
+      KestrelOptions__Options__0__EndpointType: Rest
+      KestrelOptions__Options__0__Port: 5111
+      KestrelOptions__Options__1__EndpointType: Grpc
+      KestrelOptions__Options__1__Port: 5112
+    ports:
+      - "82:80"
+      - "81:81"
+    networks:
+      - russianspotify_network
+  
   chat_message_saver:
     build:
       context: .

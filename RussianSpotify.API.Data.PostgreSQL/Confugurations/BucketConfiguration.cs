@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RussianSpotift.API.Data.PostgreSQL.Extensions;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 

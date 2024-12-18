@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Chat.GetChats;
 
 namespace RussianSpotify.API.Core.Requests.Chat.GetChats;
@@ -37,7 +39,7 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, GetChatsRespo
             ?? throw new ForbiddenException();
 
         var isAdmin = currentUser.Roles
-            .Any(x => x.Name == BaseRoles.AdminRoleName);
+            .Any(x => x.Name == Roles.AdminRoleName);
 
         var query = _dbContext.Chats
             .Where(x => x.Users.Any(y => y.Id == _userContext.CurrentUserId));
@@ -51,12 +53,12 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, GetChatsRespo
                 ChatName = isAdmin
                     ? x.Users.FirstOrDefault(y => y.Roles
                         .Select(z => z.Name)
-                        .Any(z => z != BaseRoles.AdminRoleName))!.UserName
+                        .Any(z => z != Roles.AdminRoleName))!.UserName
                     : "Тех.поддержка",
                 ImageId = isAdmin
                     ? x.Users.FirstOrDefault(y => y.Roles
                         .Select(z => z.Name)
-                        .Any(z => z != BaseRoles.AdminRoleName))!.UserPhotoId
+                        .Any(z => z != Roles.AdminRoleName))!.UserPhotoId
                     : null,
                 LastMessage = x.Messages
                     .OrderByDescending(y => y.CreatedAt)

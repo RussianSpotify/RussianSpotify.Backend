@@ -13,4 +13,8 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RussianSpotify.API.Shared\RussianSpotify.API.Shared.csproj" />
+    </ItemGroup>
 </Project>

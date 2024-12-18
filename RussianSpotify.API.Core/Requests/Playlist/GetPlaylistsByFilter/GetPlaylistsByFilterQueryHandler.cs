@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Extensions;
+using RussianSpotify.API.Shared.Exceptions;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.GetPlaylistsByFilter;
 
 namespace RussianSpotify.API.Core.Requests.Playlist.GetPlaylistsByFilter;
@@ -61,7 +63,7 @@ public class GetPlaylistsByFilterQueryHandler
             {
                 Id = playlist.Id,
                 PlaylistName = playlist.PlaylistName,
-                ImageId = playlist.ImageId,
+                ImageId = playlist.ImageFileId,
                 AuthorId = playlist.AuthorId,
                 AuthorName = playlist.Author!.UserName,
                 ReleaseDate = playlist.ReleaseDate,

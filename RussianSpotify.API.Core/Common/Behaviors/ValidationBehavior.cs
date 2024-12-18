@@ -8,6 +8,7 @@ namespace RussianSpotify.API.Core.Common.Behaviors;
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
+// TODO: Либо переписать Commands и Queries с использованием этого, либо убрать(лучше переписать), т.к. логика обработки данных мешается с валидацией
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {

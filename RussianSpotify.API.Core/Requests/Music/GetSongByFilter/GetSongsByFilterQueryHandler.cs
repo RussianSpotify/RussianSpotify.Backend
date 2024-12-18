@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Extensions;
+using RussianSpotify.API.Shared.Exceptions;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 
 namespace RussianSpotify.API.Core.Requests.Music.GetSongByFilter;
@@ -55,7 +57,7 @@ public class GetSongsByFilterQueryHandler
             .Include(song => song.Buckets)
             .Select(song => new GetSongsByFilterResponseItem
             {
-                ImageId = song.ImageId,
+                ImageId = song.ImageFileId,
                 SongId = song.Id,
                 SongName = song.SongName,
                 Duration = song.Duration,

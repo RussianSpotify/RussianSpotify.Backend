@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using RussianSpotify.API.Shared.Exceptions;
 
 namespace RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 

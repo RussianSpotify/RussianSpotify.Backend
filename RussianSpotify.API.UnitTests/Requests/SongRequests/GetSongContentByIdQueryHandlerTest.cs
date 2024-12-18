@@ -2,7 +2,6 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Music.GetSongContentById;
 using Xunit;
-using File = RussianSpotify.API.Core.Entities.File;
 
 namespace RussianSpotify.API.UnitTests.Requests.SongRequests;
 
@@ -20,11 +19,7 @@ public class GetSongContentByIdQueryHandlerTest : UnitTestBase
     public GetSongContentByIdQueryHandlerTest()
     {
         _song = Song.CreateForTest(
-            songName: "test",
-            files: new List<File>()
-            {
-                File.CreateForTest(),
-            });
+            songName: "test");
         
         _dbContext = CreateInMemory(x => x.AddRange(_song));
     }

@@ -1,17 +1,20 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
-using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Core.Services;
+using RussianSpotify.API.Grpc.Options;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
+using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
+using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions.CorsPolicy;
+using RussianSpotify.API.Shared.Interfaces;
+using RussianSpotify.API.Shared.Middlewares;
 using RussianSpotify.API.Shared.Options;
+using RussianSpotify.API.Shared.Services;
 using RussianSpotify.API.WEB.Configurations;
-using RussianSpotify.API.WEB.CorsPolicy;
-using RussianSpotify.API.WEB.Middlewares;
 using RussianSpotify.API.Worker;
-using RussianSpotify.Data.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -22,7 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddSwaggerGenWithAuth();
+    builder.Services.AddSwaggerGenWithAuth(typeof(Program).Assembly);
 }
 
 builder.Services.AddHangfireWorker();
@@ -32,10 +35,13 @@ builder.Services.AddCustomLogging();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 // Добавлен слой с db контекстом
+// TODO: Как будто бы это должно быть в одном методе AddPostgreSQLLayout и AddCustomDbContext
 builder.Services.AddPostgreSQLLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddRedis(configuration);
 builder.Services.AddSignalR();
+var grpcOptions = builder.Configuration.GetSection(nameof(GrpcOptions)).Get<GrpcOptions>()!;
+builder.Services.AddGrpcServices(grpcOptions);
 
 // RabbitMQ
 builder.Services.AddRabbitMq(configuration.GetSection("RabbitMq").Get<RabbitMqOptions>()!);
@@ -47,12 +53,10 @@ builder.Services
     .AddSingleton<SoftDeleteInterceptor>();
 
 builder.Services.AddGoogleService(configuration.GetSection("GoogleService").Get<HttpApiClientOptions>()!);
+builder.Services.AddScoped<IFileControllerHelper, FileControllerHelper>();
 
 // Добавлена аутентификация и jwt bearer
 builder.Services.AddAuthenticationWithJwtAndExternalServices(configuration);
-
-// Добавлен S3 Storage
-builder.Services.AddS3Storage(builder.Configuration.GetSection("MinioS3").Get<MinioOptions>()!);
 
 // Response Compression 
 builder.Services.AddResponseCompression();
@@ -101,8 +105,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHealthChecks("/minio-health")
-    .RequireCors(CorsPolicyConstants.AllowAll);
 app.MapControllers();
 app.MapHub<ChatHub>("/chat-hub");
 

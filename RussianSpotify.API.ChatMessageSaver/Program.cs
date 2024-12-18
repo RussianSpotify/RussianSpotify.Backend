@@ -1,6 +1,6 @@
 using RussianSpotift.API.Data.PostgreSQL;
-using RussianSpotift.API.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.ChatMessageSaver.Configurations;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Shared.Options;
 
 var builder = WebApplication.CreateBuilder(args);

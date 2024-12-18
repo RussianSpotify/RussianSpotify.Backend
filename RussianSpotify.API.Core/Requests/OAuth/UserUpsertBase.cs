@@ -3,6 +3,7 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Requests.OAuth;
 
 namespace RussianSpotify.API.Core.Requests.OAuth;
@@ -53,8 +54,8 @@ public abstract class UserUpsertBase
         if (userExist == null)
         {
             var role = await _dbContext.Roles
-                .FirstOrDefaultAsync(x => x.Name == BaseRoles.UserRoleName, cancellationToken)
-                       ?? throw new EntityNotFoundException<Role>(BaseRoles.UserRoleName);
+                .FirstOrDefaultAsync(x => x.Name == Roles.UserRoleName, cancellationToken)
+                       ?? throw new EntityNotFoundException<Role>(Roles.UserRoleName);
             
             userExist = new User(
                 userName: userInfo.Username,

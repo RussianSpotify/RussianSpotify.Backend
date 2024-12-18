@@ -7,6 +7,8 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.AccountExceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Account.GetUserInfo;
 
 namespace RussianSpotify.API.Core.Requests.Account.GetUserInfo;
@@ -50,7 +52,7 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, GetUser
             Email = user.Email,
             UserName = user.UserName,
             UserPhotoId = user.UserPhotoId,
-            ChatId = user.Roles.Any(x => x.Name == BaseRoles.AdminRoleName)
+            ChatId = user.Roles.Any(x => x.Name == Roles.AdminRoleName)
                 ? null
                 : user.Chats.FirstOrDefault()?.Id,
             Roles = user.Roles

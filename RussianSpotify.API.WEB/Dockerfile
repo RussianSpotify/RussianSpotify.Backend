@@ -10,7 +10,8 @@ COPY ["RussianSpotify.API.Data.PostgreSQL/RussianSpotify.API.Data.PostgreSQL.csp
 COPY ["RussianSpotify.API.Contracts/RussianSpotify.API.Contracts.csproj", "RussianSpotify.API.Contracts/"]
 COPY ["RussianSpotify.API.Core/RussianSpotify.API.Core.csproj", "RussianSpotify.API.Core/"]
 COPY ["RussianSpotify.API.Worker/RussianSpotify.API.Worker.csproj", "RussianSpotify.API.Worker/"]
-COPY ["RussianSpotify.Data.S3/RussianSpotify.Data.S3.csproj", "RussianSpotify.Data.S3/"]
+COPY ["RussianSpotify.API.Shared/RussianSpotify.API.Shared.csproj", "RussianSpotify.API.Shared/"]
+COPY ["RussianSpotify.API.Grpc/RussianSpotify.API.Grpc.csproj", "RussianSpotify.API.Grpc/"]
 RUN dotnet restore "RussianSpotify.API.WEB/RussianSpotify.API.WEB.csproj"
 COPY . .
 WORKDIR "/src/RussianSpotify.API.WEB"

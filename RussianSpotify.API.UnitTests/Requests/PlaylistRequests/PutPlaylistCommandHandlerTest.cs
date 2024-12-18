@@ -57,8 +57,8 @@ public class PutPlaylistCommandHandlerTest : UnitTestBase
         var handler = new PutPlaylistCommandHandler(
             _dbContext,
             UserContext.Object,
-            FileHelper.Object,
-            _logger.Object);
+            _logger.Object,
+            S3Service.Object);
 
         var response = await handler.Handle(command, default);
 

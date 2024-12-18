@@ -1,3 +1,5 @@
+using RussianSpotify.API.Shared.Exceptions;
+
 namespace RussianSpotify.API.Core.Exceptions.SongExceptions;
 
 public class SongBadRequestException : BadRequestException

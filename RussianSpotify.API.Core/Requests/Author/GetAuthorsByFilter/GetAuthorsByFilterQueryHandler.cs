@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Requests.Author.GetAuthorsByFilter;
 
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthorsByFilter;
@@ -57,7 +58,7 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
         var authors = new List<User>();
         
         foreach (var user in filteredUsersToList)
-            if (_roleManager.IsInRole(user, BaseRoles.AuthorRoleName))
+            if (_roleManager.IsInRole(user, Roles.AuthorRoleName))
                 authors.Add(user);
         
         authors = authors

@@ -5,7 +5,6 @@ using RussianSpotify.API.Core.Requests.Playlist.PostCreatePlaylist;
 using RussianSpotify.Contracts.Enums;
 using RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 using Xunit;
-using File = RussianSpotify.API.Core.Entities.File;
 
 namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
@@ -15,14 +14,12 @@ namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
-    private readonly File _image;
+    private readonly Guid _image = Guid.NewGuid();
     private readonly User _user;
     private readonly Song _song;
 
     public PostCreatePlaylistCommandHandlerTest()
     {
-        _image = File.CreateForTest(address: "zalupkino");
-
         _user = User.CreateForTest(id: UserContext.Object.CurrentUserId);
 
         _song = Song.CreateForTest(
@@ -31,7 +28,6 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
         
         _dbContext = CreateInMemory(
             x => x.AddRange(
-                _image,
                 _user,
                 _song));
     }
@@ -45,7 +41,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
         var request = new PostCreatePlaylistRequest
         {
             PlaylistName = "Тест",
-            ImageId = _image.Id,
+            ImageId = _image,
             SongIds = new List<Guid>() { _song.Id },
             IsAlbum = false
         };
@@ -55,7 +51,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
             _dbContext,
             UserContext.Object,
             DateTimeProvider.Object,
-            FileHelper.Object);
+            S3Service.Object);
 
         var response = await handler.Handle(command, default);
 
@@ -63,7 +59,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
 
         Assert.NotNull(playlist);
         
-        Assert.Equal(_image.Id, playlist.ImageId);
+        Assert.Equal(_image, playlist.ImageFileId);
         Assert.Equal(request.PlaylistName, playlist.PlaylistName);
         Assert.Equal(request.IsAlbum, playlist.IsAlbum);
         Assert.Equal(_song.Id, playlist.Songs![0].Id);

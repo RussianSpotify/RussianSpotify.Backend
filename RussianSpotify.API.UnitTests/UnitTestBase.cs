@@ -1,19 +1,18 @@
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Grpc.Clients.FileClient.Models;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.UnitTests.Requests.Builders;
-using File = RussianSpotify.API.Core.Entities.File;
 
 namespace RussianSpotify.API.UnitTests;
 
@@ -55,11 +54,6 @@ public class UnitTestBase : IDisposable
     protected Mock<ISubscriptionHandler> SubscriptionService { get; }
     
     /// <summary>
-    ///  Помощник по работе с файлами
-    /// </summary>
-    protected Mock<IFileHelper> FileHelper { get; }
-    
-    /// <summary>
     /// Мок Взаимодействия с ролью пользователя
     /// </summary>
     protected Mock<IRoleManager> RoleManager { get; }
@@ -67,7 +61,7 @@ public class UnitTestBase : IDisposable
     /// <summary>
     /// Мок S3 Service
     /// </summary>
-    protected Mock<IS3Service> S3Service { get; }
+    protected Mock<IFileServiceClient> S3Service { get; }
     
     /// <summary>
     /// Мок Сервис для работы с паролями
@@ -105,7 +99,7 @@ public class UnitTestBase : IDisposable
             {
                 new()
                 {
-                    Name = BaseRoles.AdminRoleName
+                    Name = Roles.AdminRoleName
                 }
             })
             .SetId(Guid.Parse(CurrentUserId))
@@ -155,12 +149,21 @@ public class UnitTestBase : IDisposable
         TokenFactory.Setup(x => x.GetToken())
             .Returns("22222222");
 
-        S3Service = new Mock<IS3Service>();
-        S3Service.Setup(x => x.DownloadFileAsync(
-                It.IsAny<string>(),
-                It.IsAny<string>(),
+        S3Service = new Mock<IFileServiceClient>();
+        S3Service.Setup(x => x.GetFileAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(FileContent.CreateForTest());
+            .ReturnsAsync(Grpc.Clients.FileClient.Models.File.CreateForTest());
+        S3Service.Setup(x => x.GetFileMetadataAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Grpc.Clients.FileClient.Models.File.CreateForTest().Metadata);
+        
+        S3Service.Setup(x => x.IsImage(It.IsAny<string>()))
+            .Returns(true);
+        S3Service.Setup(
+                x => x.DeleteAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken>()))
+            .Returns(() => Task.CompletedTask);
         
         DateTimeProvider = new Mock<IDateTimeProvider>();
         DateTimeProvider.Setup(x => x.CurrentDate)
@@ -189,15 +192,6 @@ public class UnitTestBase : IDisposable
             .Verifiable();
         SubscriptionService.Setup(x => x.Subscribe(It.IsAny<Guid>(), It.IsAny<int>()))
             .Verifiable();
-
-        FileHelper = new Mock<IFileHelper>();
-        FileHelper.Setup(x => x.IsImage(It.IsAny<File>()))
-            .Returns(true);
-        FileHelper.Setup(
-            x => x.DeleteFileAsync(
-                It.IsAny<File>(),
-                It.IsAny<CancellationToken>()))
-            .Returns(() => Task.CompletedTask);
 
         RoleManager = new Mock<IRoleManager>();
         RoleManager.Setup(x => x.IsInRole(

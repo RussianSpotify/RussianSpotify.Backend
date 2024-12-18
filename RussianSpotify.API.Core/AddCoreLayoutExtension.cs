@@ -7,6 +7,8 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Common.Behaviors;
 using RussianSpotify.API.Core.Services;
 using RussianSpotify.API.Core.Services.Filters;
+using RussianSpotify.API.Shared.Interfaces;
+using RussianSpotify.API.Shared.Services;
 
 namespace RussianSpotify.API.Core;
 
@@ -34,7 +36,6 @@ public static class AddCoreLayoutExtension
         services.AddScoped<ISubscriptionHandler, SubscriptionHandler>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IUserClaimsManager, UserClaimsManager>();
-        services.AddScoped<IFileHelper, FileHelper>();
         services.AddScoped<IRoleManager, RoleManager>();
         services.AddScoped<IFilterHandler, FilterHandler>();
         services.AddScoped<IPasswordService, PasswordService>();

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using File = RussianSpotify.API.Core.Entities.File;
 
 namespace RussianSpotift.API.Data.PostgreSQL;
 
@@ -28,6 +27,7 @@ public class EfContext : DbContext, IDbContext
     /// <inheritdoc />
     public DbSet<Role> Roles { get; set; }
 
+    // TODO: Не используется(убрать бы по хорошему)
     /// <inheritdoc />
     public DbSet<RolePrivilege> Privileges { get; set; } = default!;
 
@@ -42,9 +42,6 @@ public class EfContext : DbContext, IDbContext
 
     /// <inheritdoc />
     public DbSet<Category> Categories { get; set; } = default!;
-
-    /// <inheritdoc />
-    public DbSet<File> Files { get; set; } = default!;
 
     /// <inheritdoc />
     public DbSet<Bucket> Buckets { get; set; } = default!;
@@ -71,7 +68,6 @@ public class EfContext : DbContext, IDbContext
         builder.Entity<Bucket>().HasQueryFilter(x => !x.IsDeleted);
         builder.Entity<Category>().HasQueryFilter(x => !x.IsDeleted);
         builder.Entity<EmailNotification>().HasQueryFilter(x => !x.IsDeleted);
-        builder.Entity<File>().HasQueryFilter(x => !x.IsDeleted);
         builder.Entity<Playlist>().HasQueryFilter(x => !x.IsDeleted);
         builder.Entity<Song>().HasQueryFilter(x => !x.IsDeleted);
         builder.Entity<Subscribe>().HasQueryFilter(x => !x.IsDeleted);

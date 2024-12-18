@@ -1,15 +1,15 @@
-using System.Text;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 using Role = RussianSpotify.API.Core.Entities.Role;
 
@@ -59,13 +59,13 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
         if (isExistSameUser)
             throw new EmailAlreadyRegisteredException(AuthErrorMessages.UserWithSameEmail);
 
-        if (request.Role == BaseRoles.AuthorRoleName)
+        if (request.Role == Roles.AuthorRoleName)
         {
             var authorWithSameUsername = await _dbContext.Users
                 .Include(x => x.Roles)
                 .FirstOrDefaultAsync(x => x.UserName.ToLower() == request.UserName.ToLower(), cancellationToken);
 
-            if (authorWithSameUsername != null && authorWithSameUsername.Roles.Any(x => x.Id == BaseRoles.AuthorId))
+            if (authorWithSameUsername != null && authorWithSameUsername.Roles.Any(x => x.Id == Roles.AuthorId))
                 throw new BadRequestException($"Автор с именем: {request.UserName} уже существует");
         }
 
@@ -76,7 +76,7 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
             email: request.Email,
             passwordHash: passwordHash);
         
-        if (request.Role.Equals(BaseRoles.AdminRoleName, StringComparison.OrdinalIgnoreCase))
+        if (request.Role.Equals(Roles.AdminRoleName, StringComparison.OrdinalIgnoreCase))
             throw new UserCannotBeAdminException("Пользователь не может быть админом");
         
         var baseRole = await _dbContext.Roles

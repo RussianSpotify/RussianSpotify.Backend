@@ -4,6 +4,7 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.DeleteSongAuthor;
 
 namespace RussianSpotify.API.Core.Requests.Music.DeleteSongAuthor;

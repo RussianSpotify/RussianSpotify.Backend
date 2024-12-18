@@ -1,6 +1,7 @@
 using MediatR;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
+using RussianSpotify.API.Shared.Interfaces;
 
 namespace RussianSpotify.API.Core.Requests.Subscription.PostUnsubscribe;
 

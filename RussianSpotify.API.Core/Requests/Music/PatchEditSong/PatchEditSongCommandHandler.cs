@@ -4,6 +4,8 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
+using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.EditSong;
 
 namespace RussianSpotify.API.Core.Requests.Music.PatchEditSong;
@@ -15,7 +17,7 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
 {
     private readonly IDbContext _dbContext;
     private readonly IUserContext _userContext;
-    private readonly IFileHelper _fileHelper;
+    private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
     /// Конструктор
@@ -23,11 +25,13 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="fileHelper">Сервис для работы с файлами</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
-    public PatchEditSongCommandHandler(IDbContext dbContext, IFileHelper fileHelper, IUserContext userContext)
+    /// <param name="fileServiceClient">Сервис для работы с файлами</param>
+    public PatchEditSongCommandHandler(IDbContext dbContext, IUserContext userContext,
+        IFileServiceClient fileServiceClient)
     {
         _dbContext = dbContext;
-        _fileHelper = fileHelper;
         _userContext = userContext;
+        _fileServiceClient = fileServiceClient;
     }
 
     /// <inheritdoc/> 
@@ -35,10 +39,9 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
     {
         // Достаем песню из бд
         var songFromDb = await _dbContext.Songs
-            .Include(i => i.Authors)
-            .Include(i => i.Image)
-            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
-            ?? throw new EntityNotFoundException<Song>(request.SongId);
+                             .Include(i => i.Authors)
+                             .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
+                         ?? throw new EntityNotFoundException<Song>(request.SongId);
 
         var songOldName = songFromDb.SongName;
 
@@ -61,7 +64,7 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
             // Валидация и добавление
             if (request.Duration < 0)
                 throw new SongBadRequestException("Wrong song duration was provided");
-            
+
             songFromDb.Duration = request.Duration.Value;
         }
 
@@ -70,45 +73,41 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         {
             // Получаем категорию из бд
             var categoryFromDb = await _dbContext.Categories
-                .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken)
-                ?? throw new EntityNotFoundException<Category>(request.Category.ToString()!);
-            
+                                     .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category,
+                                         cancellationToken)
+                                 ?? throw new EntityNotFoundException<Category>(request.Category.ToString()!);
+
             songFromDb.Category = categoryFromDb;
         }
 
-        Console.WriteLine(request.ImageId);
         // Проверяем, был ли введен Id картинки
         if (request.ImageId is not null)
         {
             // Достаем картину из бд
-            var imageFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(i => i.Id == request.ImageId.Value, cancellationToken)
-                ?? throw new EntityNotFoundException<Entities.File>(request.ImageId.Value);
+            var file = await _fileServiceClient.GetFileAsync(request.ImageId.Value, cancellationToken);
 
             // Проверка, является ли файл картинкой и присвоение
-            if (!_fileHelper.IsImage(imageFromDb))
+            if (!_fileServiceClient.IsImage(file.Metadata.ContentType))
                 throw new SongBadImageException("File's content type is not Image");
 
             // Удаляем текущую картинку
-            if (songFromDb.Image is not null)
-                await _fileHelper.DeleteFileAsync(songFromDb.Image, cancellationToken);
+            if (songFromDb.ImageFileId is not null)
+                await _fileServiceClient.DeleteAsync(songFromDb.ImageFileId.Value, cancellationToken);
 
-            songFromDb.Image = imageFromDb;
+            songFromDb.ImageFileId = request.ImageId.Value;
         }
 
         // Проверяем, был лы введен Id файла песни
         if (request.SongFileId is not null)
         {
             // Достаем файл из бд
-            var fileFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(i => i.Id == request.SongFileId.Value, cancellationToken)
-                ?? throw new EntityNotFoundException<Entities.File>(request.SongFileId.Value);
-
-            // Проверяем, является ли файл аудио и присвоение
-            if (!_fileHelper.IsAudio(fileFromDb))
-                throw new SongBadFileException("File's content type is not Audio");
+            var file = await _fileServiceClient.GetFileMetadataAsync(request.SongFileId.Value, cancellationToken);
             
-            fileFromDb.Song = songFromDb;
+            // Проверяем, является ли файл аудио и присвоение
+            if (!_fileServiceClient.IsAudio(file.ContentType))
+                throw new SongBadFileException("File's content type is not Audio");
+
+            songFromDb.SongFileId = request.SongFileId.Value;
         }
 
         // Вносим изменения в бд

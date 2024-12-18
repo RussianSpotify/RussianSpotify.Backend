@@ -1,4 +1,5 @@
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Shared.Domain.Abstractions;
 
 namespace RussianSpotify.API.Core.Entities;
 
@@ -53,14 +54,11 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
     public Category Category { get; set; }
 
     /// <summary>
-    /// Картинка
-    /// </summary>
-    public File? Image { get; set; }
-
-    /// <summary>
     /// ИД файла картинки
     /// </summary>
-    public Guid? ImageId { get; protected set; }
+    public Guid? ImageFileId { get; set; }
+    
+    public Guid? SongFileId { get; set; }
 
     /// <summary>
     /// Корзины
@@ -71,11 +69,6 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
     /// Плейлисты, которым принадлежит песни
     /// </summary>
     public List<Playlist> Playlists { get; protected set; } = new();
-    
-    /// <summary>
-    /// Файлы (тут музыка и картинка)
-    /// </summary>
-    public List<File> Files { get; set; } = new();
 
     /// <summary>
     /// Авторы
@@ -113,20 +106,20 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
         double? duration = default,
         uint? playsNumber = default,
         Category? category = default,
-        File? image = default,
-        List<User>? authors = default,
-        List<File>? files = default)
+        Guid songFileId = default,
+        Guid imageFileId = default,
+        List<User>? authors = default)
         => new()
         {
             Id = id,
+            SongFileId = songFileId,
+            ImageFileId = imageFileId,
             SongName = songName ?? string.Empty,
             Duration = duration ?? 0,
             PlaysNumber = playsNumber ?? 0,
             CategoryId = default,
             Category = category ?? new Category(),
-            Image = image,
             Authors = authors ?? new(),
-            Files = files ?? new(),
         };
     
     /// <summary>

@@ -36,6 +36,7 @@
     <ItemGroup>
         <ProjectReference Include="..\RussianSpotify.API.Client\RussianSpotify.API.Client.csproj" />
         <ProjectReference Include="..\RussianSpotify.API.Contracts\RussianSpotify.API.Contracts.csproj" />
+        <ProjectReference Include="..\RussianSpotify.API.Grpc\RussianSpotify.API.Grpc.csproj" />
         <ProjectReference Include="..\RussianSpotify.API.Shared\RussianSpotify.API.Shared.csproj" />
     </ItemGroup>
 

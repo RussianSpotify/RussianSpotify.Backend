@@ -52,8 +52,8 @@ public class PatchEditSongCommandHandlerTest : UnitTestBase
 
         var handler = new PatchEditSongCommandHandler(
             _dbContext,
-            FileHelper.Object,
-            UserContext.Object);
+            UserContext.Object,
+            S3Service.Object);
 
         await handler.Handle(command, default);
 

@@ -25,723 +25,517 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
             modelBuilder.Entity("BucketSong", b =>
                 {
                     b.Property<Guid>("BucketsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("buckets_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SongsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("songs_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("BucketsId", "SongsId")
-                        .HasName("pk_bucket_song");
+                    b.HasKey("BucketsId", "SongsId");
 
-                    b.HasIndex("SongsId")
-                        .HasDatabaseName("ix_bucket_song_songs_id");
+                    b.HasIndex("SongsId");
 
-                    b.ToTable("bucket_song", (string)null);
+                    b.ToTable("BucketSong");
                 });
 
             modelBuilder.Entity("ChatUser", b =>
                 {
                     b.Property<Guid>("ChatsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("chats_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UsersId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("users_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("ChatsId", "UsersId")
-                        .HasName("pk_chat_user");
+                    b.HasKey("ChatsId", "UsersId");
 
-                    b.HasIndex("UsersId")
-                        .HasDatabaseName("ix_chat_user_users_id");
+                    b.HasIndex("UsersId");
 
-                    b.ToTable("chat_user", (string)null);
+                    b.ToTable("ChatUser");
                 });
 
             modelBuilder.Entity("PlaylistSong", b =>
                 {
                     b.Property<Guid>("PlaylistsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("playlists_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SongsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("songs_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("PlaylistsId", "SongsId")
-                        .HasName("pk_playlist_song");
+                    b.HasKey("PlaylistsId", "SongsId");
 
-                    b.HasIndex("SongsId")
-                        .HasDatabaseName("ix_playlist_song_songs_id");
+                    b.HasIndex("SongsId");
 
-                    b.ToTable("playlist_song", (string)null);
+                    b.ToTable("PlaylistSong");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<Guid>("RolesId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("roles_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UsersId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("users_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("RolesId", "UsersId")
-                        .HasName("pk_role_user");
+                    b.HasKey("RolesId", "UsersId");
 
-                    b.HasIndex("UsersId")
-                        .HasDatabaseName("ix_role_user_users_id");
+                    b.HasIndex("UsersId");
 
-                    b.ToTable("role_user", (string)null);
+                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Bucket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_buckets");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_buckets_user_id");
+                        .IsUnique();
 
-                    b.ToTable("buckets", (string)null);
+                    b.ToTable("Buckets");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("CategoryName")
                         .HasColumnType("integer")
-                        .HasColumnName("category_name")
                         .HasComment("Название категории");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
-                    b.HasKey("Id")
-                        .HasName("pk_categories");
+                    b.HasKey("Id");
 
-                    b.ToTable("categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Chat", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name")
                         .HasComment("Название чата");
 
-                    b.HasKey("Id")
-                        .HasName("pk_chats");
+                    b.HasKey("Id");
 
-                    b.ToTable("chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.EmailNotification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("body")
                         .HasComment("Тело сообщения");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
                     b.Property<string>("EmailTo")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("email_to")
                         .HasComment("Кому отправлять");
 
                     b.Property<string>("Head")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("head")
                         .HasComment("Заголовок сообщения");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<DateTime?>("SentDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("sent_date")
                         .HasComment("Дата отправки сообщения");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
-                    b.HasKey("Id")
-                        .HasName("pk_email_notifications");
+                    b.HasKey("Id");
 
-                    b.ToTable("email_notifications", (string)null);
-                });
-
-            modelBuilder.Entity("RussianSpotify.API.Core.Entities.File", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("address")
-                        .HasComment("Адрес файла в S3");
-
-                    b.Property<string>("ContentType")
-                        .HasColumnType("text")
-                        .HasColumnName("content_type")
-                        .HasComment("Тип файла");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("now()")
-                        .HasComment("Дата создания");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
-                        .HasComment("Дата удаления");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("text")
-                        .HasColumnName("file_name")
-                        .HasComment("Название файла");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
-                        .HasComment("Удален");
-
-                    b.Property<Guid?>("PlaylistId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("playlist_id");
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint")
-                        .HasColumnName("size")
-                        .HasComment("Размер файла");
-
-                    b.Property<Guid?>("SongId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("song_id");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasComment("Дата обновления");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_files");
-
-                    b.HasIndex("PlaylistId")
-                        .HasDatabaseName("ix_files_playlist_id");
-
-                    b.HasIndex("SongId")
-                        .HasDatabaseName("ix_files_song_id");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_files_user_id");
-
-                    b.ToTable("files", (string)null);
+                    b.ToTable("EmailNotifications");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid")
-                        .HasColumnName("chat_id")
                         .HasComment("Идентификатор чата");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<string>("MessageText")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("message_text")
                         .HasComment("Текст сообщения");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("user_id")
                         .HasComment("Идентификатор пользователя");
 
-                    b.HasKey("Id")
-                        .HasName("pk_messages");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ChatId")
-                        .HasDatabaseName("ix_messages_chat_id");
+                    b.HasIndex("ChatId");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_messages_user_id");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Playlist", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("author_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("image_id");
+                    b.Property<Guid?>("ImageFileId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsAlbum")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_album");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<string>("PlaylistName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("playlist_name")
                         .HasComment("Название плейлиста");
 
                     b.Property<long>("PlaysNumber")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasDefaultValue(0L)
-                        .HasColumnName("plays_number");
+                        .HasDefaultValue(0L);
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("release_date")
                         .HasComment("Дата релиза");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
-                    b.HasKey("Id")
-                        .HasName("pk_playlists");
+                    b.HasKey("Id");
 
-                    b.HasIndex("AuthorId")
-                        .HasDatabaseName("ix_playlists_author_id");
+                    b.HasIndex("AuthorId");
 
-                    b.HasIndex("ImageId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_playlists_image_id");
-
-                    b.ToTable("playlists", (string)null);
+                    b.ToTable("Playlists");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.PlaylistUser", b =>
                 {
                     b.Property<Guid>("PlaylistId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("playlist_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("AddedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("added_date");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("PlaylistId", "UserId")
-                        .HasName("pk_playlist_user");
+                    b.HasKey("PlaylistId", "UserId");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_playlist_user_user_id");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("playlist_user", (string)null);
+                    b.ToTable("PlaylistUser");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name")
                         .HasComment("Название роли");
 
-                    b.HasKey("Id")
-                        .HasName("pk_roles");
+                    b.HasKey("Id");
 
-                    b.ToTable("roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.RolePrivilege", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Privilege")
-                        .HasColumnType("integer")
-                        .HasColumnName("privilege");
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_privileges");
+                    b.HasKey("Id");
 
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_privileges_role_id");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable("privileges", (string)null);
+                    b.ToTable("Privileges");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Song", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("category_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
                     b.Property<double>("Duration")
                         .HasColumnType("double precision")
-                        .HasColumnName("duration")
                         .HasComment("Длительность");
 
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("image_id");
+                    b.Property<Guid?>("ImageFileId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<long>("PlaysNumber")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasDefaultValue(0L)
-                        .HasColumnName("plays_number")
                         .HasComment("Кол-во прослушиваний");
+
+                    b.Property<Guid?>("SongFileId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("SongName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("song_name")
                         .HasComment("Название песни");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
-                    b.HasKey("Id")
-                        .HasName("pk_songs");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_songs_category_id");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("ImageId")
-                        .HasDatabaseName("ix_songs_image_id");
-
-                    b.ToTable("songs", (string)null);
+                    b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Subscribe", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateEnd")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_end")
                         .HasComment("Конец подписки");
 
                     b.Property<DateTime?>("DateStart")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date_start")
                         .HasComment("Начало подписки");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("user_id")
                         .HasComment("ИД Пользователь");
 
-                    b.HasKey("Id")
-                        .HasName("pk_subscribes");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_subscribes_user_id");
+                        .IsUnique();
 
-                    b.ToTable("subscribes", (string)null);
+                    b.ToTable("Subscribes");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("AccessToken")
-                        .HasColumnType("text")
-                        .HasColumnName("access_token");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("Birthday")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("birthday");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
                         .HasDefaultValueSql("now()")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
                         .HasComment("Дата удаления");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("email")
                         .HasComment("Почта пользователя");
 
                     b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_confirmed");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deleted")
                         .HasComment("Удален");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("password_hash")
                         .HasComment("Хеш пароля");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("text")
-                        .HasColumnName("phone");
+                        .HasColumnType("text");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("text")
-                        .HasColumnName("refresh_token");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("refresh_token_expiry_time");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
                         .HasComment("Дата обновления");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("user_name")
                         .HasComment("Логин пользователя");
 
                     b.Property<Guid?>("UserPhotoId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_photo_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_users");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserPhotoId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_user_photo_id");
-
-                    b.ToTable("users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SongUser", b =>
                 {
                     b.Property<Guid>("AuthorsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("authors_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SongsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("songs_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("AuthorsId", "SongsId")
-                        .HasName("pk_song_user");
+                    b.HasKey("AuthorsId", "SongsId");
 
-                    b.HasIndex("SongsId")
-                        .HasDatabaseName("ix_song_user_songs_id");
+                    b.HasIndex("SongsId");
 
-                    b.ToTable("song_user", (string)null);
+                    b.ToTable("SongUser");
                 });
 
             modelBuilder.Entity("BucketSong", b =>
@@ -750,15 +544,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("BucketsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_bucket_song_buckets_buckets_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.Song", null)
                         .WithMany()
                         .HasForeignKey("SongsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_bucket_song_songs_songs_id");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatUser", b =>
@@ -767,15 +559,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("ChatsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_chat_user_chats_chats_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_chat_user_users_users_id");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PlaylistSong", b =>
@@ -784,15 +574,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("PlaylistsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_playlist_song_playlists_playlists_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.Song", null)
                         .WithMany()
                         .HasForeignKey("SongsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_playlist_song_songs_songs_id");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -801,15 +589,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_role_user_roles_roles_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_role_user_users_users_id");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Bucket", b =>
@@ -818,33 +604,7 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithOne("Bucket")
                         .HasForeignKey("RussianSpotify.API.Core.Entities.Bucket", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_buckets_users_user_id");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RussianSpotify.API.Core.Entities.File", b =>
-                {
-                    b.HasOne("RussianSpotify.API.Core.Entities.Playlist", "Playlist")
-                        .WithMany()
-                        .HasForeignKey("PlaylistId")
-                        .HasConstraintName("fk_files_playlists_playlist_id");
-
-                    b.HasOne("RussianSpotify.API.Core.Entities.Song", "Song")
-                        .WithMany("Files")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("fk_files_songs_song_id");
-
-                    b.HasOne("RussianSpotify.API.Core.Entities.User", "User")
-                        .WithMany("Files")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("fk_files_users_user_id");
-
-                    b.Navigation("Playlist");
-
-                    b.Navigation("Song");
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -855,15 +615,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_messages_chats_chat_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_messages_users_user_id");
+                        .IsRequired();
 
                     b.Navigation("Chat");
 
@@ -876,18 +634,9 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany("AuthorPlaylists")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_playlists_users_author_id");
-
-                    b.HasOne("RussianSpotify.API.Core.Entities.File", "Image")
-                        .WithOne()
-                        .HasForeignKey("RussianSpotify.API.Core.Entities.Playlist", "ImageId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_playlists_files_image_id");
+                        .IsRequired();
 
                     b.Navigation("Author");
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.PlaylistUser", b =>
@@ -896,15 +645,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany("PlaylistUsers")
                         .HasForeignKey("PlaylistId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_playlist_user_playlists_playlist_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.User", "User")
                         .WithMany("PlaylistUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_playlist_user_users_user_id");
+                        .IsRequired();
 
                     b.Navigation("Playlist");
 
@@ -917,8 +664,7 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany("Privileges")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_privileges_roles_role_id");
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
@@ -929,18 +675,9 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany("Songs")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_songs_categories_category_id");
-
-                    b.HasOne("RussianSpotify.API.Core.Entities.File", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_songs_files_image_id");
+                        .IsRequired();
 
                     b.Navigation("Category");
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Subscribe", b =>
@@ -949,21 +686,9 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithOne("Subscribe")
                         .HasForeignKey("RussianSpotify.API.Core.Entities.Subscribe", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_subscribes_users_user_id");
+                        .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RussianSpotify.API.Core.Entities.User", b =>
-                {
-                    b.HasOne("RussianSpotify.API.Core.Entities.File", "UserPhoto")
-                        .WithOne()
-                        .HasForeignKey("RussianSpotify.API.Core.Entities.User", "UserPhotoId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_users_files_user_photo_id1");
-
-                    b.Navigation("UserPhoto");
                 });
 
             modelBuilder.Entity("SongUser", b =>
@@ -972,15 +697,13 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .WithMany()
                         .HasForeignKey("AuthorsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_song_user_users_authors_id");
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.Song", null)
                         .WithMany()
                         .HasForeignKey("SongsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_song_user_songs_songs_id");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.Category", b =>
@@ -1003,18 +726,11 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                     b.Navigation("Privileges");
                 });
 
-            modelBuilder.Entity("RussianSpotify.API.Core.Entities.Song", b =>
-                {
-                    b.Navigation("Files");
-                });
-
             modelBuilder.Entity("RussianSpotify.API.Core.Entities.User", b =>
                 {
                     b.Navigation("AuthorPlaylists");
 
                     b.Navigation("Bucket");
-
-                    b.Navigation("Files");
 
                     b.Navigation("Messages");
 

@@ -33,8 +33,8 @@ public class DeletePlaylistCommandHandlerTest : UnitTestBase
 
         var handler = new DeletePlaylistCommandHandler(
             _dbContext,
-            FileHelper.Object,
-            UserContext.Object);
+            UserContext.Object,
+            S3Service.Object);
 
         var response = await handler.Handle(command, default);
 

@@ -1,8 +1,11 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.Playlist;
+using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.DeletePlaylist;
 
 namespace RussianSpotify.API.Core.Requests.Playlist.DeletePlaylist;
@@ -13,20 +16,20 @@ namespace RussianSpotify.API.Core.Requests.Playlist.DeletePlaylist;
 public class DeletePlaylistCommandHandler : IRequestHandler<DeletePlaylistCommand, DeletePlaylistResponse>
 {
     private readonly IDbContext _dbContext;
-    private readonly IFileHelper _fileHelper;
     private readonly IUserContext _userContext;
+    private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
     /// Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
-    /// <param name="fileHelper">Сервис файлов</param>
     /// <param name="userContext">Контекст пользователя</param>
-    public DeletePlaylistCommandHandler(IDbContext dbContext, IFileHelper fileHelper, IUserContext userContext)
+    /// <param name="fileServiceClient">Сервис для работы с файлами</param>
+    public DeletePlaylistCommandHandler(IDbContext dbContext, IUserContext userContext, IFileServiceClient fileServiceClient)
     {
         _dbContext = dbContext;
-        _fileHelper = fileHelper;
         _userContext = userContext;
+        _fileServiceClient = fileServiceClient;
     }
 
     /// <inheritdoc/>
@@ -34,21 +37,20 @@ public class DeletePlaylistCommandHandler : IRequestHandler<DeletePlaylistComman
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         var playlistFromDb = await _dbContext.Playlists
-            .Include(i => i.Image)
-            .FirstOrDefaultAsync(i => i.Id == request.PlaylistId, cancellationToken)
-            ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
+                                 .FirstOrDefaultAsync(i => i.Id == request.PlaylistId, cancellationToken)
+                             ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
 
         if (playlistFromDb.AuthorId != _userContext.CurrentUserId)
             throw new PlaylistForbiddenException("You're not author of this playlist");
-        
-        if (playlistFromDb.Image is not null)
-            await _fileHelper.DeleteFileAsync(playlistFromDb.Image, cancellationToken);
+
+        if (playlistFromDb.ImageFileId is not null)
+            await _fileServiceClient.DeleteAsync(playlistFromDb.ImageFileId, cancellationToken);
 
         _dbContext.Playlists.Remove(playlistFromDb);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        
+
         return new DeletePlaylistResponse
         {
             PlaylistId = playlistFromDb.Id,
