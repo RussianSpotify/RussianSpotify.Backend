@@ -11,6 +11,7 @@ using RussianSpotify.API.Core.Requests.Music.PatchEditSong;
 using RussianSpotify.API.Core.Requests.Music.PostAddSong;
 using RussianSpotify.API.Core.Requests.Music.PostAddSongAuthor;
 using RussianSpotify.API.Core.Requests.Music.PostAddSongToFavourite;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.AddSong;
 using RussianSpotify.Contracts.Requests.Music.AddSongAuthor;
 using RussianSpotify.Contracts.Requests.Music.DeleteSong;
@@ -27,16 +28,21 @@ namespace RussianSpotify.API.WEB.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class SongController : FileBaseController
+public class SongController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IFileControllerHelper _fileControllerHelper;
 
     /// <summary>
     /// Коснтруктор
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
-    public SongController(IMediator mediator)
-        => _mediator = mediator;
+    /// <param name="fileControllerHelper">Помощник при работе с файлами</param>
+    public SongController(IMediator mediator, IFileControllerHelper fileControllerHelper)
+    {
+        _mediator = mediator;
+        _fileControllerHelper = fileControllerHelper;
+    }
 
     /// <summary>
     /// Получить музыку по фильтру(Доступные фильтры: AuthorSongs, SongName, FavoriteSongs, SongsInPlaylist)
@@ -76,7 +82,7 @@ public class SongController : FileBaseController
             new GetSongContentByIdQuery(songId),
             cancellationToken);
 
-        return GetFileStreamResult(
+        return _fileControllerHelper.GetFileStreamResult(
             result,
             Response.Headers,
             inline: false,

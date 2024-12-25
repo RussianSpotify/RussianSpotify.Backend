@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using RussianSpotify.API.Core.Entities;
-using File = RussianSpotify.API.Core.Entities.File;
 
 namespace RussianSpotify.API.Core.Abstractions;
 
@@ -44,11 +43,6 @@ public interface IDbContext
     /// Категории
     /// </summary>
     public DbSet<Category> Categories { get; set; }
-
-    /// <summary>
-    /// Файлы
-    /// </summary>
-    public DbSet<File> Files { get; set; }
 
     /// <summary>
     /// Корзины

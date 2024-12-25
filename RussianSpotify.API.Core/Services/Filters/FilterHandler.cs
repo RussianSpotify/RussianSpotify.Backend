@@ -1,5 +1,6 @@
 ﻿using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Exceptions;
 
 namespace RussianSpotify.API.Core.Services.Filters;
 

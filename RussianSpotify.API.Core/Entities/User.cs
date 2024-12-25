@@ -1,5 +1,5 @@
-using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Domain.Abstractions;
 
 namespace RussianSpotify.API.Core.Entities;
 
@@ -20,8 +20,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="passwordHash">Хеш пароля</param>
     /// <param name="isConfirmed">Подтверждена почта</param>
     /// <param name="phone">Телефон</param>
-    /// <param name="userPhoto">Фото пользователя</param>
-    /// <param name="files">Файлы</param>
+    /// <param name="userPhotoId">ИД файла фотографии</param>
     /// <param name="birthday">День рождения</param>
     /// <param name="bucket">Корзина</param>
     /// <param name="subscribe">Подписка</param>
@@ -35,8 +34,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         string passwordHash,
         bool isConfirmed = false,
         string? phone = default,
-        File? userPhoto = default,
-        List<File>? files = default,
+        Guid? userPhotoId = default,
         DateTime? birthday = default,
         Bucket? bucket = default,
         Subscribe? subscribe = default,
@@ -46,15 +44,14 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         List<Role>? roles = default)
     {
         UserName = userName;
+        UserPhotoId = userPhotoId;
         Email = email;
         PasswordHash = passwordHash;
-        UserPhoto = userPhoto;
         Birthday = birthday;
         Phone = phone;
         IsConfirmed = isConfirmed;
         Bucket = bucket ?? new Bucket();
         Subscribe = subscribe;
-        Files = files ?? new List<File>();
         Playlists = playlists ?? new List<Playlist>();
         AuthorPlaylists = authorPlaylists ?? new List<Playlist>();
         Songs = songs ?? new List<Song>();
@@ -121,17 +118,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <summary>
     /// Id фото в профиле юзера
     /// </summary>
-    public Guid? UserPhotoId { get; private set; }
-
-    /// <summary>
-    /// Фото в профиле юзера
-    /// </summary>
-    public File? UserPhoto { get; set; }
-
-    /// <summary>
-    /// Файлы, добавленные пользователем
-    /// </summary>
-    public List<File> Files { get; set; }
+    public Guid? UserPhotoId { get; set; }
 
     /// <summary>
     /// День рождения пользователя
@@ -222,7 +209,6 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
         Guid? id = default,
         string? login = default!,
         DateTime? birthday = default,
-        File? userPhoto = default,
         string? email = default!,
         string? phone = default!,
         string? passwordHash = default,
@@ -235,7 +221,6 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
             Bucket = new Bucket(),
             _email = email ?? string.Empty,
             Phone = phone,
-            UserPhoto = userPhoto,
             _passwordHash = passwordHash ?? string.Empty, 
             Roles = roles ?? new List<Role>(),
         };

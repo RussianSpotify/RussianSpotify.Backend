@@ -1,4 +1,5 @@
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Shared.Domain.Abstractions;
 using RussianSpotify.Contracts.Enums;
 
 namespace RussianSpotify.API.Core.Entities;

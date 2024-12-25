@@ -1,11 +1,16 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.Playlist;
+using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Exceptions;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 
 namespace RussianSpotify.API.Core.Requests.Playlist.PostCreatePlaylist;
@@ -18,26 +23,25 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
     private readonly IDbContext _dbContext;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserContext _userContext;
-    private readonly IFileHelper _fileHelper;
+    private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
     /// Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
-    /// <param name="userManager">Хуйня для проверки роли</param>
     /// <param name="dateTimeProvider">Провайдер даты</param>
-    /// <param name="fileHelper">Хелпер по файлу</param>
+    /// <param name="fileServiceClient">Сервис для работы с файлами</param>
     public PostCreatePlaylistCommandHandler(
         IDbContext dbContext,
         IUserContext userContext,
         IDateTimeProvider dateTimeProvider,
-        IFileHelper fileHelper)
+        IFileServiceClient fileServiceClient)
     {
         _dbContext = dbContext;
         _userContext = userContext;
         _dateTimeProvider = dateTimeProvider;
-        _fileHelper = fileHelper;
+        _fileServiceClient = fileServiceClient;
     }
 
     /// <inheritdoc />
@@ -54,7 +58,7 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
 
         var userRoles = new List<string>();
 
-        var isArtist = userRoles.Contains(BaseRoles.AdminRoleName) || userRoles.Contains(BaseRoles.AuthorRoleName);
+        var isArtist = userRoles.Contains(Roles.AdminRoleName) || userRoles.Contains(Roles.AuthorRoleName);
 
         if (!isArtist && request.IsAlbum)
             throw new ApplicationBaseException("Пользователь не может создать альбом, только плейлист");
@@ -66,7 +70,7 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
         var playlist = new Entities.Playlist
         {
             PlaylistName = request.PlaylistName,
-            Image = null,
+            ImageFileId = null,
             IsAlbum = request.IsAlbum,
             Songs = songs,
             Author = currentUser,
@@ -79,14 +83,12 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
 
         if (request.ImageId.HasValue)
         {
-            var imageFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(x => x.Id == request.ImageId, cancellationToken)
-                ?? throw new EntityNotFoundException<Entities.File>(request.ImageId.Value);
+            var fileMetadata = await _fileServiceClient.GetFileMetadataAsync(request.ImageId.Value, cancellationToken);
 
-            if (!_fileHelper.IsImage(imageFromDb))
+            if (!_fileServiceClient.IsImage(fileMetadata.ContentType))
                 throw new PlaylistFileException("File is not Image");
 
-            playlist.Image = imageFromDb;
+            playlist.ImageFileId = request.ImageId.Value;
         }
 
         currentUser.AuthorPlaylists.Add(playlist);

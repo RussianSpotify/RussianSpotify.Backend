@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RussianSpotift.API.Data.PostgreSQL.Extensions;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
@@ -68,10 +68,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder
             .HasMany(x => x.Songs)
             .WithMany(y => y.Authors);
-
-        builder.HasOne(i => i.UserPhoto)
-            .WithOne()
-            .HasForeignKey<User>("UserPhotoId")
-            .OnDelete(DeleteBehavior.SetNull);
     }
 }

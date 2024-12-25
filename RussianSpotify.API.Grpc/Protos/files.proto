@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "RussianSpotify.API.Grpc";
+
+import "google/protobuf/empty.proto";
+
+service FileService {
+  rpc GetFiles(GetFilesRequest)
+      returns (GetFilesResponse);
+  rpc GetFilesMetadata(GetFilesRequest)
+      returns (GetFilesMetadataResponse);
+  // TODO: Можно заменить отправку сообщения в RabbitMQ, т.к. эта операция не требует ожидания пользователем, но создаётся лишний IO Bound на вызов сервера
+  rpc DeleteFiles(DeleteFilesRequest)
+      returns (google.protobuf.Empty);
+}
+
+message DeleteFilesRequest {
+  repeated string files_ids = 1;
+}
+
+message GetFilesRequest {
+  repeated string files_ids = 1;
+}
+
+message GetFilesResponse {
+  repeated File files = 1;
+}
+
+message GetFilesMetadataResponse {
+  repeated FileMetadata files_metadata = 1;
+}
+
+message File {
+  bytes content = 4;
+  FileMetadata file_metadata = 5;
+}
+
+message FileMetadata {
+  string id = 1;
+  string file_name = 2;
+  string content_type = 3;
+  string user_id = 5;
+  string address = 6;
+}

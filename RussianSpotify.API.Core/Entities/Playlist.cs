@@ -1,4 +1,5 @@
 using RussianSpotify.API.Core.Abstractions;
+using RussianSpotify.API.Shared.Domain.Abstractions;
 
 namespace RussianSpotify.API.Core.Entities;
 
@@ -22,14 +23,9 @@ public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
     public string PlaylistName { get; set; } = default!;
 
     /// <summary>
-    /// Картинка
-    /// </summary>
-    public File? Image { get; set; }
-
-    /// <summary>
     /// ИД картинки
     /// </summary>
-    public Guid? ImageId { get; set; }
+    public Guid? ImageFileId { get; set; }
 
     /// <summary>
     /// Ид автора
@@ -89,8 +85,8 @@ public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="playlistName">Название плейлиста</param>
     /// <param name="releaseDate">Дата опубликования</param>
     /// <param name="id">Ид</param>
-    /// <param name="image">Фото</param>
     /// <param name="author">Автор</param>
+    /// <param name="imageFileId">ИД фото</param>
     /// <param name="playsNumber">Кол-во прослушиваний</param>
     /// <param name="isAlbum">Альбом</param>
     /// <param name="songs">Песни</param>
@@ -100,8 +96,8 @@ public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
         string playlistName,
         DateTime releaseDate = default,
         Guid? id = default,
-        File? image = default,
         User? author = default,
+        Guid? imageFileId = default,
         uint playsNumber = default,
         bool isAlbum = default,
         List<Song>? songs = default)
@@ -109,8 +105,7 @@ public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
         {
             Id = id ?? default,
             PlaylistName = playlistName,
-            Image = image,
-            ImageId = image?.Id,
+            ImageFileId = imageFileId,
             AuthorId = author?.Id ?? default,
             Author = author,
             ReleaseDate = releaseDate,

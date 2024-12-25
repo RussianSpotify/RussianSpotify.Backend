@@ -6,6 +6,8 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.Playlist;
+using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 
 namespace RussianSpotify.API.Core.Requests.Playlist.PutPlaylist;
@@ -17,7 +19,7 @@ public class PutPlaylistCommandHandler : IRequestHandler<PutPlaylistCommand, Put
 {
     private readonly IDbContext _dbContext;
     private readonly IUserContext _userContext;
-    private readonly IFileHelper _fileHelper;
+    private readonly IFileServiceClient _fileServiceClient;
     private readonly ILogger<PutPlaylistCommandHandler> _logger;
 
     /// <summary>
@@ -25,18 +27,18 @@ public class PutPlaylistCommandHandler : IRequestHandler<PutPlaylistCommand, Put
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
-    /// <param name="fileHelper"></param>
     /// <param name="logger">Логгер</param>
+    /// <param name="fileServiceClient">Сервис для работы с файлами</param>
     public PutPlaylistCommandHandler(
         IDbContext dbContext,
         IUserContext userContext,
-        IFileHelper fileHelper,
-        ILogger<PutPlaylistCommandHandler> logger)
+        ILogger<PutPlaylistCommandHandler> logger,
+        IFileServiceClient fileServiceClient)
     {
         _dbContext = dbContext;
         _userContext = userContext;
-        _fileHelper = fileHelper;
         _logger = logger;
+        _fileServiceClient = fileServiceClient;
     }
 
     /// <inheritdoc />
@@ -49,7 +51,6 @@ public class PutPlaylistCommandHandler : IRequestHandler<PutPlaylistCommand, Put
             await _dbContext.Database.BeginTransactionAsync(cancellationToken);
             var playlist = await _dbContext.Playlists
                .Include(x => x.Songs)
-               .Include(i => i.Image)
                .Where(x => x.AuthorId == _userContext.CurrentUserId)
                .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
                 ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
@@ -88,21 +89,21 @@ public class PutPlaylistCommandHandler : IRequestHandler<PutPlaylistCommand, Put
             if (request.ImageId is not null)
             {
                 // Достаем картину из бд
-                var imageFromDb = await _dbContext.Files
-                    .FirstOrDefaultAsync(i => i.Id == request.ImageId.Value, cancellationToken);
+                var image = 
+                    await _fileServiceClient.GetFileMetadataAsync(request.ImageId, cancellationToken);
 
-                if (imageFromDb is null)
+                if (image is null)
                     throw new PlaylistFileException("File not found");
                 
                 // Проверка, является ли файл картинкой и присвоение
-                if (!_fileHelper.IsImage(imageFromDb))
+                if (!_fileServiceClient.IsImage(image.ContentType))
                     throw new PlaylistBadImageException("File's content type is not Image");
 
                 // Удаляем текущую картинку
-                if (playlist.Image is not null)
-                    await _fileHelper.DeleteFileAsync(playlist.Image, cancellationToken);
+                if (playlist.ImageFileId is not null)
+                    await _fileServiceClient.DeleteAsync(playlist.ImageFileId, cancellationToken);
 
-                playlist.Image = imageFromDb;
+                playlist.ImageFileId = request.ImageId;
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);

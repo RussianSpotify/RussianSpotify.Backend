@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RussianSpotift.API.Data.PostgreSQL.Extensions;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
@@ -33,13 +34,5 @@ public class SongConfiguration : EntityTypeConfigurationBase<Song>
 
         builder.HasMany(x => x.Authors)
             .WithMany(y => y.Songs);
-
-        builder.HasMany(x => x.Files)
-            .WithOne(y => y.Song);
-
-        builder.HasOne(i => i.Image)
-            .WithMany()
-            .HasForeignKey(i => i.ImageId)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 }

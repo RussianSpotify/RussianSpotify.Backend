@@ -5,6 +5,8 @@ using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Account.PatchUpdateUserInfo;
 
 namespace RussianSpotify.API.Core.Requests.Account.PatchUpdateUserInfo;
@@ -19,7 +21,7 @@ public class PatchUpdateUserInfoCommandHandler
     private readonly IUserClaimsManager _claimsManager;
     private readonly IJwtGenerator _jwtGenerator;
     private readonly IEmailSender _emailSender;
-    private readonly IFileHelper _fileHelper;
+    private readonly IFileServiceClient _fileServiceClient;
     private readonly IDbContext _dbContext;
     private readonly IPasswordChanger _passwordChanger;
 
@@ -30,15 +32,16 @@ public class PatchUpdateUserInfoCommandHandler
     /// <param name="claimsManager">Claims Manager <see cref="IUserClaimsManager"/>/></param>
     /// <param name="jwtGenerator">Генератор JWT токенов</param>
     /// <param name="emailSender">Email sender <see cref="IEmailSender"/></param>
-    /// <param name="fileHelper">Сервис-помощник для работы с файлами</param>
+    /// <param name="fileServiceClient">Сервис-помощник для работы с файлами</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="passwordChanger">Сервис по смене пароля</param>
+    /// <param name="fileHelper">Помощник при работе с файлами</param>
     public PatchUpdateUserInfoCommandHandler(
         IUserContext userContext,
         IUserClaimsManager claimsManager,
         IJwtGenerator jwtGenerator,
         IEmailSender emailSender,
-        IFileHelper fileHelper,
+        IFileServiceClient fileServiceClient,
         IDbContext dbContext,
         IPasswordChanger passwordChanger)
     {
@@ -46,7 +49,7 @@ public class PatchUpdateUserInfoCommandHandler
         _claimsManager = claimsManager;
         _jwtGenerator = jwtGenerator;
         _emailSender = emailSender;
-        _fileHelper = fileHelper;
+        _fileServiceClient = fileServiceClient;
         _dbContext = dbContext;
         _passwordChanger = passwordChanger;
     }
@@ -58,7 +61,7 @@ public class PatchUpdateUserInfoCommandHandler
         if (request is null)
             throw new ArgumentNullException(nameof(request));
 
-        var user = await _dbContext.Users.Include(i => i.UserPhoto)
+        var user = await _dbContext.Users
                        .Include(i => i.Roles)
             .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
             ?? throw new ForbiddenException();
@@ -70,19 +73,18 @@ public class PatchUpdateUserInfoCommandHandler
         if (request.FilePhotoId is not null)
         {
             // Достаем картину из бд
-            var imageFromDb = await _dbContext.Files
-                .FirstOrDefaultAsync(i => i.Id == request.FilePhotoId.Value, cancellationToken)
-                ?? throw new EntityNotFoundException<Entities.File>(request.FilePhotoId.Value);
+            var file = await _fileServiceClient
+                .GetFileMetadataAsync(request.FilePhotoId.Value, cancellationToken);
 
             // Проверка, является ли файл картинкой и присвоение
-            if (!_fileHelper.IsImage(imageFromDb))
+            if (!_fileServiceClient.IsImage(file.ContentType))
                 throw new UserBadImageException("File's content type is not Image");
 
             // Удаляем текущую картинку
-            if (user.UserPhoto is not null)
-                await _fileHelper.DeleteFileAsync(user.UserPhoto, cancellationToken);
-
-            user.UserPhoto = imageFromDb;
+            if (user.UserPhotoId is not null)
+                await _fileServiceClient.DeleteAsync(user.UserPhotoId, cancellationToken);
+            
+            user.UserPhotoId = request.FilePhotoId.Value;
         }
 
         var claims = _claimsManager.GetUserClaims(user);

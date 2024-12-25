@@ -1,5 +1,6 @@
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Shared.Exceptions;
 
 namespace RussianSpotify.API.Core.Exceptions;
 
@@ -11,7 +12,6 @@ public class EntityNotFoundException<TEntity> : ApplicationBaseException
 {
     private static readonly IDictionary<Type, string> EntityExceptions = new Dictionary<Type, string>
     {
-        [typeof(Entities.File)] = "Не найдена сущность 'Файл'",
         [typeof(FileContent)] = "Не найден файл в S3 хранилище",
         [typeof(User)] = "Не найден пользователь",
         [typeof(Entities.Playlist)] = "Не найден альбом/плейлист",

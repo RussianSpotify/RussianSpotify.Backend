@@ -4,6 +4,7 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Requests.Author.GetAuthor;
 
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthor;
@@ -44,7 +45,7 @@ public class GetAuthorQueryHandler
         
         foreach (var userWithSameName in usersWithSameNames)
         {
-            if (_roleManager.IsInRole(userWithSameName, BaseRoles.AuthorRoleName))
+            if (_roleManager.IsInRole(userWithSameName, Roles.AuthorRoleName))
                 author = userWithSameName;
         }
 

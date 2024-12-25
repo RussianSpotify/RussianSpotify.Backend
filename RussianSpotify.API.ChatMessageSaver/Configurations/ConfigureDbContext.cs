@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RussianSpotift.API.Data.PostgreSQL;
-using RussianSpotift.API.Data.PostgreSQL.Interceptors;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 
 namespace RussianSpotify.API.ChatMessageSaver.Configurations;
 

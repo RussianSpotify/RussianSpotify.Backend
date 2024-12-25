@@ -1,5 +1,4 @@
 using RussianSpotify.API.Core.Entities;
-using File = RussianSpotify.API.Core.Entities.File;
 
 namespace RussianSpotify.API.UnitTests.Requests.Builders;
 
@@ -68,17 +67,6 @@ internal class UserBuilder
     public UserBuilder SetBirthday(DateTime birthday)
     {
         _user.Birthday = birthday;
-        return this;
-    }
-
-    /// <summary>
-    /// Добавить фото
-    /// </summary>
-    /// <param name="photo">Фото</param>
-    /// <returns></returns>
-    public UserBuilder SetPhoto(File photo)
-    {
-        _user.UserPhoto = photo;
         return this;
     }
 

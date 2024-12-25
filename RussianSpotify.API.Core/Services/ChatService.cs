@@ -4,6 +4,8 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.Shared.Models.ChatModels;
 using RussianSpotify.Contracts.Requests.Chat.GetSenderMessage;
 using RussianSpotify.Contracts.Requests.Hub.CreateMessage;
@@ -45,13 +47,13 @@ public class ChatService : IChatService
             ?? throw new ForbiddenException();
         
         var admins = await _dbContext.Users
-            .Where(x => x.Roles.Any(y => y.Name == BaseRoles.AdminRoleName))
+            .Where(x => x.Roles.Any(y => y.Name == Roles.AdminRoleName))
             .ToListAsync();
 
         var chatExists = currentUser.Chats.Any();
 
         var isAdmin = currentUser.Roles
-            .Any(x => x.Name == BaseRoles.AdminRoleName);
+            .Any(x => x.Name == Roles.AdminRoleName);
 
         if (chatExists || isAdmin)
             return;

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.Contracts.Models.GoogleAuthModels;
 
 namespace RussianSpotify.API.Core.Services;

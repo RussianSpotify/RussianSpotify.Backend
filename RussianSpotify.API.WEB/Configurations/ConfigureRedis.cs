@@ -12,6 +12,7 @@ public static class ConfigureRedis
     /// <param name="configuration">Конфигурация</param>
     public static void AddRedis(this IServiceCollection services, IConfiguration configuration)
     {
+        // TODO: Перевести на паттерн Options
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = configuration.GetConnectionString("RedisConnection");

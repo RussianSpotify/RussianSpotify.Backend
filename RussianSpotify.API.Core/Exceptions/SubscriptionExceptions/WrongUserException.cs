@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RussianSpotify.API.Shared.Exceptions;
 
 namespace RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 

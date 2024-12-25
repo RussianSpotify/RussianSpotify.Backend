@@ -40,7 +40,7 @@ public class PostAddSongCommandHandlerTest : UnitTestBase
         var handler = new PostAddSongCommandHandler(
             _dbContext,
             UserContext.Object,
-            FileHelper.Object);
+            S3Service.Object);
 
         var response = await handler.Handle(command, default);
 

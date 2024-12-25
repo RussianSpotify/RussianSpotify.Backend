@@ -1,3 +1,5 @@
+using RussianSpotify.API.Shared.Requests.File;
+
 namespace RussianSpotify.Contracts.Requests.Music.GetSongContentById;
 
 /// <summary>

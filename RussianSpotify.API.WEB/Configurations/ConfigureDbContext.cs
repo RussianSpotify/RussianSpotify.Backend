@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RussianSpotift.API.Data.PostgreSQL;
-using RussianSpotift.API.Data.PostgreSQL.Interceptors;
+using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 
 namespace RussianSpotify.API.WEB.Configurations;
 
@@ -18,7 +18,7 @@ public static class ConfigureDbContext
         services.AddDbContext<EfContext>(
             (sp, options) => options
                 .UseNpgsql(connectionString)
-                .UseSnakeCaseNamingConvention()
+                // .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<UpdateInterceptor>()));
 }

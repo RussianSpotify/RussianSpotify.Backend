@@ -2,6 +2,7 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Chat.GetChats;
+using RussianSpotify.API.Shared.Domain.Constants;
 using Xunit;
 
 namespace RussianSpotify.API.UnitTests.Requests.ChatRequests;
@@ -24,7 +25,7 @@ public class GetChatsQueryHandlerTest : UnitTestBase
             {
                 new()
                 {
-                    Name = BaseRoles.AuthorRoleName
+                    Name = Roles.AuthorRoleName
                 }
             });
         _message = Message.CreateForTest(messageText: "123");

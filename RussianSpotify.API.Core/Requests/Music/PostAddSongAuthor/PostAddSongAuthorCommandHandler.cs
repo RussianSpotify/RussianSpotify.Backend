@@ -6,6 +6,8 @@ using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SongExceptions;
+using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.AddSongAuthor;
 
 namespace RussianSpotify.API.Core.Requests.Music.PostAddSongAuthor;
@@ -59,7 +61,7 @@ public class PostAddSongAuthorCommandHandler : IRequestHandler<PostAddSongAuthor
         // Проверка, является ли добавляемый пользовател автором
         var ifContainsAuthorRole = _roleManager.IsInRole(
             userFromDb,
-            BaseRoles.AuthorRoleName);
+            Roles.AuthorRoleName);
         
         if (!ifContainsAuthorRole)
             throw new SongBadRequestException("User is not Author");

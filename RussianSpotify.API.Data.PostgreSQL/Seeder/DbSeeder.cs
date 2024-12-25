@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
+using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Enums;
 
 namespace RussianSpotift.API.Data.PostgreSQL.Seeder;
@@ -12,14 +13,14 @@ public class DbSeeder : IDbSeeder
 {
     private static readonly IReadOnlyDictionary<Guid, string> BaseRoles = new Dictionary<Guid, string>()
     {
-        [RussianSpotify.API.Core.DefaultSettings.BaseRoles.AdminId] =
-            RussianSpotify.API.Core.DefaultSettings.BaseRoles.AdminRoleName,
+        [Roles.AdminId] =
+            Roles.AdminRoleName,
 
-        [RussianSpotify.API.Core.DefaultSettings.BaseRoles.AuthorId] =
-            RussianSpotify.API.Core.DefaultSettings.BaseRoles.AuthorRoleName,
+        [Roles.AuthorId] =
+            Roles.AuthorRoleName,
 
-        [RussianSpotify.API.Core.DefaultSettings.BaseRoles.UserId] =
-            RussianSpotify.API.Core.DefaultSettings.BaseRoles.UserRoleName
+        [Roles.UserId] =
+            Roles.UserRoleName
     };
 
     private static List<CategoryType> _baseCategories = new()

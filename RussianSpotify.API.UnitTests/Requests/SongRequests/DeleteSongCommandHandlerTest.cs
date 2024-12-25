@@ -41,7 +41,7 @@ public class DeleteSongCommandHandlerTest : UnitTestBase
         var handler = new DeleteSongCommandHandler(
             _dbContext,
             UserContext.Object,
-            FileHelper.Object);
+            S3Service.Object);
 
         await handler.Handle(command, default);
         
