@@ -1,5 +1,4 @@
 using MediatR;
-using Minio.Exceptions;
 using RussianSpotify.API.Files.Data;
 using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Interfaces;
@@ -55,7 +54,10 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
                 {
                     Content = file.FileStream,
                     FileName = file.FileName,
-                    ContentType = file.ContentType
+                    ContentType = file.ContentType,
+                    FileSize = file.FileStream.Length,
+                    UploadedBy = _userContext.CurrentUserId ?? throw new CurrentUserIdNotFound("UserId из Claims не был найден"),
+                    CreatedAt = DateTime.UtcNow
                 },
                 cancellationToken: cancellationToken);
 

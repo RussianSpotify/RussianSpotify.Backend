@@ -16,6 +16,8 @@ using RussianSpotify.API.WEB.Configurations;
 using DbContextOptions = RussianSpotify.API.Shared.Data.PostgreSQL.Options.DbContextOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+configuration.AddEnvironmentVariables();
 
 // TODO: Навести порядок(разбить по регионам, что-то завести в отдельные Extension-ы)
 builder.Services.AddControllers();
@@ -34,6 +36,8 @@ builder.Services
 
 builder.Services
     .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.AddRedis(configuration);
 
 builder.Services.AddResponseCompression();
 builder.Services.AddCustomLogging();

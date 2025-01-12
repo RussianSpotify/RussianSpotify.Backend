@@ -26,9 +26,14 @@ public class MinioOptions
     public string ServiceUrl { get; set; } = default!;
 
     /// <summary>
-    /// Название бакета
+    /// Название основного бакета (постоянное хранилище)
     /// </summary>
     public string BucketName { get; set; } = default!;
+
+    /// <summary>
+    /// Название временного бакета (временное хранилище)
+    /// </summary>
+    public string TempBucketName { get; set; } = default!;
 
     /// <summary>
     /// Таймаут
