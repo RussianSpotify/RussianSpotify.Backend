@@ -69,7 +69,7 @@ builder.WebHost.UseKestrel(options =>
 
 builder.Services.AddGrpc();
 
-builder.Services.AddS3Storage(configuration.GetSection("MinioS3").Get<MinioOptions>()!);
+builder.Services.AddS3Storage(configuration.GetSection("MinioOptions").Get<MinioOptions>()!);
 
 var app = builder.Build();
 
