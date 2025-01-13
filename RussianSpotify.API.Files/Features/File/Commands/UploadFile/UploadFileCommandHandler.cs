@@ -49,7 +49,7 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
             if (file.FileStream.Length <= 0)
                 throw new ArgumentException($"Некоректное кол-во байт");
 
-            var address = await _s3Service.UploadAsync(
+            var metadata = await _s3Service.UploadAsync(
                 fileContent: new FileContent
                 {
                     Content = file.FileStream,
@@ -61,12 +61,7 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
                 },
                 cancellationToken: cancellationToken);
 
-            filesToSave.Add(new FileMetadata(
-                userId: _userContext.CurrentUserId ?? throw new CurrentUserIdNotFound("UserId из Claims не был найден"),
-                fileName: file.FileName,
-                contentType: file.ContentType,
-                address: address,
-                size: file.FileStream.Length));
+            filesToSave.Add(metadata);
         }
 
         await _dbContext.FilesMetadata.AddRangeAsync(filesToSave, cancellationToken);

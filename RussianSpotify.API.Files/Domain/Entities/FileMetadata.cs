@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using RussianSpotify.API.Shared.Domain.Abstractions;
 
 namespace RussianSpotify.API.Files.Domain.Entities;
@@ -39,21 +40,25 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <summary>
     /// Адрес на файл в S3
     /// </summary>
+    [JsonProperty(nameof(Address))]
     public string Address { get; protected set; } = default!;
 
     /// <summary>
     /// Размер файла
     /// </summary>
+    [JsonProperty(nameof(Size))]
     public long Size { get; protected set; }
 
     /// <summary>
     /// Название файла
     /// </summary>
+    [JsonProperty(nameof(FileName))]
     public string? FileName { get; protected set; }
 
     /// <summary>
     /// Тип файла
     /// </summary>
+    [JsonProperty(nameof(ContentType))]
     public string? ContentType { get; protected set; }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Models;
 
 namespace RussianSpotify.API.Files.Interfaces;
@@ -12,8 +13,8 @@ public interface IS3Service
     /// </summary>
     /// <param name="fileContent">Бинарные данные</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Ключ</returns>
-    Task<string> UploadAsync(
+    /// <returns>Метадата</returns>
+    Task<FileMetadata> UploadAsync(
         FileContent fileContent,
         CancellationToken cancellationToken = default);
 
