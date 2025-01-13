@@ -8,6 +8,9 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Core.Exceptions.AuthExceptions;
+using RussianSpotify.API.Core.Extensions;
+using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Auth.PostLogin;
 
 #endregion
@@ -65,31 +68,31 @@ public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLog
                        .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
                    ?? throw new EntityNotFoundException<User>(request.Email);
 
-        // if (!user.IsConfirmed)
-        // {
-        //     var confirmationToken = _tokenFactory.GetToken();
-        //
-        //     var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
-        //         Templates.SendEmailConfirmationMessage,
-        //         cancellationToken);
-        //
-        //     var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
-        //
-        //     var message = messageTemplate.ReplacePlaceholders(placeholders);
-        //     
-        //     await _distributedCache.RemoveAsync(request.Email, cancellationToken);
-        //     await _distributedCache.SetStringAsync(
-        //         request.Email,
-        //         confirmationToken,
-        //         cancellationToken);
-        //
-        //     await _emailSender.SendEmailAsync(
-        //         user.Email,
-        //         message,
-        //         cancellationToken);
-        //
-        //     throw new NotConfirmedEmailException(AuthErrorMessages.NotConfirmedEmail);
-        // }
+        if (!user.IsConfirmed)
+        {
+            var confirmationToken = _tokenFactory.GetToken();
+
+            var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
+                Templates.SendEmailConfirmationMessage,
+                cancellationToken);
+
+            var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
+
+            var message = messageTemplate.ReplacePlaceholders(placeholders);
+
+            await _distributedCache.RemoveAsync(request.Email, cancellationToken);
+            await _distributedCache.SetStringAsync(
+                request.Email,
+                confirmationToken,
+                cancellationToken);
+
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                message,
+                cancellationToken);
+
+            throw new NotConfirmedEmailException(AuthErrorMessages.NotConfirmedEmail);
+        }
 
         var isCorrectPassword = _passwordService.VerifyPassword(request.Password, user.PasswordHash);
 

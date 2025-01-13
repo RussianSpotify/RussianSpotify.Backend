@@ -107,12 +107,7 @@ public class HttpClientBase
 
     private async Task<TResponse> ExtractJsonDataAsync<TResponse>(HttpResponseMessage responseMessage)
     {
-        if (responseMessage.Content is null)
-            return default!;
-
         var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
-        if (responseStream is null)
-            return default!;
 
         return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, _options).ConfigureAwait(false))!;
     }
