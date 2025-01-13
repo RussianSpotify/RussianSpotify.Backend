@@ -11,7 +11,7 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
     /// Конструктор
     /// </summary>
     /// <param name="userId">ИД пользователя</param>
-    /// <param name="fileName">Назавние файла</param>
+    /// <param name="fileName">Название файла</param>
     /// <param name="contentType">Тип файла</param>
     /// <param name="address">Адрес в S3</param>
     /// <param name="size">Размер</param>
@@ -29,6 +29,9 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
         Size = size;
     }
 
+    /// <summary>
+    /// Пустой конструктор
+    /// </summary>
     public FileMetadata()
     {
     }

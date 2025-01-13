@@ -9,6 +9,9 @@ namespace RussianSpotify.API.Files.Data;
 /// </summary>
 public interface IDbContext
 {
+    /// <summary>
+    /// Коллекция метаданных файлов.
+    /// </summary>
     DbSet<FileMetadata> FilesMetadata { get; set; }
     
     /// <summary>

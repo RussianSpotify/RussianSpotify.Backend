@@ -1,6 +1,5 @@
 using MediatR;
 using RussianSpotify.API.Files.Requests.File.DownloadFile;
-using RussianSpotify.Contracts.Requests.File.DownloadFile;
 
 namespace RussianSpotify.API.Files.Features.File.Queries.DownloadFile;
 

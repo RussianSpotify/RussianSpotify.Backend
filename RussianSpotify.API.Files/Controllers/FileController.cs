@@ -24,6 +24,10 @@ public class FileController : ControllerBase
 {
     private readonly IFileControllerHelper _fileControllerHelper;
 
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="fileControllerHelper">Помощник для работы с файлами, предоставляющий вспомогательные методы для обработки файлов.</param>
     public FileController(IFileControllerHelper fileControllerHelper)
     {
         _fileControllerHelper = fileControllerHelper;

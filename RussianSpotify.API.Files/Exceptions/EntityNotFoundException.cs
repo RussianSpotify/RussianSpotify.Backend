@@ -16,11 +16,19 @@ public class EntityNotFoundException<TEntity> : ApplicationBaseException
         [typeof(FileContent)] = "Не найден файл в S3 хранилище",
     };
 
+    /// <summary>
+    /// Исключение, выбрасываемое, когда сущность не найдена.
+    /// </summary>
+    /// <param name="message">Сообщение, описывающее ошибку или адрес сущности, которую не удалось найти.</param>
     public EntityNotFoundException(string message)
         : base($"{ExceptionEntity} с адресом {message}")
     {
     }
 
+    /// <summary>
+    /// Исключение, выбрасываемое, когда сущность с указанным идентификатором не найдена.
+    /// </summary>
+    /// <param name="id">Идентификатор сущности, которую не удалось найти.</param>
     public EntityNotFoundException(Guid id)
         : base($"{ExceptionEntity} c идентификатором {id}")
     {
