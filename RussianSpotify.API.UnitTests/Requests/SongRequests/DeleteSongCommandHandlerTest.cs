@@ -1,13 +1,17 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Music.DeleteSong;
 using RussianSpotify.Contracts.Requests.Music.DeleteSong;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.SongRequests;
 
 /// <summary>
-/// Тест для <see cref="DeleteSongCommandHandler"/>
+///     Тест для <see cref="DeleteSongCommandHandler" />
 /// </summary>
 public class DeleteSongCommandHandlerTest : UnitTestBase
 {
@@ -22,12 +26,12 @@ public class DeleteSongCommandHandlerTest : UnitTestBase
             {
                 User
             });
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(_song));
     }
 
     /// <summary>
-    /// Обработчик должен удалить песню
+    ///     Обработчик должен удалить песню
     /// </summary>
     [Fact]
     public async Task Handle_ShouldDeleteSongAsync()
@@ -44,7 +48,7 @@ public class DeleteSongCommandHandlerTest : UnitTestBase
             S3Service.Object);
 
         await handler.Handle(command, default);
-        
+
         Assert.Equal(0, _dbContext.Songs.Count());
     }
 }

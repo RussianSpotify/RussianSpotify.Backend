@@ -1,19 +1,23 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Requests.Auth.PostConfirmPasswordReset;
 using RussianSpotify.Contracts.Requests.Auth.PostConfirmPasswordReset;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AuthRequests;
 
 /// <summary>
-/// Обработчик для <see cref="PostConfirmPasswordResetCommandHandler"/>
+///     Обработчик для <see cref="PostConfirmPasswordResetCommandHandler" />
 /// </summary>
 public class PostConfirmPasswordResetCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public PostConfirmPasswordResetCommandHandlerTest()
     {
@@ -21,7 +25,7 @@ public class PostConfirmPasswordResetCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Должен сменить пароль на новый
+    ///     Должен сменить пароль на новый
     /// </summary>
     [Fact]
     public async Task Handle_ShouldConfirmResetPassword()

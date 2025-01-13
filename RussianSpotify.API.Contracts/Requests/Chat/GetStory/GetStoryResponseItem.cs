@@ -1,37 +1,37 @@
 namespace RussianSpotify.Contracts.Requests.Chat.GetStory;
 
 /// <summary>
-/// Модель списка для <see cref="GetStoryResponse"/>
+///     Модель списка для <see cref="GetStoryResponse" />
 /// </summary>
 public class GetStoryResponseItem
 {
     /// <summary>
-    /// Идентификатор
+    ///     Идентификатор
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Сообщение
+    ///     Сообщение
     /// </summary>
     public string Message { get; set; }
 
     /// <summary>
-    /// Отправитель
+    ///     Отправитель
     /// </summary>
     public string Sender { get; set; }
 
     /// <summary>
-    /// Идентификатор отправителя
+    ///     Идентификатор отправителя
     /// </summary>
     public Guid SenderId { get; set; }
 
     /// <summary>
-    /// Идентификатор фото отправителя
+    ///     Идентификатор фото отправителя
     /// </summary>
     public Guid? SenderImageId { get; set; }
 
     /// <summary>
-    /// Дата отправки
+    ///     Дата отправки
     /// </summary>
     public DateTime SentDate { get; set; }
 }

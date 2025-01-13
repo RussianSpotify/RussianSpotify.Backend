@@ -1,12 +1,16 @@
+#region
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
 /// <summary>
-/// Конфигурация для <see cref="Bucket"/>
+///     Конфигурация для <see cref="Bucket" />
 /// </summary>
 public class BucketConfiguration : EntityTypeConfigurationBase<Bucket>
 {
@@ -15,7 +19,7 @@ public class BucketConfiguration : EntityTypeConfigurationBase<Bucket>
     {
         builder.ConfigureTimeTrackableEntity();
         builder.ConfigureSoftDeletableEntity();
-        
+
         builder.HasOne(x => x.User)
             .WithOne(y => y.Bucket)
             .HasForeignKey<Bucket>(x => x.UserId)

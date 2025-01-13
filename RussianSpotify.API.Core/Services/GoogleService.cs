@@ -1,13 +1,16 @@
+#region
+
 using Microsoft.Extensions.Configuration;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.Contracts.Models.GoogleAuthModels;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Сервис для взаимодействия с Google
+///     Сервис для взаимодействия с Google
 /// </summary>
 public class GoogleService : IGoogleService
 {
@@ -15,7 +18,7 @@ public class GoogleService : IGoogleService
     private readonly IConfiguration _configuration;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="googleClient">Клиент Google</param>
     /// <param name="configuration">Конфигурация проекта</param>
@@ -25,7 +28,7 @@ public class GoogleService : IGoogleService
         _configuration = configuration;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<GoogleModelResponse> ExchangeCodeForTokenAsync(string code)
     {
         var data = await GetModelAsync(client => client.GetTokenByCodeAsync(new GoogleModelRequest
@@ -40,7 +43,7 @@ public class GoogleService : IGoogleService
         return data;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<GoogleUserInfoResponse> GetUserInfoAsync(string accessToken)
         => await _googleClient.GetUserInfoAsync(accessToken);
 

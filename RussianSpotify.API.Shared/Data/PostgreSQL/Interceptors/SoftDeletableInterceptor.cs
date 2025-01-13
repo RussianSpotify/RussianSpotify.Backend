@@ -1,11 +1,15 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using RussianSpotify.API.Shared.Domain.Abstractions;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 
 /// <summary>
-/// Перехватчик для soft удаления
+///     Перехватчик для soft удаления
 /// </summary>
 public class SoftDeleteInterceptor : SaveChangesInterceptor
 {

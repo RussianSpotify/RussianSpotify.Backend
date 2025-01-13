@@ -1,15 +1,16 @@
+#region
+
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 using RussianSpotify.API.Shared.Interfaces;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Subscription.PostSubscribe;
 
 /// <summary>
-/// Обработчик для <see cref="PostSubscribeCommand"/>
+///     Обработчик для <see cref="PostSubscribeCommand" />
 /// </summary>
 public class PostSubscribeCommandHandler : IRequestHandler<PostSubscribeCommand>
 {
@@ -17,7 +18,7 @@ public class PostSubscribeCommandHandler : IRequestHandler<PostSubscribeCommand>
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="subscriptionHandler">Сервис для управления подписками</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
@@ -27,7 +28,7 @@ public class PostSubscribeCommandHandler : IRequestHandler<PostSubscribeCommand>
         _userContext = userContext;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task Handle(PostSubscribeCommand request, CancellationToken cancellationToken)
     {
         var userId = _userContext.CurrentUserId;

@@ -1,6 +1,7 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.Playlist;
@@ -8,10 +9,12 @@ using RussianSpotify.API.Grpc.Clients.FileClient;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.DeletePlaylist;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Playlist.DeletePlaylist;
 
 /// <summary>
-/// Обработчик для <see cref="DeletePlaylistCommand"/>
+///     Обработчик для <see cref="DeletePlaylistCommand" />
 /// </summary>
 public class DeletePlaylistCommandHandler : IRequestHandler<DeletePlaylistCommand, DeletePlaylistResponse>
 {
@@ -20,19 +23,20 @@ public class DeletePlaylistCommandHandler : IRequestHandler<DeletePlaylistComman
     private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
     /// <param name="fileServiceClient">Сервис для работы с файлами</param>
-    public DeletePlaylistCommandHandler(IDbContext dbContext, IUserContext userContext, IFileServiceClient fileServiceClient)
+    public DeletePlaylistCommandHandler(IDbContext dbContext, IUserContext userContext,
+        IFileServiceClient fileServiceClient)
     {
         _dbContext = dbContext;
         _userContext = userContext;
         _fileServiceClient = fileServiceClient;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<DeletePlaylistResponse> Handle(DeletePlaylistCommand request, CancellationToken cancellationToken)
     {
         if (request is null)

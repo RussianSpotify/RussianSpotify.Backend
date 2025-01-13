@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +18,19 @@ using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 using RussianSpotify.Contracts.Requests.Auth.PostResetPassword;
 using RussianSpotify.Contracts.Requests.Auth.PostRevokeToken;
 
+#endregion
+
 namespace RussianSpotify.API.WEB.Controllers;
 
 /// <summary>
-/// Контроллер отвечающий за авторизацию и регистрацию
+///     Контроллер отвечающий за авторизацию и регистрацию
 /// </summary>
 [ApiController]
 [Route("api/[controller]/")]
 public class AuthController : ControllerBase
 {
     /// <summary>
-    /// Регистрация пользователя
+    ///     Регистрация пользователя
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>
@@ -41,7 +45,7 @@ public class AuthController : ControllerBase
         => await mediator.Send(new PostRegisterCommand(request), cancellationToken);
 
     /// <summary>
-    /// Войти в систему
+    ///     Войти в систему
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>
@@ -57,7 +61,7 @@ public class AuthController : ControllerBase
         => await mediator.Send(new PostLoginCommand(request), cancellationToken);
 
     /// <summary>
-    /// Подтверждение почты
+    ///     Подтверждение почты
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>
@@ -72,7 +76,7 @@ public class AuthController : ControllerBase
         => await mediator.Send(new PostConfirmEmailCommand(request), cancellationToken);
 
     /// <summary>
-    /// Обновление JWT
+    ///     Обновление JWT
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>
@@ -87,7 +91,7 @@ public class AuthController : ControllerBase
         => await mediator.Send(new PostRefreshTokenCommand(request), cancellationToken);
 
     /// <summary>
-    /// Удаление Refresh Token
+    ///     Удаление Refresh Token
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>
@@ -104,7 +108,7 @@ public class AuthController : ControllerBase
         => await mediator.Send(new PostRevokeTokenCommand(request), cancellationToken);
 
     /// <summary>
-    /// Сброс пароля
+    ///     Сброс пароля
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>
@@ -119,7 +123,7 @@ public class AuthController : ControllerBase
         => await mediator.Send(new PostResetPasswordCommand(request), cancellationToken);
 
     /// <summary>
-    /// Подтверждение сброса пароля
+    ///     Подтверждение сброса пароля
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="request">Запрос</param>

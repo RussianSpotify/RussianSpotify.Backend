@@ -1,30 +1,34 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Requests.Auth.PostLogin;
 using RussianSpotify.Contracts.Requests.Auth.PostLogin;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AuthRequests;
 
 /// <summary>
-/// Тест для <see cref="PostLoginCommandHandler"/>
+///     Тест для <see cref="PostLoginCommandHandler" />
 /// </summary>
 public class PostLoginCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
-    
+
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public PostLoginCommandHandlerTest()
     {
         User.Email = "test@mail.ru";
         User.IsConfirmed = true;
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(User));
     }
 
     /// <summary>
-    /// Обработчик должен дать доступ в систему
+    ///     Обработчик должен дать доступ в систему
     /// </summary>
     [Fact]
     public async Task Handle_ShouldLoginUser()

@@ -1,10 +1,14 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 /// <summary>
-/// Ошибка выбрасывается, если UserManager не смог по каким-то причинам зарегистрировать пользователя
+///     Ошибка выбрасывается, если UserManager не смог по каким-то причинам зарегистрировать пользователя
 /// </summary>
 public class RegisterUserException : ApplicationBaseException
 {

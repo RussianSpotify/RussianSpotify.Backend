@@ -1,15 +1,19 @@
+#region
+
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
 
 /// <summary>
-/// Добавление логирования (Serilog)
+///     Добавление логирования (Serilog)
 /// </summary>
 public static class ConfigureLogging
 {
     /// <summary>
-    /// Добавить логирование
+    ///     Добавить логирование
     /// </summary>
     /// <param name="serviceCollection">Сервисы</param>
     public static void AddCustomLogging(this IServiceCollection serviceCollection)

@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.API.Core.Entities;
+
+#endregion
 
 namespace RussianSpotify.API.UnitTests.Requests.Builders;
 
 /// <summary>
-/// Builder пользователя
+///     Builder пользователя
 /// </summary>
 internal class UserBuilder
 {
@@ -14,14 +18,14 @@ internal class UserBuilder
     }
 
     /// <summary>
-    /// Создать builder
+    ///     Создать builder
     /// </summary>
     /// <returns></returns>
     public static UserBuilder CreateBuilder()
         => new();
-    
+
     /// <summary>
-    /// Установить имя
+    ///     Установить имя
     /// </summary>
     /// <param name="username">Имя</param>
     public UserBuilder SetUsername(string username)
@@ -31,7 +35,7 @@ internal class UserBuilder
     }
 
     /// <summary>
-    /// Добавить роли для пользователя
+    ///     Добавить роли для пользователя
     /// </summary>
     /// <param name="roles">Роли</param>
     public UserBuilder SetRoles(List<Role> roles)
@@ -41,7 +45,7 @@ internal class UserBuilder
     }
 
     /// <summary>
-    /// Проставить ИД
+    ///     Проставить ИД
     /// </summary>
     /// <param name="id">ИД</param>
     public UserBuilder SetId(Guid id)
@@ -51,7 +55,7 @@ internal class UserBuilder
     }
 
     /// <summary>
-    /// Установить email
+    ///     Установить email
     /// </summary>
     /// <param name="email">Имя</param>
     public UserBuilder SetEmail(string email)
@@ -61,7 +65,7 @@ internal class UserBuilder
     }
 
     /// <summary>
-    /// Установить дату рождения
+    ///     Установить дату рождения
     /// </summary>
     /// <param name="birthday">Дата рождения</param>
     public UserBuilder SetBirthday(DateTime birthday)

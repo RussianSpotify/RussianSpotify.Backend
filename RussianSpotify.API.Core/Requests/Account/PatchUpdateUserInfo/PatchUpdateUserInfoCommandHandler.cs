@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -9,10 +11,12 @@ using RussianSpotify.API.Grpc.Clients.FileClient;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Account.PatchUpdateUserInfo;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Account.PatchUpdateUserInfo;
 
 /// <summary>
-/// Обработчик для <see cref="PatchUpdateUserInfoCommand"/>
+///     Обработчик для <see cref="PatchUpdateUserInfoCommand" />
 /// </summary>
 public class PatchUpdateUserInfoCommandHandler
     : IRequestHandler<PatchUpdateUserInfoCommand, PatchUpdateUserInfoResponse>
@@ -26,16 +30,15 @@ public class PatchUpdateUserInfoCommandHandler
     private readonly IPasswordChanger _passwordChanger;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
-    /// <param name="userContext">UserContext <see cref="IUserContext"/></param>
-    /// <param name="claimsManager">Claims Manager <see cref="IUserClaimsManager"/>/></param>
+    /// <param name="userContext">UserContext <see cref="IUserContext" /></param>
+    /// <param name="claimsManager">Claims Manager <see cref="IUserClaimsManager" />/></param>
     /// <param name="jwtGenerator">Генератор JWT токенов</param>
-    /// <param name="emailSender">Email sender <see cref="IEmailSender"/></param>
+    /// <param name="emailSender">Email sender <see cref="IEmailSender" /></param>
     /// <param name="fileServiceClient">Сервис-помощник для работы с файлами</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="passwordChanger">Сервис по смене пароля</param>
-    /// <param name="fileHelper">Помощник при работе с файлами</param>
     public PatchUpdateUserInfoCommandHandler(
         IUserContext userContext,
         IUserClaimsManager claimsManager,
@@ -54,7 +57,7 @@ public class PatchUpdateUserInfoCommandHandler
         _passwordChanger = passwordChanger;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}" />
     public async Task<PatchUpdateUserInfoResponse> Handle(PatchUpdateUserInfoCommand request,
         CancellationToken cancellationToken)
     {
@@ -63,8 +66,8 @@ public class PatchUpdateUserInfoCommandHandler
 
         var user = await _dbContext.Users
                        .Include(i => i.Roles)
-            .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new ForbiddenException();
+                       .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
+                   ?? throw new ForbiddenException();
 
         user.UserName = !string.IsNullOrWhiteSpace(request.UserName)
             ? request.UserName
@@ -83,7 +86,7 @@ public class PatchUpdateUserInfoCommandHandler
             // Удаляем текущую картинку
             if (user.UserPhotoId is not null)
                 await _fileServiceClient.DeleteAsync(user.UserPhotoId, cancellationToken);
-            
+
             user.UserPhotoId = request.FilePhotoId.Value;
         }
 

@@ -1,11 +1,15 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Shared.Domain.Abstractions;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 
 /// <summary>
-/// Базовый класс для настроек сущностей
+///     Базовый класс для настроек сущностей
 /// </summary>
 public abstract class EntityTypeConfigurationBase<TEntity>
     : IEntityTypeConfiguration<TEntity>
@@ -19,7 +23,7 @@ public abstract class EntityTypeConfigurationBase<TEntity>
     }
 
     /// <summary>
-    /// Конфигурация дочерних свойств
+    ///     Конфигурация дочерних свойств
     /// </summary>
     /// <param name="builder">Конфигуратор</param>
     protected abstract void ConfigureChild(EntityTypeBuilder<TEntity> builder);

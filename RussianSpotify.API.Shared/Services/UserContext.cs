@@ -1,22 +1,26 @@
+#region
+
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Services;
 
 /// <summary>
-/// Контекст пользователя
+///     Контекст пользователя
 /// </summary>
 public class UserContext : IUserContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     /// <summary>
-    /// Контекст
+    ///     Контекст
     /// </summary>
     /// <param name="httpContextAccessor">Аксессор http</param>
-        public UserContext(IHttpContextAccessor httpContextAccessor)
-         => _httpContextAccessor = httpContextAccessor;
+    public UserContext(IHttpContextAccessor httpContextAccessor)
+        => _httpContextAccessor = httpContextAccessor;
 
     private Guid? _currentUserId;
 
@@ -44,9 +48,9 @@ public class UserContext : IUserContext
             return _roleName;
         }
     }
-    
-     /// <summary>
-    /// Клаймы текущего пользователя
+
+    /// <summary>
+    ///     Клаймы текущего пользователя
     /// </summary>
     private ClaimsPrincipal? User => _httpContextAccessor.HttpContext?.User;
 }

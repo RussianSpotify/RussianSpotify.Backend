@@ -1,16 +1,20 @@
+#region
+
 using MediatR;
 using RussianSpotify.Contracts.Requests.Author.GetAuthorsByFilter;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthorsByFilter;
 
 /// <summary>
-/// Запрос для получения авторов по фильтру
+///     Запрос для получения авторов по фильтру
 /// </summary>
 public class GetAuthorsByFilterQuery
     : GetAuthorsByFilterRequest, IRequest<GetAuthorsByFilterResponse>
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос с параметрами</param>
     public GetAuthorsByFilterQuery(GetAuthorsByFilterRequest request) : base(request)

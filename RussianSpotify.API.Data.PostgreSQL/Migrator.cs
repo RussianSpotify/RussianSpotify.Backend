@@ -1,11 +1,15 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RussianSpotift.API.Data.PostgreSQL.Seeder;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL;
 
 /// <summary>
-/// Мигратор для наката миграций и базовый значений
+///     Мигратор для наката миграций и базовый значений
 /// </summary>
 public class Migrator
 {
@@ -14,7 +18,7 @@ public class Migrator
     private readonly ILogger<Migrator> _logger;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="efContext">Контекст БД</param>
     /// <param name="dbSeeder">Сид сервис</param>
@@ -30,7 +34,7 @@ public class Migrator
     }
 
     /// <summary>
-    /// Мигратор
+    ///     Мигратор
     /// </summary>
     public async Task MigrateAsync()
     {

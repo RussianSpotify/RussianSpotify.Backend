@@ -1,31 +1,35 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Music.GetSongContentById;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.SongRequests;
 
 /// <summary>
-/// Тест для <see cref="GetSongContentByIdQueryHandler"/>
+///     Тест для <see cref="GetSongContentByIdQueryHandler" />
 /// </summary>
 public class GetSongContentByIdQueryHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
     private readonly Song _song;
-    
+
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public GetSongContentByIdQueryHandlerTest()
     {
         _song = Song.CreateForTest(
             songName: "test");
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(_song));
     }
 
     /// <summary>
-    /// Обработчик должен отдать контент песни по ид
+    ///     Обработчик должен отдать контент песни по ид
     /// </summary>
     [Fact]
     public async Task Handle_ShouldGetContentSongById()

@@ -1,32 +1,32 @@
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Link-таблица между <see cref="User"/> и <see cref="Playlist"/> для добавленных в избранные плейлистов
+///     Link-таблица между <see cref="User" /> и <see cref="Playlist" /> для добавленных в избранные плейлистов
 /// </summary>
 public class PlaylistUser
 {
     /// <summary>
-    /// Id плейлиста
+    ///     Id плейлиста
     /// </summary>
     public Guid PlaylistId { get; set; }
 
     /// <summary>
-    /// Плейлист
+    ///     Плейлист
     /// </summary>
     public Playlist Playlist { get; set; } = null!;
 
     /// <summary>
-    /// Id пользователя
+    ///     Id пользователя
     /// </summary>
     public Guid UserId { get; set; }
 
     /// <summary>
-    /// Пользователь
+    ///     Пользователь
     /// </summary>
     public User User { get; set; } = null!;
 
     /// <summary>
-    /// Дата добавления в избранные
+    ///     Дата добавления в избранные
     /// </summary>
     public DateTime AddedDate { get; set; } = DateTime.UtcNow;
 }

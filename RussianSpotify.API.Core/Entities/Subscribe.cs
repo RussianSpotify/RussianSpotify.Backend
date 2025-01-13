@@ -1,39 +1,42 @@
-using RussianSpotify.API.Core.Abstractions;
+#region
+
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Сущность подписка
+///     Сущность подписка
 /// </summary>
 public class Subscribe : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
-    /// Начало подписки
+    ///     Начало подписки
     /// </summary>
     public DateTime? DateStart { get; set; }
 
     /// <summary>
-    /// Конец подписки
+    ///     Конец подписки
     /// </summary>
     public DateTime? DateEnd { get; set; }
 
     /// <summary>
-    /// Пользователь
+    ///     Пользователь
     /// </summary>
     public User User { get; set; }
 
     /// <summary>
-    /// ИД Пользователь
+    ///     ИД Пользователь
     /// </summary>
     public Guid UserId { get; set; }
-    
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
     /// <inheritdoc />
     public DateTime? DeletedAt { get; set; }
-    
+
     /// <inheritdoc />
     public DateTime CreatedAt { get; set; }
 
@@ -41,7 +44,7 @@ public class Subscribe : BaseEntity, ISoftDeletable, ITimeTrackable
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// Тестовая сущность
+    ///     Тестовая сущность
     /// </summary>
     /// <param name="id">Ид</param>
     /// <param name="dateStart">Начало подписки</param>

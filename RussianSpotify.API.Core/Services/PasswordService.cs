@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Сервис паролей
+///     Сервис паролей
 /// </summary>
 public class PasswordService : IPasswordService
 {

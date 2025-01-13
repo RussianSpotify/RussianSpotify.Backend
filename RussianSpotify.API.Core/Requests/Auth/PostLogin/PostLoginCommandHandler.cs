@@ -1,5 +1,6 @@
+#region
+
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -12,10 +13,12 @@ using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Auth.PostLogin;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Auth.PostLogin;
 
 /// <summary>
-/// Обработчик для <see cref="PostLoginCommand"/>
+///     Обработчик для <see cref="PostLoginCommand" />
 /// </summary>
 public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLoginResponse>
 {
@@ -28,7 +31,7 @@ public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLog
     private readonly IDistributedCache _distributedCache;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="tokenFactory">Фабрика токенов для почты</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
@@ -59,37 +62,37 @@ public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLog
     public async Task<PostLoginResponse> Handle(PostLoginCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        
-        var user = await _dbContext.Users
-            .Include(x => x.Roles)
-            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(request.Email);
 
-        // if (!user.IsConfirmed)
-        // {
-        //     var confirmationToken = _tokenFactory.GetToken();
-        //
-        //     var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
-        //         Templates.SendEmailConfirmationMessage,
-        //         cancellationToken);
-        //
-        //     var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
-        //
-        //     var message = messageTemplate.ReplacePlaceholders(placeholders);
-        //     
-        //     await _distributedCache.RemoveAsync(request.Email, cancellationToken);
-        //     await _distributedCache.SetStringAsync(
-        //         request.Email,
-        //         confirmationToken,
-        //         cancellationToken);
-        //
-        //     await _emailSender.SendEmailAsync(
-        //         user.Email,
-        //         message,
-        //         cancellationToken);
-        //
-        //     throw new NotConfirmedEmailException(AuthErrorMessages.NotConfirmedEmail);
-        // }
+        var user = await _dbContext.Users
+                       .Include(x => x.Roles)
+                       .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
+                   ?? throw new EntityNotFoundException<User>(request.Email);
+
+        if (!user.IsConfirmed)
+        {
+            var confirmationToken = _tokenFactory.GetToken();
+
+            var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
+                Templates.SendEmailConfirmationMessage,
+                cancellationToken);
+
+            var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmationToken };
+
+            var message = messageTemplate.ReplacePlaceholders(placeholders);
+
+            await _distributedCache.RemoveAsync(request.Email, cancellationToken);
+            await _distributedCache.SetStringAsync(
+                request.Email,
+                confirmationToken,
+                cancellationToken);
+
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                message,
+                cancellationToken);
+
+            throw new NotConfirmedEmailException(AuthErrorMessages.NotConfirmedEmail);
+        }
 
         var isCorrectPassword = _passwordService.VerifyPassword(request.Password, user.PasswordHash);
 

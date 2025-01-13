@@ -1,15 +1,18 @@
-using RussianSpotify.API.Core.Abstractions;
+#region
+
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Плейлист или альбом
+///     Плейлист или альбом
 /// </summary>
 public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public Playlist()
     {
@@ -18,61 +21,61 @@ public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// Название плейлиста
+    ///     Название плейлиста
     /// </summary>
     public string PlaylistName { get; set; } = default!;
 
     /// <summary>
-    /// ИД картинки
+    ///     ИД картинки
     /// </summary>
     public Guid? ImageFileId { get; set; }
 
     /// <summary>
-    /// Ид автора
+    ///     Ид автора
     /// </summary>
     public Guid AuthorId { get; protected set; }
 
     /// <summary>
-    /// Nav-prop автора
+    ///     Nav-prop автора
     /// </summary>
     public User? Author { get; set; }
 
     /// <summary>
-    /// Дата опубликования
+    ///     Дата опубликования
     /// </summary>
     public DateTime ReleaseDate { get; set; }
 
     /// <summary>
-    /// Количество прослушиваний плейлиста
+    ///     Количество прослушиваний плейлиста
     /// </summary>
     public uint PlaysNumber { get; set; }
 
     /// <summary>
-    /// Песни
+    ///     Песни
     /// </summary>
     public List<Song>? Songs { get; set; }
 
     /// <summary>
-    /// Лайкнувшие пользователи
+    ///     Лайкнувшие пользователи
     /// </summary>
     public List<User>? Users { get; set; }
 
     /// <summary>
-    /// Таблица со связями {<see cref="User"/>, <see cref="Playlist"/>}
+    ///     Таблица со связями {<see cref="User" />, <see cref="Playlist" />}
     /// </summary>
     public List<PlaylistUser> PlaylistUsers { get; set; } = new();
 
     /// <summary>
-    /// Является ли альбомом
+    ///     Является ли альбомом
     /// </summary>
     public bool IsAlbum { get; set; }
-    
+
     /// <inheritdoc />
     public DateTime CreatedAt { get; set; }
 
     /// <inheritdoc />
     public DateTime? UpdatedAt { get; set; }
-    
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
@@ -80,7 +83,7 @@ public class Playlist : BaseEntity, ISoftDeletable, ITimeTrackable
     public DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="playlistName">Название плейлиста</param>
     /// <param name="releaseDate">Дата опубликования</param>

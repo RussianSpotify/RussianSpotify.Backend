@@ -1,14 +1,18 @@
+#region
+
 using RussianSpotify.API.Shared.Exceptions.FileExceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Grpc.Clients.FileClient;
 
 /// <summary>
-/// Сервис S3
+///     Сервис S3
 /// </summary>
 public interface IFileServiceClient
 {
     /// <summary>
-    /// Является ли данный файл картинкой (Image)
+    ///     Является ли данный файл картинкой (Image)
     /// </summary>
     /// <param name="contentType">Тип файла</param>
     /// <returns>Результат проверки</returns>
@@ -16,7 +20,7 @@ public interface IFileServiceClient
     bool IsImage(string contentType);
 
     /// <summary>
-    /// Является ли данный файл музыкой (Audio)
+    ///     Является ли данный файл музыкой (Audio)
     /// </summary>
     /// <param name="contentType">Тип файла</param>
     /// <returns>Результат проверки</returns>
@@ -24,7 +28,7 @@ public interface IFileServiceClient
     bool IsAudio(string contentType);
 
     /// <summary>
-    /// Получить файл по ИД
+    ///     Получить файл по ИД
     /// </summary>
     /// <param name="fileId">ИД файла</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -40,9 +44,9 @@ public interface IFileServiceClient
 
     Task<ICollection<Models.File>> GetFilesAsync(IReadOnlyCollection<Guid?> ids,
         CancellationToken cancellationToken = default);
-    
+
     /// <summary>
-    /// Удалить файл из хранилища
+    ///     Удалить файл из хранилища
     /// </summary>
     /// <param name="fileId">ИД файла</param>
     /// <param name="cancellationToken">Токен отмены</param>

@@ -1,3 +1,5 @@
+#region
+
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
@@ -8,16 +10,26 @@ using RussianSpotify.API.Files.Interfaces;
 using RussianSpotify.API.Grpc;
 using File = RussianSpotify.API.Grpc.File;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Grpc;
 
+/// <summary>
+///     Сервис для обработки файлов через gRPC. Предоставляет функциональность получения метаданных файлов, загрузки файлов
+///     и их удаления.
+/// </summary>
 public class FileServer : FileService.FileServiceBase
 {
     private readonly IS3Service _s3Service;
-
     private readonly IDbContext _dbContext;
-
     private readonly ILogger<FileServer> _logger;
 
+    /// <summary>
+    ///     Конструктор для инициализации сервиса файлов.
+    /// </summary>
+    /// <param name="s3Service">Сервис для работы с S3 (облачное хранилище).</param>
+    /// <param name="dbContext">Контекст базы данных.</param>
+    /// <param name="logger">Логгер для записи информации об ошибках и операциях.</param>
     public FileServer(IS3Service s3Service, IDbContext dbContext, ILogger<FileServer> logger)
     {
         _s3Service = s3Service;
@@ -25,6 +37,12 @@ public class FileServer : FileService.FileServiceBase
         _logger = logger;
     }
 
+    /// <summary>
+    ///     Преобразует строки идентификаторов файлов в массив GUID.
+    /// </summary>
+    /// <param name="ids">Массив строковых идентификаторов файлов.</param>
+    /// <returns>Массив GUID идентификаторов файлов.</returns>
+    /// <exception cref="RpcException">Выбрасывается, если какой-либо идентификатор некорректен.</exception>
     private Guid[] GetFilesIds(RepeatedField<string> ids)
     {
         var filesIds = new Guid[ids.Count];
@@ -45,6 +63,13 @@ public class FileServer : FileService.FileServiceBase
         return filesIds;
     }
 
+    /// <summary>
+    ///     Получает метаданные файлов по их идентификаторам.
+    /// </summary>
+    /// <param name="request">Запрос, содержащий идентификаторы файлов.</param>
+    /// <param name="context">Контекст сервера для обработки вызова.</param>
+    /// <returns>Ответ с метаданными файлов.</returns>
+    /// <exception cref="RpcException">Выбрасывается, если файлы не найдены в базе данных.</exception>
     public override async Task<GetFilesMetadataResponse> GetFilesMetadata(GetFilesRequest request,
         ServerCallContext context)
     {
@@ -91,6 +116,13 @@ public class FileServer : FileService.FileServiceBase
         };
     }
 
+    /// <summary>
+    ///     Получает файлы по их метаданным, загружая их с облачного хранилища S3.
+    /// </summary>
+    /// <param name="request">Запрос с метаданными файлов.</param>
+    /// <param name="context">Контекст сервера для обработки вызова.</param>
+    /// <returns>Ответ с файлами.</returns>
+    /// <exception cref="RpcException">Выбрасывается, если файл не найден в S3.</exception>
     public override async Task<GetFilesResponse> GetFiles(GetFilesRequest request, ServerCallContext context)
     {
         var filesMetadata = (await GetFilesMetadata(request, context)).FilesMetadata;
@@ -126,6 +158,12 @@ public class FileServer : FileService.FileServiceBase
         };
     }
 
+    /// <summary>
+    ///     Удаляет файлы по их идентификаторам и удаляет соответствующие данные из базы данных и S3.
+    /// </summary>
+    /// <param name="request">Запрос с идентификаторами файлов для удаления.</param>
+    /// <param name="context">Контекст сервера для обработки вызова.</param>
+    /// <returns>Пустой ответ, если удаление выполнено успешно.</returns>
     public override async Task<Empty> DeleteFiles(DeleteFilesRequest request, ServerCallContext context)
     {
         try
@@ -144,7 +182,7 @@ public class FileServer : FileService.FileServiceBase
             // TODO: Написать метод для удаления множества файлов в сервисе IS3Service, а то IO Bound на том, что каждый раз спрашиваем, существует ли бакет или нет
             foreach (var file in files)
                 await _s3Service.DeleteAsync(file.Address, cancellationToken: context.CancellationToken);
-            
+
             _logger.LogInformation("Deleted files: {filesId}", string.Join(", ", files.Select(x => x.Id)));
             await _dbContext.SaveChangesAsync(context.CancellationToken);
         }

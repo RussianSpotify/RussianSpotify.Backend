@@ -1,11 +1,15 @@
+#region
+
 using RussianSpotify.API.Core.Enums;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 public class RolePrivilege
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="role">Роль</param>
     /// <param name="privilege">Привилегия</param>
@@ -16,29 +20,29 @@ public class RolePrivilege
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public RolePrivilege()
     {
     }
 
     /// <summary>
-    /// Идентификатор
+    ///     Идентификатор
     /// </summary>
     public Guid Id { get; protected set; }
 
     /// <summary>
-    /// Привилегия
+    ///     Привилегия
     /// </summary>
     public Privileges Privilege { get; protected set; }
 
     /// <summary>
-    /// Роль
+    ///     Роль
     /// </summary>
     public Role? Role { get; protected set; }
 
     /// <summary>
-    /// Ид роли
+    ///     Ид роли
     /// </summary>
     public Guid RoleId { get; protected set; }
 }

@@ -1,6 +1,10 @@
+#region
+
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Requests.EmailNotificator.SendEmailNotification;
+
+#endregion
 
 namespace RussianSpotify.API.Worker.Workers;
 
@@ -10,7 +14,7 @@ public class EmailNotificator : IWorker
     private readonly IMediator _mediator;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="logger">Логгер</param>
     /// <param name="mediator">Медиатор CQRS</param>

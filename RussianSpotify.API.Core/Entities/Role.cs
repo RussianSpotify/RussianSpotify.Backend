@@ -1,15 +1,19 @@
+#region
+
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 public class Role : BaseEntity
 {
     private string _name = default!;
-    
+
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public Role()
     {
@@ -18,10 +22,10 @@ public class Role : BaseEntity
     }
 
     /// <summary>
-    /// Название роли
+    ///     Название роли
     /// </summary>
     public string Name
-    { 
+    {
         get => _name;
         set => _name = string.IsNullOrWhiteSpace(value)
             ? throw new RequiredFieldException("Логин пользователя")
@@ -29,17 +33,17 @@ public class Role : BaseEntity
     }
 
     /// <summary>
-    /// Привилегии
+    ///     Привилегии
     /// </summary>
     public List<RolePrivilege> Privileges { get; protected set; }
 
     /// <summary>
-    /// Пользователи
+    ///     Пользователи
     /// </summary>
     public List<User>? Users { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="id">Идентификатор</param>
     /// <param name="name">Название роли</param>
@@ -61,7 +65,7 @@ public class Role : BaseEntity
         };
 
     /// <summary>
-    /// Обновить привилегии
+    ///     Обновить привилегии
     /// </summary>
     /// <param name="privilegesList">Список привилегий</param>
     public void UpdatePrivileges(List<Privileges> privilegesList)

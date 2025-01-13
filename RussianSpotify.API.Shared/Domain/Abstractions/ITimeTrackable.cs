@@ -1,17 +1,17 @@
 namespace RussianSpotify.API.Shared.Domain.Abstractions;
 
 /// <summary>
-/// Интерфейс отслеживания создание/обновление
+///     Интерфейс отслеживания создание/обновление
 /// </summary>
 public interface ITimeTrackable
 {
     /// <summary>
-    /// Дата создания
+    ///     Дата создания
     /// </summary>
     DateTime CreatedAt { get; set; }
-    
+
     /// <summary>
-    /// Дата обновления
+    ///     Дата обновления
     /// </summary>
     DateTime? UpdatedAt { get; set; }
 }

@@ -1,5 +1,9 @@
-﻿using System.Net;
+﻿#region
+
+using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 

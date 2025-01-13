@@ -1,12 +1,16 @@
+#region
+
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using RussianSpotify.API.Core.Abstractions;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Отвечает за отправку писем на почту
+///     Отвечает за отправку писем на почту
 /// </summary>
 public class EmailSender : IEmailSender
 {
@@ -15,7 +19,7 @@ public class EmailSender : IEmailSender
     public EmailSender(IConfiguration configuration)
         => _configuration = configuration;
 
-    /// <inheritdoc cref="IEmailSender"/>
+    /// <inheritdoc cref="IEmailSender" />
     public async Task SendEmailAsync(string to, string message, CancellationToken cancellationToken)
     {
         var emailConfiguration = _configuration.GetSection("EmailSettings");
@@ -75,7 +79,7 @@ public class EmailSender : IEmailSender
         CancellationToken cancellationToken)
     {
         using var client = new SmtpClient();
-        
+
         await client.ConnectAsync(emailConfiguration["SMTPServerHost"],
             int.Parse(emailConfiguration["SMTPServerPort"]!), true, cancellationToken);
 

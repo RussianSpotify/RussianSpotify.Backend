@@ -1,15 +1,19 @@
+#region
+
 using RussianSpotify.API.Core.Requests.Subscription.GetSubscription;
 using Xunit;
+
+#endregion
 
 namespace RussianSpotify.API.UnitTests.Requests.Subscriptions;
 
 /// <summary>
-/// Тест для <see cref="GetSubscriptionQueryHandler"/>
+///     Тест для <see cref="GetSubscriptionQueryHandler" />
 /// </summary>
 public class GetSubscriptionQueryHandlerTest : UnitTestBase
 {
     /// <summary>
-    /// Обработчик должен ответить что метод был отработан без ошибок
+    ///     Обработчик должен ответить что метод был отработан без ошибок
     /// </summary>
     [Fact]
     public async Task Handle_ShouldVerifyMethod()

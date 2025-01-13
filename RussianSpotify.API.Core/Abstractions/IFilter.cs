@@ -1,13 +1,13 @@
 ﻿namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Фильтр для сущностей
+///     Фильтр для сущностей
 /// </summary>
 /// <typeparam name="T">То по чему производится фильтрация</typeparam>
 public interface IFilter<T>
 {
     /// <summary>
-    /// Фильтрация
+    ///     Фильтрация
     /// </summary>
     /// <param name="queryable">Коллекция для фильтрации</param>
     /// <param name="filterValue">Значение фильтра</param>

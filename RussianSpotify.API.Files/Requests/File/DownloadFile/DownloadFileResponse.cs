@@ -1,10 +1,13 @@
+#region
+
 using RussianSpotify.API.Shared.Requests.File;
-using RussianSpotify.Contracts.Requests.File.DownloadFile;
+
+#endregion
 
 namespace RussianSpotify.API.Files.Requests.File.DownloadFile;
 
 /// <summary>
-/// Ответ для <see cref="DownloadFileRequest"/>
+///     Ответ для <see cref="DownloadFileRequest" />
 /// </summary>
 public class DownloadFileResponse : BaseFileStreamResponse
 {

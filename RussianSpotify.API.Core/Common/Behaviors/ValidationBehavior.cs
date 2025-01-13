@@ -1,10 +1,14 @@
+#region
+
 using FluentValidation;
 using MediatR;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Common.Behaviors;
 
 /// <summary>
-/// Подключение пайплайна валидации
+///     Подключение пайплайна валидации
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>

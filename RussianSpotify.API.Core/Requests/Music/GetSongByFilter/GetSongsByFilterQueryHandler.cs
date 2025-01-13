@@ -1,16 +1,19 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.GetSongByFilter;
 
 /// <summary>
-/// Обработчик для <see cref="GetSongsByFilterQuery"/>
+///     Обработчик для <see cref="GetSongsByFilterQuery" />
 /// </summary>
 public class GetSongsByFilterQueryHandler
     : IRequestHandler<GetSongsByFilterQuery, GetSongsByFilterResponse>
@@ -20,10 +23,11 @@ public class GetSongsByFilterQueryHandler
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="filterHandler">Фильтр хэндлер</param>
     /// <param name="dbContext">Контекст БД</param>
+    /// <param name="userContext">Контекст пользователя</param>
     public GetSongsByFilterQueryHandler(IFilterHandler filterHandler, IDbContext dbContext, IUserContext userContext)
     {
         _filterHandler = filterHandler;
@@ -31,7 +35,7 @@ public class GetSongsByFilterQueryHandler
         _userContext = userContext;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}" />
     public async Task<GetSongsByFilterResponse> Handle(GetSongsByFilterQuery request,
         CancellationToken cancellationToken)
     {
@@ -52,7 +56,7 @@ public class GetSongsByFilterQueryHandler
             cancellationToken);
 
         var totalCount = await filteredSongs.CountAsync(cancellationToken);
-        
+
         var resultSongs = await filteredSongs
             .Include(song => song.Buckets)
             .Select(song => new GetSongsByFilterResponseItem
@@ -66,7 +70,7 @@ public class GetSongsByFilterQueryHandler
                     .Select(y => new GetSongByFilterResponseItemAuthor
                     {
                         AuthorId = y.Id,
-                        AuthorName = y.UserName!
+                        AuthorName = y.UserName
                     })
                     .ToList(),
                 IsInFavorite = song.Buckets

@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
@@ -15,6 +17,8 @@ using RussianSpotify.API.Shared.Options;
 using RussianSpotify.API.Shared.Services;
 using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.Worker;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -36,12 +40,15 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 
 // Добавлен слой с db контекстом
 // TODO: Как будто бы это должно быть в одном методе AddPostgreSQLLayout и AddCustomDbContext
-builder.Services.AddPostgreSQLLayout();
+builder.Services.AddPostgreSqlLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
-builder.Services.AddRedis(configuration);
 builder.Services.AddSignalR();
 var grpcOptions = builder.Configuration.GetSection(nameof(GrpcOptions)).Get<GrpcOptions>()!;
 builder.Services.AddGrpcServices(grpcOptions);
+
+// Redis
+var redisOptions = builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()!;
+builder.Services.AddRedis(redisOptions);
 
 // RabbitMQ
 builder.Services.AddRabbitMq(configuration.GetSection("RabbitMq").Get<RabbitMqOptions>()!);

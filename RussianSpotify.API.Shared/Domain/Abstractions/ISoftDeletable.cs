@@ -1,17 +1,17 @@
 namespace RussianSpotify.API.Shared.Domain.Abstractions;
 
 /// <summary>
-/// Интерфейс мягкого удаления
+///     Интерфейс мягкого удаления
 /// </summary>
 public interface ISoftDeletable
 {
     /// <summary>
-    /// Удален
+    ///     Удален
     /// </summary>
     bool IsDeleted { get; set; }
 
     /// <summary>
-    /// Время удаления
+    ///     Время удаления
     /// </summary>
     public DateTime? DeletedAt { get; set; }
 }

@@ -1,17 +1,17 @@
 ﻿namespace RussianSpotify.Contracts.Requests.Author.GetAuthor;
 
 /// <summary>
-/// Информация об авторе
+///     Информация об авторе
 /// </summary>
 public class GetAuthorResponse
 {
     /// <summary>
-    /// Имя автора
+    ///     Имя автора
     /// </summary>
     public string Name { get; set; } = default!;
 
     /// <summary>
-    /// Id фотографии автора
+    ///     Id фотографии автора
     /// </summary>
     public Guid? AuthorPhotoId { get; set; }
 }

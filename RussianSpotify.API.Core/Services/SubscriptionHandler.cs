@@ -1,20 +1,23 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 using RussianSpotify.Contracts.Requests.Subscription.GetSubscription;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
-/// <inheritdoc/>
+/// <inheritdoc />
 public class SubscriptionHandler : ISubscriptionHandler
 {
     private readonly IDbContext _context;
     private readonly IDateTimeProvider _dateTimeProvider;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="context">Контекст БД</param>
     /// <param name="dateTimeProvider">Провайдер дат</param>
@@ -26,7 +29,7 @@ public class SubscriptionHandler : ISubscriptionHandler
         _dateTimeProvider = dateTimeProvider;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<bool> Subscribe(Guid userId, int length)
     {
         if (length < 1)
@@ -62,7 +65,7 @@ public class SubscriptionHandler : ISubscriptionHandler
         return true;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<bool> Unsubscribe(Guid userId)
     {
         var subscription = await _context.Subscribes
@@ -82,7 +85,7 @@ public class SubscriptionHandler : ISubscriptionHandler
         return true;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<GetSubscriptionResponse> GetSubscription(Guid userId)
     {
         var subscription = await _context.Subscribes

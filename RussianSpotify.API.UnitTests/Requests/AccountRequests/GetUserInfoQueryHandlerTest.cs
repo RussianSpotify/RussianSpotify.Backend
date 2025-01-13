@@ -1,18 +1,22 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Requests.Account.GetUserInfo;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AccountRequests;
 
 /// <summary>
-/// Тест для <see cref="GetUserInfoQueryHandler"/>
+///     Тест для <see cref="GetUserInfoQueryHandler" />
 /// </summary>
 public class GetUserInfoQueryHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public GetUserInfoQueryHandlerTest()
     {
@@ -20,7 +24,7 @@ public class GetUserInfoQueryHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен вернуть информацию о сущности
+    ///     Обработчик должен вернуть информацию о сущности
     /// </summary>
     [Fact]
     public async Task Handle_ShouldReturnEntityInfo()

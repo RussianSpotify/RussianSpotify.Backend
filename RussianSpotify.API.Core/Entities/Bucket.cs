@@ -1,26 +1,29 @@
-using RussianSpotify.API.Core.Abstractions;
+#region
+
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Корзина пользователя
+///     Корзина пользователя
 /// </summary>
 public class Bucket : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
-    /// Пользователь
+    ///     Пользователь
     /// </summary>
     public User User { get; set; }
 
     /// <summary>
-    /// Ид пользователя
+    ///     Ид пользователя
     /// </summary>
     public Guid UserId { get; set; }
 
     /// <summary>
-    /// Песни
+    ///     Песни
     /// </summary>
     public List<Song> Songs { get; set; } = new();
 
@@ -37,14 +40,14 @@ public class Bucket : BaseEntity, ISoftDeletable, ITimeTrackable
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// Добавить песню
+    ///     Добавить песню
     /// </summary>
     /// <param name="song">Песню</param>
     public void AddSong(Song song)
     {
         if (Songs is null)
             throw new NotIncludedException(nameof(Songs));
-        
+
         Songs.Add(song);
     }
 }

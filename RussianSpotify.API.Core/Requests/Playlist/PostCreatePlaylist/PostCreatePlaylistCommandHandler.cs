@@ -1,9 +1,8 @@
+#region
+
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.Playlist;
@@ -13,10 +12,12 @@ using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Playlist.PostCreatePlaylist;
 
 /// <summary>
-/// Обработчия для <see cref="PostCreatePlaylistCommand"/>
+///     Обработчия для <see cref="PostCreatePlaylistCommand" />
 /// </summary>
 public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlaylistCommand, PostCreatePlaylistResponse>
 {
@@ -26,7 +27,7 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
     private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
@@ -52,11 +53,11 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
             throw new ArgumentNullException(nameof(request));
 
         var currentUser = await _dbContext.Users
-            .Include(x => x.AuthorPlaylists)
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
+                              .Include(x => x.AuthorPlaylists)
+                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
+                          ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
-        var userRoles = new List<string>();
+        var userRoles = currentUser.Roles.Select(x => x.Name).ToList();
 
         var isArtist = userRoles.Contains(Roles.AdminRoleName) || userRoles.Contains(Roles.AuthorRoleName);
 

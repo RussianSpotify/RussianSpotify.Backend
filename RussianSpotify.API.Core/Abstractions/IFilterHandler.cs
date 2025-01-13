@@ -1,12 +1,12 @@
 ﻿namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Отвечает за выбор нужного фильтра и применение его к коллекции
+///     Отвечает за выбор нужного фильтра и применение его к коллекции
 /// </summary>
 public interface IFilterHandler
 {
     /// <summary>
-    /// Ищет нужный фильтр(класс, реализуюзий интерфейс IFilter) и применяет его к коллекции
+    ///     Ищет нужный фильтр(класс, реализуюзий интерфейс IFilter) и применяет его к коллекции
     /// </summary>
     /// <param name="queryable">Коллекция для фильтрации</param>
     /// <param name="filterName">Имя фильтра</param>

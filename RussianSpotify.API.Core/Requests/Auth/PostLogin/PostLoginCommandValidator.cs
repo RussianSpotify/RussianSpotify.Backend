@@ -1,10 +1,14 @@
+#region
+
 using FluentValidation;
 using RussianSpotify.API.Core.Enums;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostLogin;
 
 /// <summary>
-/// Валидатор для <see cref="PostLoginCommand"/>
+///     Валидатор для <see cref="PostLoginCommand" />
 /// </summary>
 public class PostLoginCommandValidator : AbstractValidator<PostLoginCommand>
 {

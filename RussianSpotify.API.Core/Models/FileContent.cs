@@ -1,12 +1,12 @@
 namespace RussianSpotify.API.Core.Models;
 
 /// <summary>
-/// Файл для S3
+///     Файл для S3
 /// </summary>
 public class FileContent
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="content">Бинарные данные</param>
     /// <param name="fileName">Название файла</param>
@@ -25,34 +25,34 @@ public class FileContent
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public FileContent()
     {
     }
 
     /// <summary>
-    /// Бинарные данные файла
+    ///     Бинарные данные файла
     /// </summary>
     public Stream Content { get; set; }
 
     /// <summary>
-    /// Название файла
+    ///     Название файла
     /// </summary>
     public string FileName { get; set; }
 
     /// <summary>
-    /// Тип контента
+    ///     Тип контента
     /// </summary>
     public string ContentType { get; set; }
 
     /// <summary>
-    /// Название бакета
+    ///     Название бакета
     /// </summary>
     public string? Bucket { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="content">Бинарные данные файла</param>
     /// <param name="fileName">Название файла</param>

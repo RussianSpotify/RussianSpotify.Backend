@@ -1,12 +1,12 @@
 namespace RussianSpotify.Contracts.Requests.Account.PatchUpdateUserInfo;
 
 /// <summary>
-/// Запрос на обновление данных о пользователе
+///     Запрос на обновление данных о пользователе
 /// </summary>
 public class PatchUpdateUserInfoRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">PatchUpdateUserInfoRequest</param>
     public PatchUpdateUserInfoRequest(PatchUpdateUserInfoRequest request)
@@ -26,27 +26,27 @@ public class PatchUpdateUserInfoRequest
     }
 
     /// <summary>
-    /// Имя пользователя
+    ///     Имя пользователя
     /// </summary>
     public string? UserName { get; set; }
 
     /// <summary>
-    /// Текущий пароль
+    ///     Текущий пароль
     /// </summary>
     public string? CurrentPassword { get; set; }
 
     /// <summary>
-    /// Новый пароль
+    ///     Новый пароль
     /// </summary>
     public string? NewPassword { get; set; }
 
     /// <summary>
-    /// Подтверждение нового пароля
+    ///     Подтверждение нового пароля
     /// </summary>
     public string? NewPasswordConfirm { get; set; }
 
     /// <summary>
-    /// Id файла фотографии
+    ///     Id файла фотографии
     /// </summary>
     public Guid? FilePhotoId { get; set; }
 }

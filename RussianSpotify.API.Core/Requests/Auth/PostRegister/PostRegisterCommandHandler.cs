@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -13,10 +15,12 @@ using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 using Role = RussianSpotify.API.Core.Entities.Role;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Auth.PostRegister;
 
 /// <summary>
-/// Обработчик для <see cref="PostRegisterCommand"/>
+///     Обработчик для <see cref="PostRegisterCommand" />
 /// </summary>
 public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, PostRegisterResponse>
 {
@@ -27,7 +31,7 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
     private readonly IDistributedCache _cache;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="passwordService">Сервис хеширования паролей</param>
@@ -70,23 +74,23 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
         }
 
         var passwordHash = _passwordService.HashPassword(request.Password);
-        
+
         var user = new User(
             userName: request.UserName,
             email: request.Email,
             passwordHash: passwordHash);
-        
+
         if (request.Role.Equals(Roles.AdminRoleName, StringComparison.OrdinalIgnoreCase))
             throw new UserCannotBeAdminException("Пользователь не может быть админом");
-        
+
         var baseRole = await _dbContext.Roles
-            .FirstOrDefaultAsync(x => x.Name == request.Role, cancellationToken)
-            ?? throw new EntityNotFoundException<Role>(request.Role);
-        
+                           .FirstOrDefaultAsync(x => x.Name == request.Role, cancellationToken)
+                       ?? throw new EntityNotFoundException<Role>(request.Role);
+
         user.AddRole(baseRole);
 
         var token = _tokenFactory.GetToken();
-        
+
         var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
             Templates.SendEmailConfirmationMessage,
             cancellationToken);
@@ -95,7 +99,7 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
 
         var message = messageTemplate.ReplacePlaceholders(placeholders);
         await _cache.SetStringAsync(request.Email, token, cancellationToken);
-        
+
         await _emailSender.SendEmailAsync(
             user.Email,
             message,
@@ -103,7 +107,7 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
 
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        
+
         return new PostRegisterResponse(request.Email);
     }
 }

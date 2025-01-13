@@ -1,4 +1,8 @@
+#region
+
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 

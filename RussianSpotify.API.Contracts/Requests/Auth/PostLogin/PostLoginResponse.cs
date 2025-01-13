@@ -1,12 +1,12 @@
 namespace RussianSpotify.Contracts.Requests.Auth.PostLogin;
 
 /// <summary>
-/// Результат логина для PostLogin
+///     Результат логина для PostLogin
 /// </summary>
 public class PostLoginResponse
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="accessToken">Токен доступа</param>
     /// <param name="refreshToken">Токен обновления</param>
@@ -17,12 +17,12 @@ public class PostLoginResponse
     }
 
     /// <summary>
-    /// Токен доступа
+    ///     Токен доступа
     /// </summary>
     public string AccessToken { get; set; }
 
     /// <summary>
-    /// Токен обновления
+    ///     Токен обновления
     /// </summary>
     public string RefreshToken { get; set; }
 }

@@ -1,15 +1,19 @@
+#region
+
 using MediatR;
 using RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Playlist.PutPlaylist;
 
 /// <summary>
-/// Команда на редактирование плейлиста/альбома
+///     Команда на редактирование плейлиста/альбома
 /// </summary>
 public class PutPlaylistCommand : PutPlaylistRequest, IRequest<PutPlaylistResponse>
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     /// <param name="playlistId">ИД плейлиста/альбома</param>
@@ -20,7 +24,7 @@ public class PutPlaylistCommand : PutPlaylistRequest, IRequest<PutPlaylistRespon
     }
 
     /// <summary>
-    /// ИД альбома/плейлиста
+    ///     ИД альбома/плейлиста
     /// </summary>
     public Guid PlaylistId { get; set; }
 }

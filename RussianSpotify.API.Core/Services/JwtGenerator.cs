@@ -1,3 +1,5 @@
+#region
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -7,10 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Enums;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Отвечает за генерацию JWT
+///     Отвечает за генерацию JWT
 /// </summary>
 public class JwtGenerator : IJwtGenerator
 {
@@ -18,7 +22,7 @@ public class JwtGenerator : IJwtGenerator
 
     public JwtGenerator(IConfiguration configuration) => _configuration = configuration;
 
-    /// <inheritdoc cref="IJwtGenerator"/> 
+    /// <inheritdoc cref="IJwtGenerator" />
     public string GenerateToken(List<Claim> authenticationClaims)
     {
         var authSignInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));

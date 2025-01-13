@@ -1,19 +1,23 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Requests.Auth.PostRefreshToken;
 using RussianSpotify.Contracts.Requests.Auth.PostRefreshToken;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AuthRequests;
 
 /// <summary>
-/// Тест для <see cref="PostRefreshTokenCommandHandler"/>
+///     Тест для <see cref="PostRefreshTokenCommandHandler" />
 /// </summary>
 public class PostRefreshTokenCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public PostRefreshTokenCommandHandlerTest()
     {
@@ -22,7 +26,7 @@ public class PostRefreshTokenCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен создать новую пару токенов
+    ///     Обработчик должен создать новую пару токенов
     /// </summary>
     [Fact]
     public async Task Handle_ShouldRefreshToken()

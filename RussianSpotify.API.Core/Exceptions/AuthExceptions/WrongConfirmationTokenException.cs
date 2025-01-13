@@ -1,10 +1,14 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 /// <summary>
-/// Если токен, который был отправлен на почту и токен, отправленный пользователем не совпадают
+///     Если токен, который был отправлен на почту и токен, отправленный пользователем не совпадают
 /// </summary>
 public class WrongConfirmationTokenException : ApplicationBaseException
 {

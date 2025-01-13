@@ -1,4 +1,5 @@
-using System.Text;
+#region
+
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -7,21 +8,23 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmPasswordReset;
 
 /// <summary>
-/// Обработчик для <see cref="PostConfirmPasswordResetCommand"/>
+///     Обработчик для <see cref="PostConfirmPasswordResetCommand" />
 /// </summary>
 public class PostConfirmPasswordResetCommandHandler : IRequestHandler<PostConfirmPasswordResetCommand>
 {
     private const string Prefix = "Reset_";
-    
+
     private readonly IDbContext _dbContext;
     private readonly IDistributedCache _distributedCache;
     private readonly IPasswordService _passwordService;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="distributedCache">Кеш</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
@@ -40,20 +43,20 @@ public class PostConfirmPasswordResetCommandHandler : IRequestHandler<PostConfir
     public async Task Handle(PostConfirmPasswordResetCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        
-        var user =  await _dbContext.Users
-            .FirstOrDefaultAsync(x => request.Email == x.Email, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(request.Email);
+
+        var user = await _dbContext.Users
+                       .FirstOrDefaultAsync(x => request.Email == x.Email, cancellationToken)
+                   ?? throw new EntityNotFoundException<User>(request.Email);
 
         var code = await _distributedCache
             .GetStringAsync($"{Prefix}{request.Email}", cancellationToken);
 
         if (code is null)
             throw new NotFoundException("Код не найден.");
-        
+
         if (!request.VerificationCodeFromUser.Equals(code))
             throw new ValidationException("Код неверный");
-        
+
         var newHash = _passwordService.HashPassword(request.NewPassword);
         user.PasswordHash = newHash;
         user.RefreshToken = null;

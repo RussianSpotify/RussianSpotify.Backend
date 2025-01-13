@@ -1,17 +1,21 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Enums;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL.Seeder;
 
 /// <summary>
-/// Сид базовых значений в бд
+///     Сид базовых значений в бд
 /// </summary>
 public class DbSeeder : IDbSeeder
 {
-    private static readonly IReadOnlyDictionary<Guid, string> BaseRoles = new Dictionary<Guid, string>()
+    private static readonly IReadOnlyDictionary<Guid, string> BaseRoles = new Dictionary<Guid, string>
     {
         [Roles.AdminId] =
             Roles.AdminRoleName,
@@ -23,7 +27,7 @@ public class DbSeeder : IDbSeeder
             Roles.UserRoleName
     };
 
-    private static List<CategoryType> _baseCategories = new()
+    private static readonly List<CategoryType> BaseCategories = new()
     {
         CategoryType.HipHop,
         CategoryType.Metall,
@@ -45,7 +49,7 @@ public class DbSeeder : IDbSeeder
         var existsRolesInDb = await dbContext.Roles
             .Where(x => BaseRoles.Keys.Contains(x.Id))
             .Select(x => x.Id)
-            .ToListAsync(cancellationToken) ?? new List<Guid>();
+            .ToListAsync(cancellationToken);
 
         var rolesToSeed = BaseRoles
             .Where(x => !existsRolesInDb.Contains(x.Key))
@@ -87,15 +91,15 @@ public class DbSeeder : IDbSeeder
     {
         var existsCategoriesInDb = await dbContext.Categories
             .ToListAsync(cancellationToken);
-        
+
         var categoriesToDelete = existsCategoriesInDb
-            .Where(categoryFromDb => _baseCategories.All(x => x != categoryFromDb.CategoryName))
+            .Where(categoryFromDb => BaseCategories.All(x => x != categoryFromDb.CategoryName))
             .ToList();
 
         foreach (var categoryToDelete in categoriesToDelete)
             dbContext.Categories.Remove(categoryToDelete);
-        
-        _baseCategories.ForEach(x =>
+
+        BaseCategories.ForEach(x =>
         {
             if (existsCategoriesInDb.All(y => y.CategoryName != x))
             {

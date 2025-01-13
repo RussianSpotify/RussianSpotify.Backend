@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Chat.GetStory;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Chat.GetStory;
 
 /// <summary>
-/// Обработчик для <see cref="GetStoryQuery"/>
+///     Обработчик для <see cref="GetStoryQuery" />
 /// </summary>
 public class GetStoryQueryHandler : IRequestHandler<GetStoryQuery, GetStoryResponse>
 {
@@ -16,7 +20,7 @@ public class GetStoryQueryHandler : IRequestHandler<GetStoryQuery, GetStoryRespo
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="userContext">Контекст пользователя</param>
     /// <param name="dbContext">Контекст БД</param>
@@ -26,7 +30,7 @@ public class GetStoryQueryHandler : IRequestHandler<GetStoryQuery, GetStoryRespo
         _dbContext = dbContext;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}" />
     public async Task<GetStoryResponse> Handle(GetStoryQuery request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);

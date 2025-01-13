@@ -1,18 +1,22 @@
+#region
+
 using Microsoft.AspNetCore.SignalR;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.Contracts.Requests.Hub.CreateMessage;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Хаб чата
+///     Хаб чата
 /// </summary>
 public class ChatHub : Hub
 {
     private readonly IChatService _chatService;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="chatService">Сервис чата</param>
     public ChatHub(IChatService chatService)
@@ -21,7 +25,7 @@ public class ChatHub : Hub
     }
 
     /// <summary>
-    /// Создание чата при подключении к хабу
+    ///     Создание чата при подключении к хабу
     /// </summary>
     public override async Task OnConnectedAsync()
     {
@@ -30,7 +34,7 @@ public class ChatHub : Hub
     }
 
     /// <summary>
-    /// Отправить сообщение
+    ///     Отправить сообщение
     /// </summary>
     /// <param name="request">Запрос</param>
     public async Task SendMessage(CreateMessageRequest request)
@@ -39,7 +43,7 @@ public class ChatHub : Hub
         var receiverUsers = (await _chatService.GetUsersInChat(request.ChatId))
             .Select(x => x.ToString())
             .ToList();
-        
+
         await Clients.Users(receiverUsers)
             .SendAsync("ReceiveMessage", new
             {

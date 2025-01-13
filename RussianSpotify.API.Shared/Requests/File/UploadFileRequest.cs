@@ -3,7 +3,7 @@ namespace RussianSpotify.API.Shared.Requests.File;
 public class UploadFileRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="fileStream">Бинарь</param>
     /// <param name="fileName">Название файла</param>
@@ -16,17 +16,15 @@ public class UploadFileRequest
     }
 
     /// <summary>
-    /// Поток
+    ///     Поток
     /// </summary>
     public Stream FileStream { get; set; }
 
     /// <summary>
-    /// 
     /// </summary>
     public string FileName { get; set; }
 
     /// <summary>
-    /// 
     /// </summary>
     public string ContentType { get; set; }
 }

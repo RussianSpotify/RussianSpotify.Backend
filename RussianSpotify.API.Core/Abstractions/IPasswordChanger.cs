@@ -1,14 +1,18 @@
+#region
+
 using RussianSpotify.API.Core.Entities;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Сервис по смене пароля
+///     Сервис по смене пароля
 /// </summary>
 public interface IPasswordChanger
 {
     /// <summary>
-    /// Поменять пароль
+    ///     Поменять пароль
     /// </summary>
     /// <param name="user">Пользователь</param>
     /// <param name="oldPassword">Старый пароль</param>

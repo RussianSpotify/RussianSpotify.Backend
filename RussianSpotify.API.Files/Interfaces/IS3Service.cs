@@ -1,24 +1,29 @@
+#region
+
+using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Models;
+
+#endregion
 
 namespace RussianSpotify.API.Files.Interfaces;
 
 /// <summary>
-/// Сервис S3
+///     Сервис S3
 /// </summary>
 public interface IS3Service
 {
     /// <summary>
-    /// Загрузить файл в хранилище
+    ///     Загрузить файл в хранилище
     /// </summary>
     /// <param name="fileContent">Бинарные данные</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Ключ</returns>
-    Task<string> UploadAsync(
+    /// <returns>Метадата</returns>
+    Task<FileMetadata> UploadAsync(
         FileContent fileContent,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Скачать файл по ключу
+    ///     Скачать файл по ключу
     /// </summary>
     /// <param name="key">Ключ</param>
     /// <param name="bucket">Бакет если отличется от умолчания</param>
@@ -30,7 +35,7 @@ public interface IS3Service
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получить файл в виде url
+    ///     Получить файл в виде url
     /// </summary>
     /// <param name="key">Адрес</param>
     /// <param name="bucket">Бакет</param>
@@ -42,7 +47,7 @@ public interface IS3Service
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удалить файл из хранилища
+    ///     Удалить файл из хранилища
     /// </summary>
     /// <param name="key">Ключ</param>
     /// <param name="bucket">Бакет если отличется от умолчания</param>

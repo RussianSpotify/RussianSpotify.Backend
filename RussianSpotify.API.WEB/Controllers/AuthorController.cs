@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RussianSpotify.API.Core.Requests.Author.GetAuthor;
@@ -6,10 +8,12 @@ using RussianSpotify.API.Core.Requests.Author.GetAuthorsByFilter;
 using RussianSpotify.Contracts.Requests.Author.GetAuthor;
 using RussianSpotify.Contracts.Requests.Author.GetAuthorsByFilter;
 
+#endregion
+
 namespace RussianSpotify.API.WEB.Controllers;
 
 /// <summary>
-/// Контроллер, отвечающий за действия связанные с авторами
+///     Контроллер, отвечающий за действия связанные с авторами
 /// </summary>
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -18,7 +22,7 @@ public class AuthorController : ControllerBase
     private readonly IMediator _mediator;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     public AuthorController(IMediator mediator)
@@ -27,7 +31,7 @@ public class AuthorController : ControllerBase
     }
 
     /// <summary>
-    /// Возвращает информацию об авторе
+    ///     Возвращает информацию об авторе
     /// </summary>
     /// <param name="request">Имя автора</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -46,10 +50,10 @@ public class AuthorController : ControllerBase
     }
 
     /// <summary>
-    /// Возвращает авторов, отфильтрованных по конкретному фильтру
+    ///     Возвращает авторов, отфильтрованных по конкретному фильтру
     /// </summary>
     /// <param name="request">Запрос с информацией о запросе</param>
-    /// <returns><see cref="GetAuthorsByFilterResponse"/> с инфой об авторе</returns>
+    /// <returns><see cref="GetAuthorsByFilterResponse" /> с инфой об авторе</returns>
     [Authorize]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]

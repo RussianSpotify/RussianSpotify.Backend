@@ -1,13 +1,17 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
 /// <summary>
-/// Конфигурация для <see cref="Category"/>
+///     Конфигурация для <see cref="Category" />
 /// </summary>
 public class CategoryConfiguration : EntityTypeConfigurationBase<Category>
 {
@@ -16,7 +20,7 @@ public class CategoryConfiguration : EntityTypeConfigurationBase<Category>
     {
         builder.ConfigureTimeTrackableEntity();
         builder.ConfigureSoftDeletableEntity();
-        
+
         builder.Property(p => p.CategoryName)
             .HasComment("Название категории")
             .IsRequired();

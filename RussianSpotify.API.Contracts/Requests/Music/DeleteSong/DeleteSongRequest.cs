@@ -1,31 +1,31 @@
 namespace RussianSpotify.Contracts.Requests.Music.DeleteSong;
 
 /// <summary>
-/// Запрос на удаление песни
+///     Запрос на удаление песни
 /// </summary>
 public class DeleteSongRequest
 {
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public DeleteSongRequest()
     {
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     public DeleteSongRequest(DeleteSongRequest request)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         SongId = request.SongId;
     }
 
     /// <summary>
-    /// Id песни
+    ///     Id песни
     /// </summary>
     public Guid SongId { get; set; }
 }

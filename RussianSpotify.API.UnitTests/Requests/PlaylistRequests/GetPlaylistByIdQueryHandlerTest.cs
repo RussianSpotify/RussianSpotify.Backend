@@ -1,30 +1,34 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Playlist.GetPlaylistById;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
-/// Тест для <see cref="GetPlaylistByIdQueryHandler"/>
+///     Тест для <see cref="GetPlaylistByIdQueryHandler" />
 /// </summary>
 public class GetPlaylistByIdQueryHandlerTest : UnitTestBase
 {
-    private Core.Entities.Playlist _playlist;
-    private IDbContext _dbContext;
+    private readonly Playlist _playlist;
+    private readonly IDbContext _dbContext;
 
     public GetPlaylistByIdQueryHandlerTest()
     {
-        _playlist = Core.Entities.Playlist.CreateForTest(
+        _playlist = Playlist.CreateForTest(
             playlistName: "123",
             releaseDate: new DateTime(2003, 12, 1),
             author: User.CreateForTest(login: "login"));
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(_playlist));
     }
 
     /// <summary>
-    /// Обработчик должен вернуть плейлист по ИД
+    ///     Обработчик должен вернуть плейлист по ИД
     /// </summary>
     [Fact]
     public async Task Handle_WithId_ShouldReturnPlaylist()

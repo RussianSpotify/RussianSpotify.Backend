@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿#region
+
+using Microsoft.AspNetCore.Http;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Enums;
 
 /// <summary>
-/// Базовые настройки Cookies
+///     Базовые настройки Cookies
 /// </summary>
 public static class BaseCookieOptions
 {
     /// <summary>
-    /// Cookie Options
+    ///     Cookie Options
     /// </summary>
     public static readonly CookieOptions Options = new()
     {
@@ -16,12 +20,12 @@ public static class BaseCookieOptions
     };
 
     /// <summary>
-    /// Name куки для JWT
+    ///     Name куки для JWT
     /// </summary>
     public const string AccessTokenCookieName = "token";
 
     /// <summary>
-    /// Name куки для Refresh Токена
+    ///     Name куки для Refresh Токена
     /// </summary>
     public const string RefreshTokenCookieName = "refresh";
 }

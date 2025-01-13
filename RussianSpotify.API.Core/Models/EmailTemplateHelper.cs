@@ -1,18 +1,22 @@
+#region
+
 using System.Reflection;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Extensions;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Models;
 
 /// <summary>
-/// Хелпер по работе с уведмолениями
+///     Хелпер по работе с уведмолениями
 /// </summary>
 public static class EmailTemplateHelper
 {
     private const string TemplatePath = "RussianSpotify.API.Core.Templates.HTML";
 
     /// <summary>
-    /// Создать уведмоление
+    ///     Создать уведмоление
     /// </summary>
     /// <param name="placeholders">Шаблоны</param>
     /// <param name="template">Шаблон письма</param>
@@ -38,7 +42,7 @@ public static class EmailTemplateHelper
     }
 
     /// <summary>
-    /// Возвращает html шаблон
+    ///     Возвращает html шаблон
     /// </summary>
     /// <param name="template">имя html шаблона</param>
     /// <param name="cancellationToken">Токен отмены</param>

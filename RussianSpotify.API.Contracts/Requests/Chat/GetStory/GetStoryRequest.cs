@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.Contracts.Models;
+
+#endregion
 
 namespace RussianSpotify.Contracts.Requests.Chat.GetStory;
 
 /// <summary>
-/// Запрос на получение истории чата
+///     Запрос на получение истории чата
 /// </summary>
 public class GetStoryRequest
 {
@@ -11,7 +15,7 @@ public class GetStoryRequest
     private int _pageSize;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public GetStoryRequest()
     {
@@ -20,7 +24,7 @@ public class GetStoryRequest
     }
 
     /// <summary>
-    /// Номер страницы
+    ///     Номер страницы
     /// </summary>
     public int PageNumber
     {
@@ -31,7 +35,7 @@ public class GetStoryRequest
     }
 
     /// <summary>
-    /// Размерность
+    ///     Размерность
     /// </summary>
     public int PageSize
     {

@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,12 @@ using RussianSpotify.Contracts.Requests.Playlist.GetPlaylistsByFilter;
 using RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 using RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 
+#endregion
+
 namespace RussianSpotify.API.WEB.Controllers;
 
 /// <summary>
-/// Контроллер, отвечающий за работу с плейлистами
+///     Контроллер, отвечающий за работу с плейлистами
 /// </summary>
 [ApiController]
 [Authorize]
@@ -27,7 +31,7 @@ public class PlaylistController : ControllerBase
     private readonly IMediator _mediator;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="mediator">Медиатор</param>
     public PlaylistController(IMediator mediator)
@@ -36,10 +40,12 @@ public class PlaylistController : ControllerBase
     }
 
     /// <summary>
-    /// Получить альбомы по фильтру(Доступные фильтры: AuthorPlaylists, PlaylistName, FavoritePlaylist)
+    ///     Получить альбомы по фильтру(Доступные фильтры: AuthorPlaylists, PlaylistName, FavoritePlaylist)
     /// </summary>
-    /// <param name="request">GetPlaylistsByFilterRequest(Название фильтра,
-    /// значение фильтра, страница, кол-во альбомов на странице)</param>
+    /// <param name="request">
+    ///     GetPlaylistsByFilterRequest(Название фильтра,
+    ///     значение фильтра, страница, кол-во альбомов на странице)
+    /// </param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Список GetPlaylistsByFilterResponse альбомы по фильтру</returns>
     [HttpGet("GetPlaylistsByFilter")]
@@ -55,7 +61,7 @@ public class PlaylistController : ControllerBase
     }
 
     /// <summary>
-    /// Создать плейлист/альбом
+    ///     Создать плейлист/альбом
     /// </summary>
     /// <param name="request">Запрос</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -70,7 +76,7 @@ public class PlaylistController : ControllerBase
         => await _mediator.Send(new PostCreatePlaylistCommand(request), cancellationToken);
 
     /// <summary>
-    /// Добавить альбом/плейлист в любимое
+    ///     Добавить альбом/плейлист в любимое
     /// </summary>
     /// <param name="id">ИД альбома/плейлиста</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -85,7 +91,7 @@ public class PlaylistController : ControllerBase
         => await _mediator.Send(new PostAddPlaylistToFavouriteCommand(id), cancellationToken);
 
     /// <summary>
-    /// Изменить плейлист/альбом
+    ///     Изменить плейлист/альбом
     /// </summary>
     /// <param name="playlistId">ИД плейлиста</param>
     /// <param name="request">Запрос</param>
@@ -104,7 +110,7 @@ public class PlaylistController : ControllerBase
             cancellationToken);
 
     /// <summary>
-    /// Получить инфу о плейлисте/альбоме
+    ///     Получить инфу о плейлисте/альбоме
     /// </summary>
     /// <param name="playlistId">ИД плейлиста/альбома</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -118,7 +124,7 @@ public class PlaylistController : ControllerBase
         => await _mediator.Send(new GetPlaylistByIdQuery(playlistId: playlistId), cancellationToken);
 
     /// <summary>
-    /// Удалить плейлист
+    ///     Удалить плейлист
     /// </summary>
     /// <param name="playlistId">Id плейлиста</param>
     [HttpDelete("DeletePlaylist/{playlistId}")]
@@ -126,9 +132,9 @@ public class PlaylistController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<DeletePlaylistResponse> DeletePlaylistAsync([FromRoute] Guid playlistId)
         => await _mediator.Send(new DeletePlaylistCommand(playlistId));
-    
+
     /// <summary>
-    /// Удалить плейлист из любимых
+    ///     Удалить плейлист из любимых
     /// </summary>
     /// <param name="playlistId">ИД плейлиста</param>
     /// <param name="cancellationToken">Токен отмены</param>

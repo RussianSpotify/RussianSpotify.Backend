@@ -1,6 +1,10 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Shared.Interfaces;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Data.PostgreSQL.Services;
 

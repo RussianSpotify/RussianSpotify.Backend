@@ -1,12 +1,16 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
 /// <summary>
-/// Конфигурация для <see cref="Chat"/>
+///     Конфигурация для <see cref="Chat" />
 /// </summary>
 public class ChatConfiguration : EntityTypeConfigurationBase<Chat>
 {

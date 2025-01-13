@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -8,10 +10,12 @@ using RussianSpotify.API.Grpc.Clients.FileClient;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.AddSong;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.PostAddSong;
 
 /// <summary>
-/// Обработчик команды на добавление новой песни
+///     Обработчик команды на добавление новой песни
 /// </summary>
 public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, AddSongResponse>
 {
@@ -20,7 +24,7 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
     private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Конекст базы данных</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
@@ -35,13 +39,13 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
         _fileServiceClient = fileServiceClient;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<AddSongResponse> Handle(PostAddSongCommand request, CancellationToken cancellationToken)
     {
         // Достаем категорию из бд
         var category = await _dbContext.Categories
-            .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken)
-            ?? throw new EntityNotFoundException<Category>(request.Category.ToString());
+                           .FirstOrDefaultAsync(i => (int)i.CategoryName == request.Category, cancellationToken)
+                       ?? throw new EntityNotFoundException<Category>(request.Category.ToString());
 
         // Валидация названия песни
         if (string.IsNullOrEmpty(request.SongName) || string.IsNullOrWhiteSpace(request.SongName))
@@ -76,13 +80,13 @@ public class PostAddSongCommandHandler : IRequestHandler<PostAddSongCommand, Add
             // Проверка, является ли файл аудио
             if (!_fileServiceClient.IsAudio(file.Metadata.ContentType))
                 throw new SongBadFileException("File's content type is not Audio");
-            
+
             newSong.SongFileId = request.SongFileId;
         }
-        
+
         var userFromDb = await _dbContext.Users
-            .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new ForbiddenException();
+                             .FirstOrDefaultAsync(i => i.Id == _userContext.CurrentUserId, cancellationToken)
+                         ?? throw new ForbiddenException();
 
         // Вносим изменения в бд
         newSong.AddAuthor(userFromDb);

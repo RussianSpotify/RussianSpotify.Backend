@@ -1,16 +1,19 @@
+#region
+
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
-/// <inheritdoc cref="IUserClaimsManager"/>
+/// <inheritdoc cref="IUserClaimsManager" />
 public class UserClaimsManager : IUserClaimsManager
 {
-    /// <inheritdoc cref="IUserClaimsManager"/>
+    /// <inheritdoc cref="IUserClaimsManager" />
     public List<Claim> GetUserClaims(User user)
     {
         if (user.Roles is null)

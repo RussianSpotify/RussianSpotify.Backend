@@ -1,12 +1,12 @@
 namespace RussianSpotify.Contracts.Requests.Chat.GetChats;
 
 /// <summary>
-/// Ответ на запрос о получении чатов
+///     Ответ на запрос о получении чатов
 /// </summary>
 public class GetChatsResponse
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="entities">Сущности</param>
     /// <param name="totalCount">Общее кол-во</param>
@@ -17,12 +17,12 @@ public class GetChatsResponse
     }
 
     /// <summary>
-    /// Сущности
+    ///     Сущности
     /// </summary>
     public List<GetChatsResponseItem> Entities { get; set; }
 
     /// <summary>
-    /// Общее кол-во
+    ///     Общее кол-во
     /// </summary>
     public int TotalCount { get; set; }
 }

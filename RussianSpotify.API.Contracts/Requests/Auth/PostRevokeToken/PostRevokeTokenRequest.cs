@@ -15,7 +15,7 @@ public class PostRevokeTokenRequest
     }
 
     /// <summary>
-    /// Email пользователя
+    ///     Email пользователя
     /// </summary>
     public string Email { get; set; } = default!;
 }

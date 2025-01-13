@@ -1,3 +1,5 @@
+#region
+
 using System.Reflection;
 using FluentValidation;
 using MediatR;
@@ -10,15 +12,17 @@ using RussianSpotify.API.Core.Services.Filters;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.Shared.Services;
 
+#endregion
+
 namespace RussianSpotify.API.Core;
 
 /// <summary>
-/// Добавление Core слоя(Инъекция всех зависимостей Core)
+///     Добавление Core слоя(Инъекция всех зависимостей Core)
 /// </summary>
 public static class AddCoreLayoutExtension
 {
     /// <summary>
-    /// Добавление сервисов в коллекцию
+    ///     Добавление сервисов в коллекцию
     /// </summary>
     /// <param name="services">Builder.Services</param>
     /// <returns>Коллекцию сервисов с добавленными зависимостями</returns>
@@ -44,7 +48,7 @@ public static class AddCoreLayoutExtension
     }
 
     /// <summary>
-    /// Добавить интеграцию с сервисом Google
+    ///     Добавить интеграцию с сервисом Google
     /// </summary>
     /// <param name="services">Сервисы</param>
     /// <param name="options">Настройки</param>
@@ -55,7 +59,7 @@ public static class AddCoreLayoutExtension
         {
             client.BaseAddress = new Uri(options.BaseAddress);
         });
-        
+
         services.AddScoped<IGoogleService, GoogleService>();
     }
 }

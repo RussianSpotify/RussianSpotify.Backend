@@ -1,4 +1,5 @@
-using System.Text;
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -9,22 +10,24 @@ using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Auth.PostResetPassword;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Auth.PostResetPassword;
 
 /// <summary>
-/// Обработчик для <see cref="PostResetPasswordCommand"/>
+///     Обработчик для <see cref="PostResetPasswordCommand" />
 /// </summary>
 public class PostResetPasswordCommandHandler : IRequestHandler<PostResetPasswordCommand, PostResetPasswordResponse>
 {
     private const string Prefix = "Reset_";
-    
+
     private readonly IDbContext _dbContext;
     private readonly IEmailSender _emailSender;
     private readonly IDistributedCache _distributedCache;
     private readonly ITokenFactory _tokenFactory;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="emailSender">Позволяет отправлять письма на почту</param>
@@ -43,7 +46,8 @@ public class PostResetPasswordCommandHandler : IRequestHandler<PostResetPassword
     }
 
     /// <inheritdoc />
-    public async Task<PostResetPasswordResponse> Handle(PostResetPasswordCommand request, CancellationToken cancellationToken)
+    public async Task<PostResetPasswordResponse> Handle(PostResetPasswordCommand request,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -52,22 +56,22 @@ public class PostResetPasswordCommandHandler : IRequestHandler<PostResetPassword
 
         if (!user)
             throw new EntityNotFoundException<User>(request.Email);
-        
+
         var confirmToken = _tokenFactory.GetToken();
-        
+
         var messageTemplate = await EmailTemplateHelper.GetEmailTemplateAsync(
             Templates.SendPasswordResetConfirmationMessage,
             cancellationToken);
 
         var placeholders = new Dictionary<string, string> { ["{confirmationToken}"] = confirmToken };
-        
+
         var message = messageTemplate.ReplacePlaceholders(placeholders);
 
         await _distributedCache.SetStringAsync(
             $"{Prefix}{request.Email}",
             confirmToken,
             cancellationToken);
-        
+
         await _emailSender.SendEmailAsync(request.Email, message, cancellationToken);
 
         return new PostResetPasswordResponse(request.Email);

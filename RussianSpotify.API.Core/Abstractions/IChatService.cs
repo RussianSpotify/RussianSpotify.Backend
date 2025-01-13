@@ -1,28 +1,31 @@
-using RussianSpotify.API.Shared.Models.ChatModels;
+#region
+
 using RussianSpotify.Contracts.Requests.Chat.GetSenderMessage;
 using RussianSpotify.Contracts.Requests.Hub.CreateMessage;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Сервис чата
+///     Сервис чата
 /// </summary>
 public interface IChatService
 {
     /// <summary>
-    /// Создать чат
+    ///     Создать чат
     /// </summary>
     /// <returns>Идентификатор чата</returns>
     public Task CreateChatAsync();
 
     /// <summary>
-    /// Создать сообщение
+    ///     Создать сообщение
     /// </summary>
     /// <returns>Данные отправителя</returns>
     public Task<GetSenderMessageInfo> CreateMessageAsync(CreateMessageRequest model);
 
     /// <summary>
-    /// Получить пользователей чата
+    ///     Получить пользователей чата
     /// </summary>
     /// <param name="chatId">Идентификатор чата</param>
     /// <returns>Список пользователей</returns>

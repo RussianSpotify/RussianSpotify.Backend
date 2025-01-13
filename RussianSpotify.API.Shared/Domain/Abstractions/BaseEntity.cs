@@ -1,12 +1,12 @@
 namespace RussianSpotify.API.Shared.Domain.Abstractions;
 
 /// <summary>
-/// Базовая сущность
+///     Базовая сущность
 /// </summary>
 public abstract class BaseEntity
 {
     /// <summary>
-    /// Идентификатор
+    ///     Идентификатор
     /// </summary>
     public Guid Id { get; set; }
 }

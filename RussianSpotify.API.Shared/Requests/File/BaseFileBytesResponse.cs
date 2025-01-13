@@ -1,12 +1,12 @@
-namespace RussianSpotify.API.Files.Requests.File;
+namespace RussianSpotify.API.Shared.Requests.File;
 
 /// <summary>
-/// Базовый ответ в байтах
+///     Базовый ответ в байтах
 /// </summary>
 public class BaseFileBytesResponse
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="content">Контент</param>
     /// <param name="contentType">Тип контента</param>
@@ -22,17 +22,17 @@ public class BaseFileBytesResponse
     }
 
     /// <summary>
-    /// Содержимое
+    ///     Содержимое
     /// </summary>
     public byte[] Content { get; set; }
 
     /// <summary>
-    /// Тип контента
+    ///     Тип контента
     /// </summary>
     public string ContentType { get; set; }
 
     /// <summary>
-    /// Название файла
+    ///     Название файла
     /// </summary>
     public string? FileName { get; set; }
 }

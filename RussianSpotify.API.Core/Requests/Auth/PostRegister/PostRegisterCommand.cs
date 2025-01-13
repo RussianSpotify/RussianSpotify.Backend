@@ -1,15 +1,19 @@
+#region
+
 using MediatR;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostRegister;
 
 /// <summary>
-/// Команда на регистрацию
+///     Команда на регистрацию
 /// </summary>
 public class PostRegisterCommand : PostRegisterRequest, IRequest<PostRegisterResponse>
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     public PostRegisterCommand(PostRegisterRequest request)

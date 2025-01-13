@@ -1,16 +1,18 @@
+#region
+
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Requests.Author.GetAuthorsByFilter;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthorsByFilter;
 
 /// <summary>
-/// Обработчик запроса <see cref="GetAuthorsByFilterRequest"/>
+///     Обработчик запроса <see cref="GetAuthorsByFilterRequest" />
 /// </summary>
 public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilterQuery, GetAuthorsByFilterResponse>
 {
@@ -19,7 +21,7 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
     private readonly IRoleManager _roleManager;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="roleManager">Сервис для работы с ролями пользователей</param>
@@ -34,7 +36,7 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
         _filterHandler = filterHandler;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<GetAuthorsByFilterResponse> Handle(
         GetAuthorsByFilterQuery request,
         CancellationToken cancellationToken)
@@ -56,11 +58,11 @@ public class GetAuthorsByFilterQueryHandler : IRequestHandler<GetAuthorsByFilter
             .ToListAsync(cancellationToken);
 
         var authors = new List<User>();
-        
+
         foreach (var user in filteredUsersToList)
             if (_roleManager.IsInRole(user, Roles.AuthorRoleName))
                 authors.Add(user);
-        
+
         authors = authors
             .Distinct()
             .ToList();

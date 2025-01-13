@@ -1,5 +1,6 @@
+#region
+
 using MediatR;
-using Minio.Exceptions;
 using RussianSpotify.API.Files.Data;
 using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Interfaces;
@@ -8,10 +9,12 @@ using RussianSpotify.API.Files.Requests.File.UploadFile;
 using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Features.File.Commands.UploadFile;
 
 /// <summary>
-/// Обработчик для <see cref="UploadFileCommand"/>
+///     Обработчик для <see cref="UploadFileCommand" />
 /// </summary>
 public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, UploadFileResponse>
 {
@@ -20,7 +23,7 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="s3Service">Сервис S3</param>
     /// <param name="dbContext">Контекст БД</param>
@@ -48,23 +51,22 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Uploa
                 throw new ArgumentNullException(nameof(file.FileName));
 
             if (file.FileStream.Length <= 0)
-                throw new ArgumentException($"Некоректное кол-во байт");
+                throw new ArgumentException("Некоректное кол-во байт");
 
-            var address = await _s3Service.UploadAsync(
+            var metadata = await _s3Service.UploadAsync(
                 fileContent: new FileContent
                 {
                     Content = file.FileStream,
                     FileName = file.FileName,
-                    ContentType = file.ContentType
+                    ContentType = file.ContentType,
+                    FileSize = file.FileStream.Length,
+                    UploadedBy = _userContext.CurrentUserId ??
+                                 throw new CurrentUserIdNotFound("UserId из Claims не был найден"),
+                    CreatedAt = DateTime.UtcNow
                 },
                 cancellationToken: cancellationToken);
 
-            filesToSave.Add(new FileMetadata(
-                userId: _userContext.CurrentUserId ?? throw new CurrentUserIdNotFound("UserId из Claims не был найден"),
-                fileName: file.FileName,
-                contentType: file.ContentType,
-                address: address,
-                size: file.FileStream.Length));
+            filesToSave.Add(metadata);
         }
 
         await _dbContext.FilesMetadata.AddRangeAsync(filesToSave, cancellationToken);

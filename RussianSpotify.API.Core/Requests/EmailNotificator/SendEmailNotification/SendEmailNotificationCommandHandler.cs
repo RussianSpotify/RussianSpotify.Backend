@@ -1,11 +1,15 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.EmailNotificator.SendEmailNotification;
 
 /// <summary>
-/// Обработчик для <see cref="SendEmailNotificationCommand"/>
+///     Обработчик для <see cref="SendEmailNotificationCommand" />
 /// </summary>
 public class SendEmailNotificationCommandHandler : IRequestHandler<SendEmailNotificationCommand>
 {
@@ -16,7 +20,7 @@ public class SendEmailNotificationCommandHandler : IRequestHandler<SendEmailNoti
     private readonly IEmailSender _emailSender;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="dateTimeProvider">Провайдер дат</param>

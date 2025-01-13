@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RussianSpotify.API.Contracts\RussianSpotify.API.Contracts.csproj" />
+        <ProjectReference Include="..\RussianSpotify.API.Contracts\RussianSpotify.API.Contracts.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="11.0.1"/>
     </ItemGroup>
 
 </Project>

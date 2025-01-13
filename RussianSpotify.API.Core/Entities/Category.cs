@@ -1,16 +1,19 @@
-using RussianSpotify.API.Core.Abstractions;
+#region
+
 using RussianSpotify.API.Shared.Domain.Abstractions;
 using RussianSpotify.Contracts.Enums;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Категория
+///     Категория
 /// </summary>
 public class Category : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public Category()
     {
@@ -18,16 +21,16 @@ public class Category : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// Имя категории
+    ///     Имя категории
     /// </summary>
     public CategoryType CategoryName { get; set; }
-    
+
     /// <inheritdoc />
     public DateTime CreatedAt { get; set; }
 
     /// <inheritdoc />
     public DateTime? UpdatedAt { get; set; }
-    
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
@@ -35,12 +38,12 @@ public class Category : BaseEntity, ISoftDeletable, ITimeTrackable
     public DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Песни
+    ///     Песни
     /// </summary>
     public List<Song> Songs { get; protected set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="id">ИД</param>
     /// <param name="categoryType">Тип категории</param>

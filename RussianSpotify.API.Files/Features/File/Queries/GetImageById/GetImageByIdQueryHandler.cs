@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Files.Data;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Files.Interfaces;
 using RussianSpotify.API.Files.Requests.File.GetImageById;
 using RussianSpotify.API.Shared.Exceptions;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Features.File.Queries.GetImageById;
 
 /// <summary>
-/// Обработчик для <see cref="GetImageByIdQuery"/>
+///     Обработчик для <see cref="GetImageByIdQuery" />
 /// </summary>
 public class GetImageByIdQueryHandler : IRequestHandler<GetImageByIdQuery, GetImageByIdResponse>
 {
@@ -16,7 +20,7 @@ public class GetImageByIdQueryHandler : IRequestHandler<GetImageByIdQuery, GetIm
     private readonly IS3Service _s3Service;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="s3Service">Сервис для работы с файлами</param>
@@ -40,7 +44,7 @@ public class GetImageByIdQueryHandler : IRequestHandler<GetImageByIdQuery, GetIm
         if (image?.Address is null)
             throw new ArgumentNullException(nameof(image));
 
-        var imageFromS3 = 
+        var imageFromS3 =
             await _s3Service.GetFileAsync(image.Address, cancellationToken: cancellationToken);
 
         if (imageFromS3?.Content is null)

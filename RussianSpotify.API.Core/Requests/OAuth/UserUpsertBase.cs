@@ -1,15 +1,18 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Requests.OAuth;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.OAuth;
 
 /// <summary>
-/// Базовый класс для работы с обновлением/созданием пользователя при входе через сторонние сервисы
+///     Базовый класс для работы с обновлением/созданием пользователя при входе через сторонние сервисы
 /// </summary>
 public abstract class UserUpsertBase
 {
@@ -18,7 +21,7 @@ public abstract class UserUpsertBase
     private readonly IJwtGenerator _jwtGenerator;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="userClaimsManager">Отвечает за клэймы юзера</param>
@@ -34,7 +37,7 @@ public abstract class UserUpsertBase
     }
 
     /// <summary>
-    /// Применить изменения к пользователю
+    ///     Применить изменения к пользователю
     /// </summary>
     /// <param name="userInfo">Ответ от внешней системы</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -46,17 +49,17 @@ public abstract class UserUpsertBase
 
         if (string.IsNullOrWhiteSpace(userInfo.Email))
             throw new RequiredFieldException("Почта");
-        
+
         var userExist = await _dbContext.Users
-            .Include(x => x.Roles)   
+            .Include(x => x.Roles)
             .FirstOrDefaultAsync(x => x.Email == userInfo.Email, cancellationToken);
 
         if (userExist == null)
         {
             var role = await _dbContext.Roles
-                .FirstOrDefaultAsync(x => x.Name == Roles.UserRoleName, cancellationToken)
+                           .FirstOrDefaultAsync(x => x.Name == Roles.UserRoleName, cancellationToken)
                        ?? throw new EntityNotFoundException<Role>(Roles.UserRoleName);
-            
+
             userExist = new User(
                 userName: userInfo.Username,
                 email: userInfo.Email,
@@ -72,7 +75,7 @@ public abstract class UserUpsertBase
         }
 
         var userClaims = _userClaimsManager.GetUserClaims(userExist);
-        
+
         var accessToken = _jwtGenerator.GenerateToken(userClaims);
         var refreshToken = _jwtGenerator.GenerateRefreshToken();
 

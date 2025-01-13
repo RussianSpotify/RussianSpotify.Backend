@@ -1,12 +1,12 @@
 namespace RussianSpotify.Contracts.Requests.Auth.PostResetPassword;
 
 /// <summary>
-/// Запрос на сброс пароля
+///     Запрос на сброс пароля
 /// </summary>
 public class PostResetPasswordRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">PostResetPasswordRequest</param>
     public PostResetPasswordRequest(PostResetPasswordRequest request)
@@ -18,14 +18,14 @@ public class PostResetPasswordRequest
     }
 
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public PostResetPasswordRequest()
     {
     }
 
     /// <summary>
-    /// Email пользователя
+    ///     Email пользователя
     /// </summary>
     public string Email { get; set; } = default!;
 }

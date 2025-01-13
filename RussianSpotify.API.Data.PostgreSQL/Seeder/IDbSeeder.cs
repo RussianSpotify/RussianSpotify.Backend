@@ -1,11 +1,15 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
+
+#endregion
 
 namespace RussianSpotift.API.Data.PostgreSQL.Seeder;
 
 public interface IDbSeeder
 {
     /// <summary>
-    /// Seed данных
+    ///     Seed данных
     /// </summary>
     /// <param name="efContext">Контекст БД</param>
     /// <param name="cancellationToken">Токен отмены</param>

@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Фабрика токенов для почты
+///     Фабрика токенов для почты
 /// </summary>
 public class TokenFactory : ITokenFactory
 {

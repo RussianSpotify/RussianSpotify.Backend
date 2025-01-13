@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Requests.Auth.PostRegister;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AuthRequests;
 
 /// <summary>
-/// Тест для <see cref="PostRegisterCommandHandler"/>
+///     Тест для <see cref="PostRegisterCommandHandler" />
 /// </summary>
 public class PostRegisterCommandHandlerTest : UnitTestBase
 {
@@ -16,7 +20,7 @@ public class PostRegisterCommandHandlerTest : UnitTestBase
     private readonly Role _role;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public PostRegisterCommandHandlerTest()
     {
@@ -25,7 +29,7 @@ public class PostRegisterCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен создать пользователя
+    ///     Обработчик должен создать пользователя
     /// </summary>
     [Fact]
     public async Task Handle_ShouldRegisterUser()
@@ -55,9 +59,9 @@ public class PostRegisterCommandHandlerTest : UnitTestBase
         var entity = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
 
         Assert.NotNull(entity);
-        
+
         var entityRole = Assert.Single(entity.Roles);
-        
+
         Assert.Equal(request.Email, entity.Email);
         Assert.Equal(request.UserName, entity.UserName);
         Assert.Equal(request.Role, entityRole.Name);

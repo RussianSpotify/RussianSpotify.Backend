@@ -1,30 +1,34 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.Contracts.Requests.Music.GetCategories;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.GetCategories;
 
 /// <summary>
-/// Обработчик для <see cref="GetCategoriesQuery"/>
+///     Обработчик для <see cref="GetCategoriesQuery" />
 /// </summary>
 public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, GetCategoriesResponse>
 {
     private readonly IDbContext _dbContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     public GetCategoriesQueryHandler(IDbContext dbContext)
         => _dbContext = dbContext;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<GetCategoriesResponse> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        
+
         var result = await _dbContext.Categories
             .Select(x => new GetCategoriesResponseItem
             {

@@ -1,6 +1,9 @@
-using System.Net;
+#region
+
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
+
+#endregion
 
 namespace RussianSpotify.API.Grpc.Clients;
 
@@ -22,7 +25,7 @@ public static class AddGrpcClientExtensions
                     KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
                 };
             });
-        
+
         return services;
     }
 }

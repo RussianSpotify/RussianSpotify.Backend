@@ -1,19 +1,23 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Requests.Auth.PostConfirmEmail;
 using RussianSpotify.Contracts.Requests.Auth.PostConfirmEmail;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AuthRequests;
 
 /// <summary>
-/// Тест для <see cref="PostConfirmEmailCommandHandler"/>
+///     Тест для <see cref="PostConfirmEmailCommandHandler" />
 /// </summary>
 public class PostConfirmEmailCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
-    
+
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public PostConfirmEmailCommandHandlerTest()
     {
@@ -21,7 +25,7 @@ public class PostConfirmEmailCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен подтвердить почту
+    ///     Обработчик должен подтвердить почту
     /// </summary>
     [Fact]
     public async Task Handle_ShouldConfirmEmail()
@@ -36,7 +40,7 @@ public class PostConfirmEmailCommandHandlerTest : UnitTestBase
         var handler = new PostConfirmEmailCommandHandler(Cache.Object, _dbContext);
 
         await handler.Handle(command, default);
-        
+
         Assert.True(User.IsConfirmed);
     }
 }

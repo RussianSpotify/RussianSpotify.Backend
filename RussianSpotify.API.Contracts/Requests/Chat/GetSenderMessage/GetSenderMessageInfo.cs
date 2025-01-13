@@ -1,22 +1,22 @@
 namespace RussianSpotify.Contracts.Requests.Chat.GetSenderMessage;
 
 /// <summary>
-/// Ответ при отправке сообщения
+///     Ответ при отправке сообщения
 /// </summary>
 public class GetSenderMessageInfo
 {
     /// <summary>
-    /// Идентификатор отправителя
+    ///     Идентификатор отправителя
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя отправителя
+    ///     Имя отправителя
     /// </summary>
     public string Username { get; set; }
 
     /// <summary>
-    /// Идентификатор аватарки
+    ///     Идентификатор аватарки
     /// </summary>
     public Guid? ImageId { get; set; }
 }

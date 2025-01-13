@@ -7,16 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
-      <PackageReference Include="Hangfire.MemoryStorage" Version="1.8.1.1" />
-      <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14"/>
+        <PackageReference Include="Hangfire.MemoryStorage" Version="1.8.1.1"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RussianSpotify.API.Core\RussianSpotify.API.Core.csproj" />
+        <ProjectReference Include="..\RussianSpotify.API.Core\RussianSpotify.API.Core.csproj"/>
     </ItemGroup>
 
 </Project>

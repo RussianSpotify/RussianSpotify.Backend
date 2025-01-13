@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.PostAddSongToFavourite;
 
 /// <summary>
-/// Обработчик для <see cref="PostAddSongToFavouriteCommand"/>
+///     Обработчик для <see cref="PostAddSongToFavouriteCommand" />
 /// </summary>
 public class PostAddSongToFavouriteCommandHandler : IRequestHandler<PostAddSongToFavouriteCommand>
 {
@@ -16,7 +20,7 @@ public class PostAddSongToFavouriteCommandHandler : IRequestHandler<PostAddSongT
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
@@ -35,14 +39,14 @@ public class PostAddSongToFavouriteCommandHandler : IRequestHandler<PostAddSongT
             throw new ArgumentNullException(nameof(request));
 
         var currentUser = await _dbContext.Users
-            .Include(x => x.Bucket)
-                .ThenInclude(y => y!.Songs)
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
+                              .Include(x => x.Bucket)
+                              .ThenInclude(y => y!.Songs)
+                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
+                          ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
         var songToAdd = await _dbContext.Songs
-            .FirstOrDefaultAsync(x => x.Id == request.SongId, cancellationToken)
-            ?? throw new EntityNotFoundException<Song>(request.SongId);
+                            .FirstOrDefaultAsync(x => x.Id == request.SongId, cancellationToken)
+                        ?? throw new EntityNotFoundException<Song>(request.SongId);
 
         currentUser.Bucket!.AddSong(songToAdd);
         await _dbContext.SaveChangesAsync(cancellationToken);

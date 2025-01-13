@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,27 +11,36 @@ using RussianSpotify.API.Files.Features.File.Queries.GetImageById;
 using RussianSpotify.API.Files.Requests.File.DeleteFile;
 using RussianSpotify.API.Files.Requests.File.GetFileUrl;
 using RussianSpotify.API.Files.Requests.File.UploadFile;
-using RussianSpotify.API.Shared.Services;
+using RussianSpotify.API.Shared.Interfaces;
+
+#endregion
 
 namespace RussianSpotify.API.Files.Controllers;
 
 /// <summary>
-/// Контроллер для файлов
+///     Контроллер для файлов
 /// </summary>
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class FileController : ControllerBase
 {
-    private readonly FileControllerHelper _fileControllerHelper;
+    private readonly IFileControllerHelper _fileControllerHelper;
 
-    public FileController(FileControllerHelper fileControllerHelper)
+    /// <summary>
+    ///     Конструктор
+    /// </summary>
+    /// <param name="fileControllerHelper">
+    ///     Помощник для работы с файлами, предоставляющий вспомогательные методы для обработки
+    ///     файлов.
+    /// </param>
+    public FileController(IFileControllerHelper fileControllerHelper)
     {
         _fileControllerHelper = fileControllerHelper;
     }
 
     /// <summary>
-    /// Загрузить файл
+    ///     Загрузить файл
     /// </summary>
     /// <param name="files">Файлы</param>
     /// <param name="mediator">Медиатор CQRS</param>
@@ -46,12 +57,12 @@ public class FileController : ControllerBase
     {
         var command = new UploadFileCommand(_fileControllerHelper.GetEnumerableFiles(files)
             .Select(x => new UploadRequestItem(x.FileStream, x.FileName, x.ContentType)));
-        
+
         return await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
-    /// Скачать файл
+    ///     Скачать файл
     /// </summary>
     /// <param name="id">ИД файла</param>
     /// <param name="mediator">Медиатор CQRS</param>
@@ -72,7 +83,7 @@ public class FileController : ControllerBase
     }
 
     /// <summary>
-    /// Получить файл в виде URL
+    ///     Получить файл в виде URL
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="id">Идентификатор файла</param>
@@ -88,7 +99,7 @@ public class FileController : ControllerBase
         => await mediator.Send(new GetFileUrlQuery(id), cancellationToken);
 
     /// <summary>
-    /// Получить изображение по ИД
+    ///     Получить изображение по ИД
     /// </summary>
     /// <param name="id">Ид изображения</param>
     /// <param name="mediator"></param>
@@ -107,7 +118,7 @@ public class FileController : ControllerBase
     }
 
     /// <summary>
-    /// Эндпоинт для удаления файла
+    ///     Эндпоинт для удаления файла
     /// </summary>
     /// <param name="request">Запрос с информацией</param>
     /// <param name="mediator">Медиатор</param>

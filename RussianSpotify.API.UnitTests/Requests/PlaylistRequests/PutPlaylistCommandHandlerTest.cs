@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -7,28 +9,29 @@ using RussianSpotify.API.Core.Requests.Playlist.PutPlaylist;
 using RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
-/// Тест для <see cref="PutPlaylistCommandHandler"/>
+///     Тест для <see cref="PutPlaylistCommandHandler" />
 /// </summary>
 public class PutPlaylistCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
-    private readonly Core.Entities.Playlist _playlist;
-    private readonly Song _song;
+    private readonly Playlist _playlist;
     private readonly Mock<ILogger<PutPlaylistCommandHandler>> _logger;
 
     public PutPlaylistCommandHandlerTest()
     {
-        _song = Song.CreateForTest(songName: "my song");
+        var song = Song.CreateForTest(songName: "my song");
 
-        _playlist = Core.Entities.Playlist.CreateForTest(
+        _playlist = Playlist.CreateForTest(
             playlistName: "my playlist",
             author: User.CreateForTest(id: UserContext.Object.CurrentUserId),
             songs: new List<Song>
             {
-                _song
+                song
             });
 
         _logger = ConfigureLogger<PutPlaylistCommandHandler>();
@@ -36,11 +39,11 @@ public class PutPlaylistCommandHandlerTest : UnitTestBase
         _dbContext = CreateInMemory(
             x => x.AddRange(
                 _playlist,
-                _song));
+                song));
     }
 
     /// <summary>
-    /// Обработчик должен обновить плейлист
+    ///     Обработчик должен обновить плейлист
     /// </summary>
     [Fact]
     public async Task Handle_ShouldUpdateEntity()

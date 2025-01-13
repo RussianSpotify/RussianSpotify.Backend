@@ -1,15 +1,19 @@
+#region
+
 using MediatR;
 using RussianSpotify.Contracts.Requests.Auth.PostRefreshToken;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostRefreshToken;
 
 /// <summary>
-/// Команда для обновления JWT токена
+///     Команда для обновления JWT токена
 /// </summary>
 public class PostRefreshTokenCommand : PostRefreshTokenRequest, IRequest<PostRefreshTokenResponse>
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     public PostRefreshTokenCommand(PostRefreshTokenRequest request)

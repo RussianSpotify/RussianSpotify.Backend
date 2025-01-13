@@ -1,13 +1,24 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
-namespace RussianSpotify.API.Files.Data.EntityTypeConfiguations;
+#endregion
 
+namespace RussianSpotify.API.Files.Data.EntityTypeConfigurations;
+
+/// <summary>
+///     Конфигурация сущности для метаданных файлов.
+/// </summary>
 public class FileMetadataConfiguration : EntityTypeConfigurationBase<FileMetadata>
 {
+    /// <summary>
+    ///     Конфигурирует свойства сущности <see cref="FileMetadata" /> для базы данных.
+    /// </summary>
+    /// <param name="builder">Строитель конфигурации для сущности <see cref="FileMetadata" />.</param>
     protected override void ConfigureChild(EntityTypeBuilder<FileMetadata> builder)
     {
         builder.Property(p => p.FileName)

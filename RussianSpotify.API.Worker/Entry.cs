@@ -1,3 +1,5 @@
+#region
+
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
@@ -5,15 +7,17 @@ using Microsoft.Extensions.DependencyInjection;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Worker.Workers;
 
+#endregion
+
 namespace RussianSpotify.API.Worker;
 
 /// <summary>
-/// Точка входа для воркера
+///     Точка входа для воркера
 /// </summary>
 public static class Entry
 {
     /// <summary>
-    /// Добавить службу с тасками по расписанию
+    ///     Добавить службу с тасками по расписанию
     /// </summary>
     /// <param name="serviceCollection"></param>
     /// <returns></returns>
@@ -42,7 +46,7 @@ public static class Entry
     }
 
     /// <summary>
-    /// Добавить задачу
+    ///     Добавить задачу
     /// </summary>
     /// <param name="cron">Крон</param>
     /// <typeparam name="T">Задача</typeparam>
@@ -50,7 +54,7 @@ public static class Entry
         where T : IWorker
         => RecurringJob.AddOrUpdate<T>(
             typeof(T).FullName,
-            (x) => x.RunAsync(),
+            x => x.RunAsync(),
             cron,
             TimeZoneInfo.Local);
 }

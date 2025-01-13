@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.DeleteSongFromBucket;
 
 /// <summary>
-/// Обработчик для <see cref="DeleteSongFromBucketCommand"/>
+///     Обработчик для <see cref="DeleteSongFromBucketCommand" />
 /// </summary>
 public class DeleteSongFromBucketCommandHandler : IRequestHandler<DeleteSongFromBucketCommand>
 {
@@ -16,7 +20,7 @@ public class DeleteSongFromBucketCommandHandler : IRequestHandler<DeleteSongFrom
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
@@ -33,14 +37,14 @@ public class DeleteSongFromBucketCommandHandler : IRequestHandler<DeleteSongFrom
             throw new ArgumentNullException(nameof(request));
 
         var userFromDb = await _dbContext.Users
-            .Include(x => x.Bucket)
-                .ThenInclude(y => y!.Songs)
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
+                             .Include(x => x.Bucket)
+                             .ThenInclude(y => y!.Songs)
+                             .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
+                         ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
         var songCurrentUser = userFromDb.Bucket!.Songs
-            .FirstOrDefault(x => x.Id == request.SongId)
-            ?? throw new EntityNotFoundException<Song>(request.SongId);
+                                  .FirstOrDefault(x => x.Id == request.SongId)
+                              ?? throw new EntityNotFoundException<Song>(request.SongId);
 
         userFromDb.Bucket.Songs.Remove(songCurrentUser);
         await _dbContext.SaveChangesAsync(cancellationToken);

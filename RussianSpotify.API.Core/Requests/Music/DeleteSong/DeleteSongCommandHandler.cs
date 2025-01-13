@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -7,10 +9,12 @@ using RussianSpotify.API.Grpc.Clients.FileClient;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.DeleteSong;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.DeleteSong;
 
 /// <summary>
-/// Обработчик для <see cref="DeleteSongCommand"/>
+///     Обработчик для <see cref="DeleteSongCommand" />
 /// </summary>
 public class DeleteSongCommandHandler : IRequestHandler<DeleteSongCommand, DeleteSongResponse>
 {
@@ -19,7 +23,7 @@ public class DeleteSongCommandHandler : IRequestHandler<DeleteSongCommand, Delet
     private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
@@ -34,7 +38,7 @@ public class DeleteSongCommandHandler : IRequestHandler<DeleteSongCommand, Delet
         _fileServiceClient = fileServiceClient;
     }
 
-    /// <inheritdoc/> 
+    /// <inheritdoc />
     public async Task<DeleteSongResponse> Handle(DeleteSongCommand request, CancellationToken cancellationToken)
     {
         // Достаем песню из бд

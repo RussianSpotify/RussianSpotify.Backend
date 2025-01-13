@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Models;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Subscription.SendEndSubscribeNotification;
 
 /// <summary>
-/// Обработчик для <see cref="SendEndSubscribeNotificationQuery"/>
+///     Обработчик для <see cref="SendEndSubscribeNotificationQuery" />
 /// </summary>
 public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndSubscribeNotificationQuery>
 {
@@ -18,7 +22,7 @@ public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndS
     private readonly IDateTimeProvider _dateTimeProvider;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="dateTimeProvider">Провайдер дат</param>
@@ -59,7 +63,7 @@ public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndS
 
         var placeholders = new Dictionary<string, string>
         {
-            ["{username}"] = subscribe.User.UserName ?? subscribe.User.Email!,
+            ["{username}"] = subscribe.User.UserName,
         };
 
         var emailNotification = await EmailTemplateHelper
@@ -67,7 +71,7 @@ public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndS
                 placeholders: placeholders,
                 template: Templates.SendEndSubscribeNotification,
                 head: "Истекает срок подписки",
-                emailTo: subscribe.User.Email!,
+                emailTo: subscribe.User.Email,
                 cancellationToken: cancellationToken);
 
         await _dbContext.EmailNotifications.AddAsync(emailNotification, cancellationToken);
