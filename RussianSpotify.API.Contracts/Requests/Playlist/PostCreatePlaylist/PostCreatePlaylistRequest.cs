@@ -1,26 +1,26 @@
 namespace RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 
 /// <summary>
-/// Запрос на создание плейлиста и добавление музыки
+///     Запрос на создание плейлиста и добавление музыки
 /// </summary>
 public class PostCreatePlaylistRequest
 {
     /// <summary>
-    /// Констркутор
+    ///     Констркутор
     /// </summary>
     public PostCreatePlaylistRequest()
     {
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     public PostCreatePlaylistRequest(PostCreatePlaylistRequest request)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         PlaylistName = request.PlaylistName;
         ImageId = request.ImageId;
         SongIds = request.SongIds;
@@ -28,22 +28,22 @@ public class PostCreatePlaylistRequest
     }
 
     /// <summary>
-    /// Название плейлиста
+    ///     Название плейлиста
     /// </summary>
     public string PlaylistName { get; set; } = default!;
 
     /// <summary>
-    /// Картинка плейлиста
+    ///     Картинка плейлиста
     /// </summary>
-    public Guid? ImageId { get; set;  }
+    public Guid? ImageId { get; set; }
 
     /// <summary>
-    /// Песни
+    ///     Песни
     /// </summary>
     public List<Guid> SongIds { get; set; } = new();
 
     /// <summary>
-    /// Это альбом
+    ///     Это альбом
     /// </summary>
     public bool IsAlbum { get; set; }
 }

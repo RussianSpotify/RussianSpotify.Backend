@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -6,10 +8,12 @@ using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Playlist.RemovePlaylistFromFavorite;
 
 /// <summary>
-/// Обработчик для <see cref="RemovePlaylistFromFavoriteCommand"/>
+///     Обработчик для <see cref="RemovePlaylistFromFavoriteCommand" />
 /// </summary>
 public class RemovePlaylistFromFavoriteCommandHandler : IRequestHandler<RemovePlaylistFromFavoriteCommand>
 {
@@ -17,7 +21,7 @@ public class RemovePlaylistFromFavoriteCommandHandler : IRequestHandler<RemovePl
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
@@ -36,13 +40,13 @@ public class RemovePlaylistFromFavoriteCommandHandler : IRequestHandler<RemovePl
             throw new ArgumentNullException(nameof(request));
 
         var currentUser = await _dbContext.Users
-            .Include(x => x.Playlists)
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
+                              .Include(x => x.Playlists)
+                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
+                          ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
         var playlistFromDb = await _dbContext.Playlists
-            .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
-            ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
+                                 .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
+                             ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
 
         if (currentUser.Playlists is null)
             throw new ApplicationBaseException("У пользователя нет плейлистов");

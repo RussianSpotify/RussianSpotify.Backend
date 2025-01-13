@@ -1,19 +1,19 @@
 namespace RussianSpotify.API.Files.Requests.File.DownloadFile;
 
 /// <summary>
-/// Запрос на скачивание файла
+///     Запрос на скачивание файла
 /// </summary>
 public class DownloadFileRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="id">ИД файла</param>
     protected DownloadFileRequest(Guid id)
         => Id = id;
 
     /// <summary>
-    /// ИД файла
+    ///     ИД файла
     /// </summary>
     public Guid Id { get; }
 }

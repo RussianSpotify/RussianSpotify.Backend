@@ -1,3 +1,5 @@
+#region
+
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
@@ -8,10 +10,13 @@ using RussianSpotify.API.Files.Interfaces;
 using RussianSpotify.API.Grpc;
 using File = RussianSpotify.API.Grpc.File;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Grpc;
 
 /// <summary>
-/// Сервис для обработки файлов через gRPC. Предоставляет функциональность получения метаданных файлов, загрузки файлов и их удаления.
+///     Сервис для обработки файлов через gRPC. Предоставляет функциональность получения метаданных файлов, загрузки файлов
+///     и их удаления.
 /// </summary>
 public class FileServer : FileService.FileServiceBase
 {
@@ -20,7 +25,7 @@ public class FileServer : FileService.FileServiceBase
     private readonly ILogger<FileServer> _logger;
 
     /// <summary>
-    /// Конструктор для инициализации сервиса файлов.
+    ///     Конструктор для инициализации сервиса файлов.
     /// </summary>
     /// <param name="s3Service">Сервис для работы с S3 (облачное хранилище).</param>
     /// <param name="dbContext">Контекст базы данных.</param>
@@ -33,7 +38,7 @@ public class FileServer : FileService.FileServiceBase
     }
 
     /// <summary>
-    /// Преобразует строки идентификаторов файлов в массив GUID.
+    ///     Преобразует строки идентификаторов файлов в массив GUID.
     /// </summary>
     /// <param name="ids">Массив строковых идентификаторов файлов.</param>
     /// <returns>Массив GUID идентификаторов файлов.</returns>
@@ -59,7 +64,7 @@ public class FileServer : FileService.FileServiceBase
     }
 
     /// <summary>
-    /// Получает метаданные файлов по их идентификаторам.
+    ///     Получает метаданные файлов по их идентификаторам.
     /// </summary>
     /// <param name="request">Запрос, содержащий идентификаторы файлов.</param>
     /// <param name="context">Контекст сервера для обработки вызова.</param>
@@ -112,7 +117,7 @@ public class FileServer : FileService.FileServiceBase
     }
 
     /// <summary>
-    /// Получает файлы по их метаданным, загружая их с облачного хранилища S3.
+    ///     Получает файлы по их метаданным, загружая их с облачного хранилища S3.
     /// </summary>
     /// <param name="request">Запрос с метаданными файлов.</param>
     /// <param name="context">Контекст сервера для обработки вызова.</param>
@@ -154,7 +159,7 @@ public class FileServer : FileService.FileServiceBase
     }
 
     /// <summary>
-    /// Удаляет файлы по их идентификаторам и удаляет соответствующие данные из базы данных и S3.
+    ///     Удаляет файлы по их идентификаторам и удаляет соответствующие данные из базы данных и S3.
     /// </summary>
     /// <param name="request">Запрос с идентификаторами файлов для удаления.</param>
     /// <param name="context">Контекст сервера для обработки вызова.</param>

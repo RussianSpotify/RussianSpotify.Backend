@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services.Filters.AuthorFilters;
 
-/// <inheritdoc/>
+/// <inheritdoc />
 [Obsolete("Нельзя так сортировать на стороне СУБД, ибо из-за инклуда ломается (дубликаты)")]
 public class AuthorShuffledFilter : IFilter<User>
 {

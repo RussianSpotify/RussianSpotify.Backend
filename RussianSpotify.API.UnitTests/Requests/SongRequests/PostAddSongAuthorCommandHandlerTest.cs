@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Requests.Music.PostAddSongAuthor;
 using RussianSpotify.Contracts.Requests.Music.AddSongAuthor;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.SongRequests;
 
 /// <summary>
-/// Тест для <see cref="PostAddSongAuthorCommandHandler"/>
+///     Тест для <see cref="PostAddSongAuthorCommandHandler" />
 /// </summary>
 public class PostAddSongAuthorCommandHandlerTest : UnitTestBase
 {
@@ -21,10 +25,10 @@ public class PostAddSongAuthorCommandHandlerTest : UnitTestBase
         _user = User.CreateForTest(
             login: "1111",
             email: "email");
-        
+
         _song = Song.CreateForTest(
             songName: "123",
-            authors: new List<User>()
+            authors: new List<User>
             {
                 User
             });
@@ -36,7 +40,7 @@ public class PostAddSongAuthorCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен добавить автора к песни
+    ///     Обработчик должен добавить автора к песни
     /// </summary>
     [Fact]
     public async Task Handle_ShouldAddAuthorInSong()
@@ -56,7 +60,7 @@ public class PostAddSongAuthorCommandHandlerTest : UnitTestBase
         var response = await handler.Handle(command, default);
 
         var entity = await _dbContext.Songs.FirstOrDefaultAsync(x => x.Id == response.SongId);
-        
+
         Assert.NotNull(entity);
         Assert.Equal(2, entity.Authors.Count);
     }

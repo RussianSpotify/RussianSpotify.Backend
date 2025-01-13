@@ -1,78 +1,82 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using RussianSpotify.API.Core.Entities;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Интерфейс контекста бд
+///     Интерфейс контекста бд
 /// </summary>
 public interface IDbContext
 {
     /// <summary>
-    /// Пользователи
+    ///     Пользователи
     /// </summary>
     public DbSet<User> Users { get; set; }
 
     /// <summary>
-    /// Роли
+    ///     Роли
     /// </summary>
     public DbSet<Role> Roles { get; set; }
 
     /// <summary>
-    /// Привилегии
+    ///     Привилегии
     /// </summary>
     public DbSet<RolePrivilege> Privileges { get; set; }
 
     /// <summary>
-    /// Альбомы
+    ///     Альбомы
     /// </summary>
     public DbSet<Playlist> Playlists { get; set; }
 
     /// <summary>
-    /// Песни
+    ///     Песни
     /// </summary>
     public DbSet<Song> Songs { get; set; }
 
     /// <summary>
-    /// Подписки
+    ///     Подписки
     /// </summary>
     public DbSet<Subscribe> Subscribes { get; set; }
 
     /// <summary>
-    /// Категории
+    ///     Категории
     /// </summary>
     public DbSet<Category> Categories { get; set; }
 
     /// <summary>
-    /// Корзины
+    ///     Корзины
     /// </summary>
     public DbSet<Bucket> Buckets { get; set; }
 
     /// <summary>
-    /// Уведомления
+    ///     Уведомления
     /// </summary>
     public DbSet<EmailNotification> EmailNotifications { get; set; }
 
     /// <summary>
-    /// Чаты
+    ///     Чаты
     /// </summary>
     public DbSet<Chat> Chats { get; set; }
 
     /// <summary>
-    /// Сообщения
+    ///     Сообщения
     /// </summary>
     public DbSet<Message> Messages { get; set; }
-    
+
     /// <summary>
-    /// Сохранить изменения
+    ///     Сохранить изменения
     /// </summary>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Кол-во затронутых записей</returns>
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    
+
     /// <summary>
-    /// Фасад базы
+    ///     Фасад базы
     /// </summary>
     public DatabaseFacade Database { get; }
 }

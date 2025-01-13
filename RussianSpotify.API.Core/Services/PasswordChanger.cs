@@ -1,18 +1,22 @@
+#region
+
 using FluentValidation;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Сервис по смене пароля
+///     Сервис по смене пароля
 /// </summary>
 public class PasswordChanger : IPasswordChanger
 {
     private readonly IPasswordService _passwordService;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="passwordService">Сервис по хешированию</param>
     public PasswordChanger(IPasswordService passwordService)

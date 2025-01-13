@@ -1,16 +1,20 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using RussianSpotify.Contracts.Requests.Playlist.GetPlaylistsByFilter;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Playlist.GetPlaylistsByFilter;
 
 /// <summary>
-/// Запрос на получение плейлистов по фильтру
+///     Запрос на получение плейлистов по фильтру
 /// </summary>
 public class GetPlaylistsByFilterQuery
     : GetPlaylistsByFilterRequest, IRequest<GetPlaylistsByFilterResponse>
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     public GetPlaylistsByFilterQuery(GetPlaylistsByFilterRequest request)

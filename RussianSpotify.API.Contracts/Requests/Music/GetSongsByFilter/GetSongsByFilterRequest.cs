@@ -1,24 +1,28 @@
-﻿using RussianSpotify.Contracts.Models;
+﻿#region
+
+using RussianSpotify.Contracts.Models;
+
+#endregion
 
 namespace RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 
 /// <summary>
-/// Запрос на получение песни по фильтру
+///     Запрос на получение песни по фильтру
 /// </summary>
 public class GetSongsByFilterRequest
 {
     private int _pageSize;
-    private int _pageNumber;
+    private readonly int _pageNumber;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">GetSongsByFilterRequest, который приходит с фронта</param>
     public GetSongsByFilterRequest(GetSongsByFilterRequest request)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         FilterName = request.FilterName;
         FilterValue = request.FilterValue;
         PageNumber = request.PageNumber;
@@ -26,24 +30,24 @@ public class GetSongsByFilterRequest
     }
 
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public GetSongsByFilterRequest()
     {
     }
 
     /// <summary>
-    /// Название фильтра
+    ///     Название фильтра
     /// </summary>
     public string FilterName { get; set; } = default!;
 
     /// <summary>
-    /// Значение фильтра
+    ///     Значение фильтра
     /// </summary>
     public string FilterValue { get; set; } = default!;
 
     /// <summary>
-    /// Номер страницы
+    ///     Номер страницы
     /// </summary>
     public int PageNumber
     {
@@ -52,7 +56,7 @@ public class GetSongsByFilterRequest
     }
 
     /// <summary>
-    /// Кол-во элементов на странице
+    ///     Кол-во элементов на странице
     /// </summary>
     public int PageSize
     {

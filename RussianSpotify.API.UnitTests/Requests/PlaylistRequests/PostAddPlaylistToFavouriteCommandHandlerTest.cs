@@ -1,22 +1,26 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Playlist.PostAddPlaylistToFavourite;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
-/// Тест для <see cref="PostAddPlaylistToFavouriteCommandHandler"/>
+///     Тест для <see cref="PostAddPlaylistToFavouriteCommandHandler" />
 /// </summary>
 public class PostAddPlaylistToFavouriteCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
-    private readonly Core.Entities.Playlist _playlist;
-    
+    private readonly Playlist _playlist;
+
     public PostAddPlaylistToFavouriteCommandHandlerTest()
     {
-        _playlist = Core.Entities.Playlist.CreateForTest(
+        _playlist = Playlist.CreateForTest(
             playlistName: "test");
 
         var user = User.CreateForTest(id: UserContext.Object.CurrentUserId);
@@ -25,7 +29,7 @@ public class PostAddPlaylistToFavouriteCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен добавить плейлист в любимые
+    ///     Обработчик должен добавить плейлист в любимые
     /// </summary>
     [Fact]
     public async Task Handle_ShouldAddPlaylistInFavourite()
@@ -36,14 +40,14 @@ public class PostAddPlaylistToFavouriteCommandHandlerTest : UnitTestBase
         await handler.Handle(request, default);
 
         var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == UserContext.Object.CurrentUserId);
-        
+
         Assert.NotNull(user);
 
         Assert.NotNull(user.Playlists);
         Assert.NotEmpty(user.Playlists);
-        
+
         var playlist = Assert.Single(user.Playlists);
-        
+
         Assert.Equal(_playlist.Id, playlist.Id);
         Assert.Equal(_playlist.PlaylistName, playlist.PlaylistName);
     }

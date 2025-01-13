@@ -1,13 +1,17 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
 /// <summary>
-/// Конфигурация для <see cref="Message"/>
+///     Конфигурация для <see cref="Message" />
 /// </summary>
 public class MessageConfiguration : EntityTypeConfigurationBase<Message>
 {
@@ -19,7 +23,7 @@ public class MessageConfiguration : EntityTypeConfigurationBase<Message>
         builder.Property(p => p.MessageText)
             .HasComment("Текст сообщения")
             .IsRequired();
-        
+
         builder.ConfigureTimeTrackableEntity();
 
         builder.Property(p => p.UserId)

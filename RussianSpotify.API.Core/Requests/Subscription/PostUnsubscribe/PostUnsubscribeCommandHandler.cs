@@ -1,12 +1,16 @@
+#region
+
 using MediatR;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Subscription.PostUnsubscribe;
 
 /// <summary>
-/// Обработчик для <see cref="PostUnsubscribeCommand"/>
+///     Обработчик для <see cref="PostUnsubscribeCommand" />
 /// </summary>
 public class PostUnsubscribeCommandHandler : IRequestHandler<PostUnsubscribeCommand>
 {
@@ -14,7 +18,7 @@ public class PostUnsubscribeCommandHandler : IRequestHandler<PostUnsubscribeComm
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="subscriptionHandler">Сервис для управления подписками</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
@@ -24,7 +28,7 @@ public class PostUnsubscribeCommandHandler : IRequestHandler<PostUnsubscribeComm
         _userContext = userContext;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task Handle(PostUnsubscribeCommand request, CancellationToken cancellationToken)
     {
         var userId = _userContext.CurrentUserId;

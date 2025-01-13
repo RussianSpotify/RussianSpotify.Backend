@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.Extensions.Caching.Distributed;
 using Minio;
 using Minio.DataModel.Args;
@@ -6,6 +8,9 @@ using Newtonsoft.Json;
 using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Interfaces;
 using RussianSpotify.API.Files.Models;
+using RussianSpotify.API.Files.Options;
+
+#endregion
 
 namespace RussianSpotify.API.Files.Services.S3Service;
 
@@ -14,20 +19,20 @@ public class S3Service : IS3Service
 {
     private const string DefaultContentType = "application/octet-stream";
 
-    private readonly Options.MinioOptions _minioOptions;
+    private readonly MinioOptions _minioOptions;
     private readonly ILogger<S3Service> _logger;
     private readonly IMinioClient _minioClient;
     private readonly IDistributedCache _redis;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="minioOptions">Настройки для S3</param>
     /// <param name="logger">Логгер</param>
     /// <param name="minioClient">Клиент Minio</param>
     /// <param name="redis">Редис</param>
     public S3Service(
-        Options.MinioOptions minioOptions,
+        MinioOptions minioOptions,
         ILogger<S3Service> logger,
         IMinioClient minioClient, IDistributedCache redis)
     {

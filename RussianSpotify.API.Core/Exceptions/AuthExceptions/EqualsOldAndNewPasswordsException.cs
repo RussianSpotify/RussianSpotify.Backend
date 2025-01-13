@@ -1,10 +1,14 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 /// <summary>
-/// Если новый пароль и старый совпадают
+///     Если новый пароль и старый совпадают
 /// </summary>
 public class EqualsOldAndNewPasswordsException : ApplicationBaseException
 {

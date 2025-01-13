@@ -1,3 +1,5 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Music.PatchEditSong;
@@ -5,35 +7,37 @@ using RussianSpotify.Contracts.Enums;
 using RussianSpotify.Contracts.Requests.Music.EditSong;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.SongRequests;
 
 /// <summary>
-/// Тест для <see cref="PatchEditSongCommandHandler"/>
+///     Тест для <see cref="PatchEditSongCommandHandler" />
 /// </summary>
 public class PatchEditSongCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
     private readonly Song _song;
-    
+
     public PatchEditSongCommandHandlerTest()
     {
         var category = Category.CreateForTest(
             categoryType: CategoryType.HipHop);
-        
+
         _song = Song.CreateForTest(
             songName: "tester1213",
             duration: 100,
-            authors: new List<User>()
+            authors: new List<User>
             {
                 User
             },
             category: Category.CreateForTest(categoryType: CategoryType.Rap));
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(_song, category));
     }
 
     /// <summary>
-    /// Обработчик должен обновить сущность
+    ///     Обработчик должен обновить сущность
     /// </summary>
     [Fact]
     public async Task Handle_ShouldUpdateEntity()

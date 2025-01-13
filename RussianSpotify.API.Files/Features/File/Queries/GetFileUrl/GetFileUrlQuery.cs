@@ -1,22 +1,26 @@
+#region
+
 using MediatR;
 using RussianSpotify.API.Files.Requests.File.GetFileUrl;
+
+#endregion
 
 namespace RussianSpotify.API.Files.Features.File.Queries.GetFileUrl;
 
 /// <summary>
-/// Запрос на получение файла в виде URL
+///     Запрос на получение файла в виде URL
 /// </summary>
 public class GetFileUrlQuery : IRequest<GetFileUrlResponse>
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="id">Идентификатор файла</param>
     public GetFileUrlQuery(Guid id)
         => Id = id;
 
     /// <summary>
-    /// Идентификатор файла
+    ///     Идентификатор файла
     /// </summary>
     public Guid Id { get; set; }
 }

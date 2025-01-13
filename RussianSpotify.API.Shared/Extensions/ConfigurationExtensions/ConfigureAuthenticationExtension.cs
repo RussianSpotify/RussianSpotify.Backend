@@ -1,3 +1,5 @@
+#region
+
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -5,15 +7,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
+#endregion
+
 namespace RussianSpotify.API.WEB.Configurations;
 
 /// <summary>
-/// Конфигурация аутентификации
+///     Конфигурация аутентификации
 /// </summary>
 public static class ConfigureAuthenticationExtension
 {
     /// <summary>
-    /// Добавление Аутентификации с настройкой JwtBearer
+    ///     Добавление Аутентификации с настройкой JwtBearer
     /// </summary>
     /// <param name="services">Коллекция сервисов билдера</param>
     /// <param name="configuration">конфигурация(appsettings.json)</param>
@@ -30,7 +34,7 @@ public static class ConfigureAuthenticationExtension
         {
             options.SaveToken = true;
             options.RequireHttpsMetadata = false;
-            options.TokenValidationParameters = new TokenValidationParameters()
+            options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,

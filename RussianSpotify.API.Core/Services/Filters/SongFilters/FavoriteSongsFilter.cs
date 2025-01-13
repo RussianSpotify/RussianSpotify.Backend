@@ -1,14 +1,18 @@
-﻿using RussianSpotify.API.Core.Abstractions;
+﻿#region
+
+using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Services.Filters.SongFilters;
 
 /// <summary>
-/// Фильтрует песни по понравившимся
+///     Фильтрует песни по понравившимся
 /// </summary>
 public class FavoriteSongsFilter : IFilter<Song>
 {
-    /// <inheritdoc cref="IFilter{T}"/>
+    /// <inheritdoc cref="IFilter{T}" />
     public Task<IOrderedQueryable<Song>> FilterAsync(IQueryable<Song> queryable, string filterValue,
         CancellationToken cancellationToken)
     {

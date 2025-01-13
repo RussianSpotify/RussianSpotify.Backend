@@ -1,4 +1,8 @@
+#region
+
 using RussianSpotify.API.Shared.Exceptions.FileExceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Grpc.Clients.FileClient;
 
@@ -7,14 +11,14 @@ public class FileServiceClient : IFileServiceClient
     private const string ImageFileStartsWith = "image/";
     private const string AudioFileStartsWith = "audio/";
 
-    private readonly Grpc.FileService.FileServiceClient _fileClient;
+    private readonly FileService.FileServiceClient _fileClient;
 
-    public FileServiceClient(Grpc.FileService.FileServiceClient fileClient)
+    public FileServiceClient(FileService.FileServiceClient fileClient)
     {
         _fileClient = fileClient;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public bool IsImage(string сontentType)
     {
         if (сontentType is null)
@@ -23,7 +27,7 @@ public class FileServiceClient : IFileServiceClient
         return сontentType.StartsWith(ImageFileStartsWith);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public bool IsAudio(string contentType)
     {
         if (contentType is null)
@@ -95,7 +99,7 @@ public class FileServiceClient : IFileServiceClient
                 Metadata = MapFromGrpcModel(item.FileMetadata)
             });
         }
-        
+
         return result;
     }
 
@@ -108,7 +112,7 @@ public class FileServiceClient : IFileServiceClient
     {
         if (filesIds.Any(id => id == null))
             throw new FileInternalException("Ids cannot be null");
-        
+
         var request = new DeleteFilesRequest { FilesIds = { filesIds.Select(id => id!.Value.ToString()) } };
         await _fileClient.DeleteFilesAsync(request, cancellationToken: cancellationToken);
     }

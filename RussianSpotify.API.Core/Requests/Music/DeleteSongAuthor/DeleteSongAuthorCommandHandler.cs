@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -7,10 +9,12 @@ using RussianSpotify.API.Core.Exceptions.SongExceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.DeleteSongAuthor;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.DeleteSongAuthor;
 
 /// <summary>
-/// Обработчик запроса на удаление автора песни
+///     Обработчик запроса на удаление автора песни
 /// </summary>
 public class DeleteSongAuthorCommandHandler : IRequestHandler<DeleteSongAuthorCommand, DeleteSongAuthorResponse>
 {
@@ -18,7 +22,7 @@ public class DeleteSongAuthorCommandHandler : IRequestHandler<DeleteSongAuthorCo
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
@@ -28,15 +32,15 @@ public class DeleteSongAuthorCommandHandler : IRequestHandler<DeleteSongAuthorCo
         _userContext = userContext;
     }
 
-    /// <inheritdoc/> 
+    /// <inheritdoc />
     public async Task<DeleteSongAuthorResponse> Handle(DeleteSongAuthorCommand request,
         CancellationToken cancellationToken)
     {
         // Достаем песню из бд
         var song = await _dbContext.Songs
-            .Include(i => i.Authors)
-            .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
-            ?? throw new EntityNotFoundException<Song>(request.SongId);
+                       .Include(i => i.Authors)
+                       .FirstOrDefaultAsync(i => i.Id == request.SongId, cancellationToken)
+                   ?? throw new EntityNotFoundException<Song>(request.SongId);
 
         // Достаем текущего пользователя из бд
         var currentUserId = _userContext.CurrentUserId;
@@ -53,8 +57,8 @@ public class DeleteSongAuthorCommandHandler : IRequestHandler<DeleteSongAuthorCo
 
         // Достаем автора, которого хотим удалить
         var songAuthorToDelete = song.Authors
-            .FirstOrDefault(i => i.Id == request.AuthorId)
-            ?? throw new EntityNotFoundException<User>(request.AuthorId);
+                                     .FirstOrDefault(i => i.Id == request.AuthorId)
+                                 ?? throw new EntityNotFoundException<User>(request.AuthorId);
 
         // Вносим изменения в бд
         song.RemoveAuthor(songAuthorToDelete);

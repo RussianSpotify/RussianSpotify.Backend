@@ -1,10 +1,14 @@
+#region
+
 using MediatR;
 using RussianSpotify.Contracts.Requests.Account.PatchUpdateUserInfo;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Account.PatchUpdateUserInfo;
 
 /// <summary>
-/// Запрос на обновление данных о пользователе
+///     Запрос на обновление данных о пользователе
 /// </summary>
 public class PatchUpdateUserInfoCommand
     : PatchUpdateUserInfoRequest, IRequest<PatchUpdateUserInfoResponse>

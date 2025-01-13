@@ -1,15 +1,19 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions;
 
 /// <summary>
-/// Ошибка об забытом Include
+///     Ошибка об забытом Include
 /// </summary>
 public class NotIncludedException : ApplicationBaseException
 {
     /// <summary>
-    /// Консутрктор
+    ///     Консутрктор
     /// </summary>
     /// <param name="message"></param>
     /// <param name="statusCode"></param>
@@ -19,7 +23,7 @@ public class NotIncludedException : ApplicationBaseException
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public NotIncludedException()
     {

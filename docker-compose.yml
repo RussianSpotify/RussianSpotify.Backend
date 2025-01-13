@@ -37,7 +37,7 @@ services:
       - "6379:6379"
     networks:
       - russianspotify_network
-        
+
   rabbitmq:
     container_name: Russian.Spotify.API.RabbitMQ
     image: rabbitmq:3-management
@@ -80,7 +80,7 @@ services:
       - "80:80"
     networks:
       - russianspotify_network
-      
+
   files_service:
     build:
       context: .

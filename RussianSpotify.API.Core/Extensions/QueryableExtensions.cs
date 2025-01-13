@@ -1,14 +1,18 @@
+#region
+
 using RussianSpotify.Contracts.Models;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Extensions;
 
 /// <summary>
-/// Расширения для IQueryable
+///     Расширения для IQueryable
 /// </summary>
 public static class QueryableExtensions
 {
     /// <summary>
-    /// SkipTake - сколько пропустить и сколько взять
+    ///     SkipTake - сколько пропустить и сколько взять
     /// </summary>
     /// <param name="query">Квери</param>
     /// <param name="request">Запрос</param>

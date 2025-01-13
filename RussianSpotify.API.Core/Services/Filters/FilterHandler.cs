@@ -1,15 +1,18 @@
-﻿using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions;
+﻿#region
+
+using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Services.Filters;
 
 /// <summary>
-/// <inheritdoc cref="IFilterHandler"/>
+///     <inheritdoc cref="IFilterHandler" />
 /// </summary>
 public class FilterHandler : IFilterHandler
 {
-    /// <inheritdoc cref="IFilterHandler"/>
+    /// <inheritdoc cref="IFilterHandler" />
     public async Task<IOrderedQueryable<T>> GetByFilterAsync<T>(IQueryable<T> queryable, string filterName,
         string filterValue,
         CancellationToken cancellationToken)

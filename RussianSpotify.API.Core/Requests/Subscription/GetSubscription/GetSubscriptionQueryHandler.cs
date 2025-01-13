@@ -1,13 +1,17 @@
+#region
+
 using MediatR;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Exceptions.SubscriptionExceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Subscription.GetSubscription;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Subscription.GetSubscription;
 
 /// <summary>
-/// Обработчик для <see cref="GetSubscriptionQuery"/>
+///     Обработчик для <see cref="GetSubscriptionQuery" />
 /// </summary>
 public class GetSubscriptionQueryHandler : IRequestHandler<GetSubscriptionQuery, GetSubscriptionResponse>
 {
@@ -15,7 +19,7 @@ public class GetSubscriptionQueryHandler : IRequestHandler<GetSubscriptionQuery,
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="subscriptionHandler">Сервис для управления подписками</param>
     /// <param name="userContext">Контекст текущего пользователя</param>

@@ -1,16 +1,20 @@
+#region
+
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
 
 /// <summary>
-/// Конфигурация сваггера
+///     Конфигурация сваггера
 /// </summary>
 public static class ConfigureSwaggerExtension
 {
     /// <summary>
-    /// Добавление SwaggerGen и настройка его Аутентификации и XML-документации
+    ///     Добавление SwaggerGen и настройка его Аутентификации и XML-документации
     /// </summary>
     /// <param name="services">Сервисы билдера</param>
     /// <param name="assembly">Assembly</param>

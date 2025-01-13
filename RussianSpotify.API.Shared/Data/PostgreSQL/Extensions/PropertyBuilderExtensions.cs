@@ -1,21 +1,26 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Shared.Domain.Abstractions;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
 /// <summary>
-/// Методы расширения для конфигурации сущностей
+///     Методы расширения для конфигурации сущностей
 /// </summary>
 public static class PropertyBuilderExtensions
 {
     private const string NowCommand = "now()";
-    
+
     /// <summary>
-    /// Сконфигурировать сущность для обновления/создания
+    ///     Сконфигурировать сущность для обновления/создания
     /// </summary>
     /// <param name="builder">Конфигуратор</param>
-    public static void ConfigureTimeTrackableEntity<TTimeTrackableEntity>(this EntityTypeBuilder<TTimeTrackableEntity> builder)
+    public static void ConfigureTimeTrackableEntity<TTimeTrackableEntity>(
+        this EntityTypeBuilder<TTimeTrackableEntity> builder)
         where TTimeTrackableEntity : class, ITimeTrackable
     {
         builder.Property(p => p.CreatedAt)
@@ -25,12 +30,13 @@ public static class PropertyBuilderExtensions
         builder.Property(p => p.UpdatedAt)
             .HasComment("Дата обновления");
     }
-    
+
     /// <summary>
-    /// Сконфигурировать сущность, которая является SoftDeletable
+    ///     Сконфигурировать сущность, которая является SoftDeletable
     /// </summary>
     /// <param name="builder">Конфигуратор</param>
-    public static void ConfigureSoftDeletableEntity<TSoftDeletedEntity>(this EntityTypeBuilder<TSoftDeletedEntity> builder)
+    public static void ConfigureSoftDeletableEntity<TSoftDeletedEntity>(
+        this EntityTypeBuilder<TSoftDeletedEntity> builder)
         where TSoftDeletedEntity : class, ISoftDeletable
     {
         builder.Property(p => p.IsDeleted)

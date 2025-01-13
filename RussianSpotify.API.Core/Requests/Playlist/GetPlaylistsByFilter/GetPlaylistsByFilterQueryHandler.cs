@@ -1,16 +1,19 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.GetPlaylistsByFilter;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Playlist.GetPlaylistsByFilter;
 
 /// <summary>
-/// Обработчик для <see cref="GetPlaylistsByFilterQuery"/>
+///     Обработчик для <see cref="GetPlaylistsByFilterQuery" />
 /// </summary>
 public class GetPlaylistsByFilterQueryHandler
     : IRequestHandler<GetPlaylistsByFilterQuery, GetPlaylistsByFilterResponse>
@@ -20,7 +23,7 @@ public class GetPlaylistsByFilterQueryHandler
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="filterHandler">Маршрутизатор фильтров</param>
@@ -35,7 +38,7 @@ public class GetPlaylistsByFilterQueryHandler
         _userContext = userContext;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}" />
     public async Task<GetPlaylistsByFilterResponse> Handle(GetPlaylistsByFilterQuery request,
         CancellationToken cancellationToken)
     {

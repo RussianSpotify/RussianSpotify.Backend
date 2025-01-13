@@ -10,47 +10,47 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\RussianSpotify.API.WEB.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\RussianSpotify.API.WEB.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNet.Security.OAuth.Vkontakte" Version="7.0.4" />
-        <PackageReference Include="AspNet.Security.OAuth.Yandex" Version="7.0.4" />
-        <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.20" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.20" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.20" />
+        <PackageReference Include="AspNet.Security.OAuth.Vkontakte" Version="7.0.4"/>
+        <PackageReference Include="AspNet.Security.OAuth.Yandex" Version="7.0.4"/>
+        <PackageReference Include="EFCore.NamingConventions" Version="7.0.2"/>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.20"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.20"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.20"/>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.16">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.16">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18" />
-        <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="7.0.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RussianSpotify.API.Core\RussianSpotify.API.Core.csproj" />
-      <ProjectReference Include="..\RussianSpotify.API.Data.PostgreSQL\RussianSpotify.API.Data.PostgreSQL.csproj" />
-      <ProjectReference Include="..\RussianSpotify.API.Worker\RussianSpotify.API.Worker.csproj" />
+        <ProjectReference Include="..\RussianSpotify.API.Core\RussianSpotify.API.Core.csproj"/>
+        <ProjectReference Include="..\RussianSpotify.API.Data.PostgreSQL\RussianSpotify.API.Data.PostgreSQL.csproj"/>
+        <ProjectReference Include="..\RussianSpotify.API.Worker\RussianSpotify.API.Worker.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
 </Project>

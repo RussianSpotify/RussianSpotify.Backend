@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
@@ -6,10 +8,12 @@ using RussianSpotify.Contracts.Enums;
 using RussianSpotify.Contracts.Requests.Playlist.PostCreatePlaylist;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.PlaylistRequests;
 
 /// <summary>
-/// Тест для <see cref="PostCreatePlaylistCommandHandler"/>
+///     Тест для <see cref="PostCreatePlaylistCommandHandler" />
 /// </summary>
 public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
 {
@@ -25,7 +29,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
         _song = Song.CreateForTest(
             songName: "test",
             category: Category.CreateForTest(categoryType: CategoryType.Rap));
-        
+
         _dbContext = CreateInMemory(
             x => x.AddRange(
                 _user,
@@ -33,7 +37,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен создать плейлист
+    ///     Обработчик должен создать плейлист
     /// </summary>
     [Fact]
     public async Task Handle_ShouldCreatePlaylist()
@@ -42,7 +46,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
         {
             PlaylistName = "Тест",
             ImageId = _image,
-            SongIds = new List<Guid>() { _song.Id },
+            SongIds = new List<Guid> { _song.Id },
             IsAlbum = false
         };
 
@@ -58,7 +62,7 @@ public class PostCreatePlaylistCommandHandlerTest : UnitTestBase
         var playlist = await _dbContext.Playlists.FirstOrDefaultAsync(x => x.Id == response.PlaylistId);
 
         Assert.NotNull(playlist);
-        
+
         Assert.Equal(_image, playlist.ImageFileId);
         Assert.Equal(request.PlaylistName, playlist.PlaylistName);
         Assert.Equal(request.IsAlbum, playlist.IsAlbum);

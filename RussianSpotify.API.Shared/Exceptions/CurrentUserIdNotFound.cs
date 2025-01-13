@@ -1,9 +1,13 @@
+#region
+
 using System.Net;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Exceptions;
 
 /// <summary>
-/// Если CurrentUserId из IUserContext равно null
+///     Если CurrentUserId из IUserContext равно null
 /// </summary>
 public class CurrentUserIdNotFound : ApplicationBaseException
 {

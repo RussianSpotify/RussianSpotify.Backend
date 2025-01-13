@@ -1,4 +1,8 @@
+#region
+
 using System.Net;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Exceptions;
 

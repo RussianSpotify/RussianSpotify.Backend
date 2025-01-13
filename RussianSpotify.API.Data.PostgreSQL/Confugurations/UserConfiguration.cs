@@ -1,7 +1,11 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
+
+#endregion
 
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
@@ -24,14 +28,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasComment("Хеш пароля")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .IsRequired();
-        
+
         builder.Property(p => p.Birthday);
 
         builder.Property(p => p.Phone);
 
         builder.Property(p => p.IsConfirmed)
             .IsRequired();
-        
+
         builder.ConfigureSoftDeletableEntity();
         builder.ConfigureTimeTrackableEntity();
 
@@ -45,7 +49,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasMany(x => x.Chats)
             .WithMany(y => y.Users);
-        
+
         builder
             .HasOne(x => x.Subscribe)
             .WithOne(y => y.User)

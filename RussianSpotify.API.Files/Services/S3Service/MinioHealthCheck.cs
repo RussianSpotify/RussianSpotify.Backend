@@ -1,12 +1,16 @@
+#region
+
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Minio;
 using Minio.DataModel.Args;
 using RussianSpotify.API.Files.Options;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Services.S3Service;
 
 /// <summary>
-/// Проверка жизни сервиса S3
+///     Проверка жизни сервиса S3
 /// </summary>
 public class MinioHealthCheck : IHealthCheck
 {
@@ -15,7 +19,7 @@ public class MinioHealthCheck : IHealthCheck
     private readonly ILogger<MinioHealthCheck> _logger;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="minioClient">Клиент Minio</param>
     /// <param name="logger"></param>

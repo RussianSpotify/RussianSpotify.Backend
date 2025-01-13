@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Files.Data;
@@ -7,10 +9,12 @@ using RussianSpotify.API.Files.Interfaces;
 using RussianSpotify.API.Files.Models;
 using RussianSpotify.API.Files.Requests.File.DownloadFile;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Features.File.Queries.DownloadFile;
 
 /// <summary>
-/// Обработчик для <see cref="DownloadFileQuery"/>
+///     Обработчик для <see cref="DownloadFileQuery" />
 /// </summary>
 public class DownloadFileQueryHandler : IRequestHandler<DownloadFileQuery, DownloadFileResponse>
 {
@@ -18,7 +22,7 @@ public class DownloadFileQueryHandler : IRequestHandler<DownloadFileQuery, Downl
     private readonly IDbContext _dbContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="s3Service">S3 сервис</param>
     /// <param name="dbContext">Контекст БД</param>
@@ -35,12 +39,12 @@ public class DownloadFileQueryHandler : IRequestHandler<DownloadFileQuery, Downl
             throw new ArgumentNullException(nameof(request));
 
         var fileFromDb = await _dbContext.FilesMetadata
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
-            ?? throw new EntityNotFoundException<FileMetadata>(request.Id);
+                             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+                         ?? throw new EntityNotFoundException<FileMetadata>(request.Id);
 
         var file = await _s3Service
-            .GetFileAsync(fileFromDb.Address, cancellationToken: cancellationToken)
-            ?? throw new EntityNotFoundException<FileContent>(fileFromDb.Address);
+                       .GetFileAsync(fileFromDb.Address, cancellationToken: cancellationToken)
+                   ?? throw new EntityNotFoundException<FileContent>(fileFromDb.Address);
 
         return new DownloadFileResponse(
             content: file.Content,

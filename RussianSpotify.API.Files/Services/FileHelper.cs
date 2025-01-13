@@ -1,18 +1,22 @@
+#region
+
 using RussianSpotify.API.Files.Data;
 using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Exceptions.FileExceptions;
 using RussianSpotify.API.Files.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Services;
 
-/// <inheritdoc/>
+/// <inheritdoc />
 public class FileHelper : IFileHelper
-{   
+{
     private readonly IS3Service _s3Service;
     private readonly IDbContext _dbContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="s3Service">Сервис S3</param>
     /// <param name="dbContext">Контекст БД</param>
@@ -22,7 +26,7 @@ public class FileHelper : IFileHelper
         _dbContext = dbContext;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task DeleteFileAsync(FileMetadata file, CancellationToken cancellationToken)
     {
         if (file is null)

@@ -1,14 +1,18 @@
+#region
+
 using System.ComponentModel;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Extensions;
 
 /// <summary>
-/// Расширения для Enum
+///     Расширения для Enum
 /// </summary>
 public static class EnumExtensions
 {
     /// <summary>
-    /// Получть описание из атрибута Description
+    ///     Получть описание из атрибута Description
     /// </summary>
     /// <param name="value">Enum</param>
     /// <returns>Описание</returns>

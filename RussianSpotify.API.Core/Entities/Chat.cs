@@ -1,17 +1,21 @@
+#region
+
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Чат
+///     Чат
 /// </summary>
 public class Chat : BaseEntity
 {
     private string _name = default!;
-    
+
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="name">Название чата</param>
     /// <param name="messages">Сообщения</param>
@@ -24,14 +28,14 @@ public class Chat : BaseEntity
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     private Chat()
     {
     }
 
     /// <summary>
-    /// Название чата
+    ///     Название чата
     /// </summary>
     // ReSharper disable once EntityFramework.ModelValidation.UnlimitedStringLength
     public string Name
@@ -43,17 +47,17 @@ public class Chat : BaseEntity
     }
 
     /// <summary>
-    /// Сообщения в чате
+    ///     Сообщения в чате
     /// </summary>
     public ICollection<Message> Messages { get; set; }
 
     /// <summary>
-    /// Пользователи
+    ///     Пользователи
     /// </summary>
     public ICollection<User> Users { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="id">Идентификатор</param>
     /// <param name="name">Название чата</param>

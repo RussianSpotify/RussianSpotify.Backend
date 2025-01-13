@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +22,12 @@ using RussianSpotify.Contracts.Requests.Music.EditSong;
 using RussianSpotify.Contracts.Requests.Music.GetCategories;
 using RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 
+#endregion
+
 namespace RussianSpotify.API.WEB.Controllers;
 
 /// <summary>
-/// Контроллер, который отвечает за работу с музыкой
+///     Контроллер, который отвечает за работу с музыкой
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -34,7 +38,7 @@ public class SongController : ControllerBase
     private readonly IFileControllerHelper _fileControllerHelper;
 
     /// <summary>
-    /// Коснтруктор
+    ///     Коснтруктор
     /// </summary>
     /// <param name="mediator">Медиатор CQRS</param>
     /// <param name="fileControllerHelper">Помощник при работе с файлами</param>
@@ -45,10 +49,12 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Получить музыку по фильтру(Доступные фильтры: AuthorSongs, SongName, FavoriteSongs, SongsInPlaylist)
+    ///     Получить музыку по фильтру(Доступные фильтры: AuthorSongs, SongName, FavoriteSongs, SongsInPlaylist)
     /// </summary>
-    /// <param name="request">GetSongsByFilterRequest(Название фильтра,
-    /// значение фильтра, страница, кол-во песен на странице)</param>
+    /// <param name="request">
+    ///     GetSongsByFilterRequest(Название фильтра,
+    ///     значение фильтра, страница, кол-во песен на странице)
+    /// </param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>GetSongsByFilterResponse песни по фильтру и общее количество песен по этом фильтру</returns>
     [HttpGet("GetSongsByFilter")]
@@ -63,7 +69,7 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Отправить песню в виде стрима
+    ///     Отправить песню в виде стрима
     /// </summary>
     /// <param name="songId">ИД песни</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -90,7 +96,7 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Добавить новую песню (информацию)
+    ///     Добавить новую песню (информацию)
     /// </summary>
     /// <param name="addSongRequest">Запрос с информацией</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -110,7 +116,7 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Добавить автора песни
+    ///     Добавить автора песни
     /// </summary>
     /// <param name="addSongAuthorRequest">Запрос с информацией</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -132,7 +138,7 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Обновить данные о песне
+    ///     Обновить данные о песне
     /// </summary>
     /// <param name="editSongRequest">Запрос с информацией</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -156,7 +162,7 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить автора песни
+    ///     Удалить автора песни
     /// </summary>
     /// <param name="deleteSongAuthorRequest">Запрос с информацией</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -179,7 +185,7 @@ public class SongController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить песню
+    ///     Удалить песню
     /// </summary>
     /// <param name="songId">Id песни</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -199,12 +205,12 @@ public class SongController : ControllerBase
         {
             SongId = songId
         });
-        
+
         return await _mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
-    /// Добавить песню в любимое
+    ///     Добавить песню в любимое
     /// </summary>
     /// <param name="songId"></param>
     /// <param name="cancellationToken"></param>
@@ -219,7 +225,7 @@ public class SongController : ControllerBase
         => await _mediator.Send(new PostAddSongToFavouriteCommand(songId), cancellationToken);
 
     /// <summary>
-    /// Удалить песню из бакета
+    ///     Удалить песню из бакета
     /// </summary>
     /// <param name="songId">ИД песни</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -228,7 +234,7 @@ public class SongController : ControllerBase
         => await _mediator.Send(new DeleteSongFromBucketCommand(songId), cancellationToken);
 
     /// <summary>
-    /// Возвращает все категории(жанры) песен
+    ///     Возвращает все категории(жанры) песен
     /// </summary>
     [HttpGet("GetCategories")]
     public async Task<GetCategoriesResponse> GetCategoriesAsync()

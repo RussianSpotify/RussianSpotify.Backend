@@ -1,12 +1,12 @@
 namespace RussianSpotify.API.Shared.Requests.File;
 
 /// <summary>
-/// Ответ в виде потока
+///     Ответ в виде потока
 /// </summary>
 public class BaseFileStreamResponse
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="content">Контент</param>
     /// <param name="fileName">Название файла</param>
@@ -22,17 +22,17 @@ public class BaseFileStreamResponse
     }
 
     /// <summary>
-    /// Контент
+    ///     Контент
     /// </summary>
     public Stream Content { get; }
 
     /// <summary>
-    /// Название файла
+    ///     Название файла
     /// </summary>
     public string FileName { get; set; }
 
     /// <summary>
-    /// Тип файла
+    ///     Тип файла
     /// </summary>
     public string ContentType { get; set; }
 }

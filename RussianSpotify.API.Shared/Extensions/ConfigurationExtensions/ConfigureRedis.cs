@@ -1,15 +1,19 @@
+#region
+
 using Microsoft.Extensions.DependencyInjection;
 using RussianSpotify.API.Shared.Options;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
 
 /// <summary>
-/// Конфигурация Redis
+///     Конфигурация Redis
 /// </summary>
 public static class ConfigureRedis
 {
     /// <summary>
-    /// Добавить Redis
+    ///     Добавить Redis
     /// </summary>
     /// <param name="serviceCollection">Сервисы</param>
     /// <param name="options">Конфигурация</param>
@@ -19,7 +23,8 @@ public static class ConfigureRedis
             throw new ArgumentNullException(nameof(serviceCollection));
 
         if (options == null)
-            throw new InvalidOperationException("Redis settings are not configured. Please provide a 'Redis' section in the configuration.");
+            throw new InvalidOperationException(
+                "Redis settings are not configured. Please provide a 'Redis' section in the configuration.");
 
         serviceCollection.AddStackExchangeRedisCache(redisCacheOptions =>
         {

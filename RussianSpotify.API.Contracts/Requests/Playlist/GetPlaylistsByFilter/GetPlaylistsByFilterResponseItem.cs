@@ -1,52 +1,52 @@
 ﻿namespace RussianSpotify.Contracts.Requests.Playlist.GetPlaylistsByFilter;
 
 /// <summary>
-/// Плейлист для <see cref="GetPlaylistsByFilterResponse"/>
+///     Плейлист для <see cref="GetPlaylistsByFilterResponse" />
 /// </summary>
 public class GetPlaylistsByFilterResponseItem
 {
     /// <summary>
-    /// ИД плейлиста/альбома
+    ///     ИД плейлиста/альбома
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Название плейлиста/альбома
+    ///     Название плейлиста/альбома
     /// </summary>
     public string PlaylistName { get; set; } = default!;
 
     /// <summary>
-    /// ИД картинки
+    ///     ИД картинки
     /// </summary>
     public Guid? ImageId { get; set; }
 
     /// <summary>
-    /// Это альбом
+    ///     Это альбом
     /// </summary>
     public bool IsAlbum { get; set; }
 
     /// <summary>
-    /// Id автора
+    ///     Id автора
     /// </summary>
     public Guid AuthorId { get; set; }
 
     /// <summary>
-    /// Автор
+    ///     Автор
     /// </summary>
     public string? AuthorName { get; set; }
 
     /// <summary>
-    /// Дата релиза
+    ///     Дата релиза
     /// </summary>
     public DateTime ReleaseDate { get; set; }
 
     /// <summary>
-    /// Добавлен ли альбом в понравившееся
+    ///     Добавлен ли альбом в понравившееся
     /// </summary>
     public bool? IsInFavorite { get; set; }
 
     /// <summary>
-    /// ИД песен
+    ///     ИД песен
     /// </summary>
     public List<Guid>? SongsIds { get; set; }
 }

@@ -1,4 +1,5 @@
-using System.Text;
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -7,10 +8,12 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using ValidationException = FluentValidation.ValidationException;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmEmail;
 
 /// <summary>
-/// Обработчик для <see cref="PostConfirmEmailCommand"/>
+///     Обработчик для <see cref="PostConfirmEmailCommand" />
 /// </summary>
 public class PostConfirmEmailCommandHandler : IRequestHandler<PostConfirmEmailCommand>
 {
@@ -18,7 +21,7 @@ public class PostConfirmEmailCommandHandler : IRequestHandler<PostConfirmEmailCo
     private readonly IDistributedCache _distributedCache;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="distributedCache">Кеш</param>
     /// <param name="dbContext">Контекст БД</param>
@@ -37,13 +40,13 @@ public class PostConfirmEmailCommandHandler : IRequestHandler<PostConfirmEmailCo
             throw new RequiredFieldException("Код");
 
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(request.Email);
+                       .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
+                   ?? throw new EntityNotFoundException<User>(request.Email);
 
         var exceptedCode = await _distributedCache
-            .GetStringAsync(request.Email, cancellationToken)
-            ?? throw new NotFoundException("Код для данного пользователя не найден");
-        
+                               .GetStringAsync(request.Email, cancellationToken)
+                           ?? throw new NotFoundException("Код для данного пользователя не найден");
+
         if (!exceptedCode.Equals(request.EmailVerificationCodeFromUser))
             throw new ValidationException("Введен неверный код");
 

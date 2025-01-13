@@ -1,21 +1,25 @@
+#region
+
 using MediatR;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Playlist.PostAddPlaylistToFavourite;
 
 /// <summary>
-/// Команда на добавление альбома/плейлиста в любимые
+///     Команда на добавление альбома/плейлиста в любимые
 /// </summary>
 public class PostAddPlaylistToFavouriteCommand : IRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="playlistId">Ид плейлиста/альбома</param>
     public PostAddPlaylistToFavouriteCommand(Guid playlistId)
         => PlaylistId = playlistId;
 
     /// <summary>
-    /// ИД плейлиста/альбома
+    ///     ИД плейлиста/альбома
     /// </summary>
     public Guid PlaylistId { get; set; }
 }

@@ -1,17 +1,17 @@
 namespace RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 
 /// <summary>
-/// Ответ на команду <see cref="PutPlaylistRequest"/>
+///     Ответ на команду <see cref="PutPlaylistRequest" />
 /// </summary>
 public class PutPlaylistResponse
 {
     /// <summary>
-    /// Название плейлиста
+    ///     Название плейлиста
     /// </summary>
     public string PlaylistName { get; set; } = null!;
 
     /// <summary>
-    /// Id плейлиста
+    ///     Id плейлиста
     /// </summary>
     public Guid PlaylistId { get; set; }
 }

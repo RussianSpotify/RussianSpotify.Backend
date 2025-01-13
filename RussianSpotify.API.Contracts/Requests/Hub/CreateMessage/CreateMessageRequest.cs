@@ -1,17 +1,17 @@
 namespace RussianSpotify.Contracts.Requests.Hub.CreateMessage;
 
 /// <summary>
-/// Запрос на создание сообщения
+///     Запрос на создание сообщения
 /// </summary>
 public class CreateMessageRequest
 {
     /// <summary>
-    /// Сообщение
+    ///     Сообщение
     /// </summary>
     public string Message { get; set; }
 
     /// <summary>
-    /// Чат
+    ///     Чат
     /// </summary>
     public Guid ChatId { get; set; }
 }

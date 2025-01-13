@@ -1,19 +1,21 @@
-using Microsoft.EntityFrameworkCore;
+#region
+
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
-using RussianSpotify.API.Shared.Data.PostgreSQL.Options;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Services;
 using DbContextOptions = RussianSpotify.API.Shared.Data.PostgreSQL.Options.DbContextOptions;
 using IMigrator = RussianSpotify.API.Shared.Interfaces.IMigrator;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Data;
 
 /// <summary>
-/// Входная точка
+///     Входная точка
 /// </summary>
 public static class Entry
 {
     /// <summary>
-    /// Регистрация зависимостей
+    ///     Регистрация зависимостей
     /// </summary>
     public static void AddDataContext(this IServiceCollection serviceCollection, DbContextOptions options)
     {

@@ -1,10 +1,14 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using RussianSpotify.Contracts.Requests.Author.GetAuthor;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthor;
 
 /// <summary>
-/// Запрос на получение информации об авторе
+///     Запрос на получение информации об авторе
 /// </summary>
 public class GetAuthorQuery : GetAuthorRequest, IRequest<GetAuthorResponse>
 {

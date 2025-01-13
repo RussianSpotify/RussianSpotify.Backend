@@ -1,10 +1,14 @@
+#region
+
 using FluentValidation;
 using RussianSpotify.API.Core.Enums;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostConfirmPasswordReset;
 
 /// <summary>
-/// Валидатор для <see cref="PostConfirmPasswordResetCommand"/>
+///     Валидатор для <see cref="PostConfirmPasswordResetCommand" />
 /// </summary>
 public class PostConfirmPasswordResetCommandValidator : AbstractValidator<PostConfirmPasswordResetCommand>
 {

@@ -1,15 +1,18 @@
-using RussianSpotify.API.Core.Abstractions;
+#region
+
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Сообщение
+///     Сообщение
 /// </summary>
 public class Message : BaseEntity, ITimeTrackable
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="messageText">Текст сообщения</param>
     /// <param name="user">Пользователь, кто отправил</param>
@@ -22,45 +25,45 @@ public class Message : BaseEntity, ITimeTrackable
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     private Message()
     {
     }
 
     /// <summary>
-    /// Текст сообщения
+    ///     Текст сообщения
     /// </summary>
     public string MessageText { get; set; }
 
-    /// <inheritdoc cref="ITimeTrackable"/>
+    /// <inheritdoc cref="ITimeTrackable" />
     public DateTime CreatedAt { get; set; }
-    
-    /// <inheritdoc cref="ITimeTrackable"/>
+
+    /// <inheritdoc cref="ITimeTrackable" />
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// Идентификатор пользователя 
+    ///     Идентификатор пользователя
     /// </summary>
     public Guid UserId { get; set; }
 
     /// <summary>
-    /// Идентификатор чата
+    ///     Идентификатор чата
     /// </summary>
     public Guid ChatId { get; set; }
-    
+
     /// <summary>
-    /// Пользователь, кто отправил
+    ///     Пользователь, кто отправил
     /// </summary>
     public User User { get; set; }
-    
+
     /// <summary>
-    /// Чат
+    ///     Чат
     /// </summary>
     public Chat Chat { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="id">Идентификатор</param>
     /// <param name="messageText">Текст сообщения</param>

@@ -1,23 +1,27 @@
+#region
+
 using System.Net;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Exceptions;
 
 /// <summary>
-/// Базовый класс ошибок
+///     Базовый класс ошибок
 /// </summary>
 public class ApplicationBaseException : Exception
 {
     public HttpStatusCode ResponseStatusCode { get; set; }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public ApplicationBaseException()
     {
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="message">Сообщение об ошибку</param>
     public ApplicationBaseException(string message)
@@ -25,7 +29,7 @@ public class ApplicationBaseException : Exception
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="message">Сообщение об ошибке</param>
     /// <param name="statusCode">Код ошибки</param>

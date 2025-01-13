@@ -1,13 +1,16 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Chat.GetStory;
-using RussianSpotify.Contracts.Models;
 using Xunit;
+
+#endregion
 
 namespace RussianSpotify.API.UnitTests.Requests.ChatRequests;
 
 /// <summary>
-/// Тест для <see cref="GetStoryQueryHandler"/>
+///     Тест для <see cref="GetStoryQueryHandler" />
 /// </summary>
 public class GetStoryQueryHandlerTest : UnitTestBase
 {
@@ -18,14 +21,14 @@ public class GetStoryQueryHandlerTest : UnitTestBase
     public GetStoryQueryHandlerTest()
     {
         _message = Message.CreateForTest(messageText: "hui", user: User);
-        
+
         _chat = Chat.CreateForTest(
             name: "Test chat",
-            users: new List<User>()
+            users: new List<User>
             {
                 User
             },
-            messages: new List<Message>()
+            messages: new List<Message>
             {
                 _message
             });
@@ -34,7 +37,7 @@ public class GetStoryQueryHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Должен вернуть сообщения из чата
+    ///     Должен вернуть сообщения из чата
     /// </summary>
     [Fact]
     public async Task Handle_ShouldReturnMessagesInChat()

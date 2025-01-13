@@ -1,14 +1,17 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Chat.GetChats;
 using RussianSpotify.API.Shared.Domain.Constants;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.ChatRequests;
 
 /// <summary>
-/// Тест для <see cref="GetChatsQueryHandler"/>
+///     Тест для <see cref="GetChatsQueryHandler" />
 /// </summary>
 public class GetChatsQueryHandlerTest : UnitTestBase
 {
@@ -16,12 +19,12 @@ public class GetChatsQueryHandlerTest : UnitTestBase
     private readonly Chat _chat;
     private readonly User _user;
     private readonly Message _message;
-    
+
     public GetChatsQueryHandlerTest()
     {
         _user = User.CreateForTest(
             login: "Tester123",
-            roles: new List<Role>()
+            roles: new List<Role>
             {
                 new()
                 {
@@ -29,10 +32,10 @@ public class GetChatsQueryHandlerTest : UnitTestBase
                 }
             });
         _message = Message.CreateForTest(messageText: "123");
-        
+
         _chat = Chat.CreateForTest(
             name: "Test chat",
-            messages: new List<Message>()
+            messages: new List<Message>
             {
                 _message
             },
@@ -45,7 +48,7 @@ public class GetChatsQueryHandlerTest : UnitTestBase
     }
 
     /// <summary>
-    /// Обработчик должен вернуть информацию для чата
+    ///     Обработчик должен вернуть информацию для чата
     /// </summary>
     [Fact]
     public async Task Handle_ShouldReturnChatInfo()
@@ -59,7 +62,7 @@ public class GetChatsQueryHandlerTest : UnitTestBase
         Assert.NotNull(response);
         Assert.NotNull(response.Entities);
         Assert.NotEmpty(response.Entities);
-        
+
         Assert.Equal(1, response.TotalCount);
         var entity = Assert.Single(response.Entities);
 

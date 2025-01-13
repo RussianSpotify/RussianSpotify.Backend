@@ -1,5 +1,6 @@
+#region
+
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -7,15 +8,14 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.AuthExceptions;
-using RussianSpotify.API.Core.Extensions;
-using RussianSpotify.API.Core.Models;
 using RussianSpotify.Contracts.Requests.Auth.PostLogin;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.Auth.PostLogin;
 
 /// <summary>
-/// Обработчик для <see cref="PostLoginCommand"/>
+///     Обработчик для <see cref="PostLoginCommand" />
 /// </summary>
 public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLoginResponse>
 {
@@ -28,7 +28,7 @@ public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLog
     private readonly IDistributedCache _distributedCache;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="tokenFactory">Фабрика токенов для почты</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
@@ -59,11 +59,11 @@ public class PostLoginCommandHandler : IRequestHandler<PostLoginCommand, PostLog
     public async Task<PostLoginResponse> Handle(PostLoginCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        
+
         var user = await _dbContext.Users
-            .Include(x => x.Roles)
-            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(request.Email);
+                       .Include(x => x.Roles)
+                       .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
+                   ?? throw new EntityNotFoundException<User>(request.Email);
 
         // if (!user.IsConfirmed)
         // {

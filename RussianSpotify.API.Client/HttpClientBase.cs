@@ -1,3 +1,5 @@
+#region
+
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -7,10 +9,12 @@ using RussianSpotify.Contracts.Models;
 using JsonException = System.Text.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
+#endregion
+
 namespace RussianSpotify.API.Client;
 
 /// <summary>
-/// Базовый Http Client
+///     Базовый Http Client
 /// </summary>
 public class HttpClientBase
 {
@@ -18,7 +22,7 @@ public class HttpClientBase
     private readonly JsonSerializerOptions _options;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="httpClient">Http клиент</param>
     public HttpClientBase(HttpClient httpClient)
@@ -28,7 +32,7 @@ public class HttpClientBase
     }
 
     /// <summary>
-    /// POST
+    ///     POST
     /// </summary>
     /// <typeparam name="TResponse">Тип ответа</typeparam>
     /// <param name="url">url</param>
@@ -45,7 +49,7 @@ public class HttpClientBase
     }
 
     /// <summary>
-    /// GET
+    ///     GET
     /// </summary>
     /// <typeparam name="TResponse">Тип ответа</typeparam>
     /// <param name="url">url</param>
@@ -57,7 +61,7 @@ public class HttpClientBase
     {
         if (accessToken != null)
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", accessToken);
-        
+
         var responseMessage = await _httpClient.GetAsync($"{url}").ConfigureAwait(false);
 
         if (!responseMessage.IsSuccessStatusCode)
@@ -65,10 +69,10 @@ public class HttpClientBase
 
         return await ExtractJsonDataAsync<TResponse>(responseMessage).ConfigureAwait(false);
     }
-    
+
     private StringContent GetJsonContent(object data)
         => new(JsonSerializer.Serialize(data, _options), Encoding.UTF8, "application/json");
-    
+
     private static JsonSerializerOptions InitSerializationOptions()
     {
         var options = new JsonSerializerOptions
@@ -80,9 +84,9 @@ public class HttpClientBase
 
         return options;
     }
-    
+
     /// <summary>
-    /// Обработка исключения для ответа с ошибочным статусом
+    ///     Обработка исключения для ответа с ошибочным статусом
     /// </summary>
     /// <param name="responseMessage">Ответ сервера</param>
     /// <returns>-</returns>
@@ -100,7 +104,7 @@ public class HttpClientBase
             throw new ApplicationException($"Произошло неожиданное исключение: {responseText}");
         }
     }
-    
+
     private async Task<TResponse> ExtractJsonDataAsync<TResponse>(HttpResponseMessage responseMessage)
     {
         if (responseMessage?.Content is null)

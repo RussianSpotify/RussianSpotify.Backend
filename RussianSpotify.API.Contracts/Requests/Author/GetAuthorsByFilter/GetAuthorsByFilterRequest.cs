@@ -1,17 +1,21 @@
+#region
+
 using RussianSpotify.Contracts.Models;
+
+#endregion
 
 namespace RussianSpotify.Contracts.Requests.Author.GetAuthorsByFilter;
 
 /// <summary>
-/// Запрос для получения авторов по фильтру
+///     Запрос для получения авторов по фильтру
 /// </summary>
 public class GetAuthorsByFilterRequest
 {
-    private int _pageNumber;
+    private readonly int _pageNumber;
     private int _pageSize;
 
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public GetAuthorsByFilterRequest()
     {
@@ -20,14 +24,14 @@ public class GetAuthorsByFilterRequest
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     public GetAuthorsByFilterRequest(GetAuthorsByFilterRequest request)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         FilterName = request.FilterName;
         FilterValue = request.FilterValue;
         PlaylistCount = request.PlaylistCount;
@@ -36,22 +40,22 @@ public class GetAuthorsByFilterRequest
     }
 
     /// <summary>
-    /// Название фильтра(Доступные фильтры: AuthorPlaylists)
+    ///     Название фильтра(Доступные фильтры: AuthorPlaylists)
     /// </summary>
     public string FilterName { get; set; } = null!;
 
     /// <summary>
-    /// Значение фильтра
+    ///     Значение фильтра
     /// </summary>
     public string FilterValue { get; set; } = null!;
 
     /// <summary>
-    /// Количество плейлистов в ответе
+    ///     Количество плейлистов в ответе
     /// </summary>
     public int PlaylistCount { get; set; }
 
     /// <summary>
-    /// Номер страницы
+    ///     Номер страницы
     /// </summary>
     public int PageNumber
     {
@@ -60,7 +64,7 @@ public class GetAuthorsByFilterRequest
     }
 
     /// <summary>
-    /// Кол-во элементов на странице
+    ///     Кол-во элементов на странице
     /// </summary>
     public int PageSize
     {

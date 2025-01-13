@@ -1,7 +1,8 @@
+#region
+
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Constants;
@@ -10,10 +11,12 @@ using RussianSpotify.API.Shared.Models.ChatModels;
 using RussianSpotify.Contracts.Requests.Chat.GetSenderMessage;
 using RussianSpotify.Contracts.Requests.Hub.CreateMessage;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services;
 
 /// <summary>
-/// Сервис чата
+///     Сервис чата
 /// </summary>
 public class ChatService : IChatService
 {
@@ -22,7 +25,7 @@ public class ChatService : IChatService
     private readonly IBus _bus;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="userContext">Контекст пользователя</param>
@@ -41,11 +44,11 @@ public class ChatService : IChatService
     public async Task CreateChatAsync()
     {
         var currentUser = await _dbContext.Users
-            .Include(x => x.Roles)
-            .Include(x => x.Chats)
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId)
-            ?? throw new ForbiddenException();
-        
+                              .Include(x => x.Roles)
+                              .Include(x => x.Chats)
+                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId)
+                          ?? throw new ForbiddenException();
+
         var admins = await _dbContext.Users
             .Where(x => x.Roles.Any(y => y.Name == Roles.AdminRoleName))
             .ToListAsync();
@@ -73,12 +76,12 @@ public class ChatService : IChatService
     public async Task<GetSenderMessageInfo> CreateMessageAsync(CreateMessageRequest model)
     {
         ArgumentNullException.ThrowIfNull(model);
-        
+
         var currentUser = await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId)
-            ?? throw new ForbiddenException();
-        
+                              .AsNoTracking()
+                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId)
+                          ?? throw new ForbiddenException();
+
         await _bus.Publish(new CreateMessageModel
         {
             Message = model.Message,

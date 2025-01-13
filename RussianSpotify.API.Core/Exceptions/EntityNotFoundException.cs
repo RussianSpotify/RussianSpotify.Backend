@@ -1,11 +1,15 @@
+#region
+
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Shared.Exceptions;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Exceptions;
 
 /// <summary>
-/// Ошибка на ненайденую сущность
+///     Ошибка на ненайденую сущность
 /// </summary>
 public class EntityNotFoundException<TEntity> : ApplicationBaseException
     where TEntity : class

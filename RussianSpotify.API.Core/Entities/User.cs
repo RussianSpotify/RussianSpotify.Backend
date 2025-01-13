@@ -1,10 +1,14 @@
+#region
+
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Entities;
 
 /// <summary>
-/// Сущность пользователя
+///     Сущность пользователя
 /// </summary>
 public class User : BaseEntity, ISoftDeletable, ITimeTrackable
 {
@@ -13,7 +17,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     private string _passwordHash = default!;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="userName">Имя пользователя</param>
     /// <param name="email">Почта</param>
@@ -61,14 +65,14 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     private User()
     {
     }
 
     /// <summary>
-    /// Логин пользователя
+    ///     Логин пользователя
     /// </summary>
     public string UserName
     {
@@ -79,7 +83,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// Почта пользователя
+    ///     Почта пользователя
     /// </summary>
     public string Email
     {
@@ -90,7 +94,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// Хеш пароля
+    ///     Хеш пароля
     /// </summary>
     public string PasswordHash
     {
@@ -101,91 +105,91 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// JWT
+    ///     JWT
     /// </summary>
     public string? AccessToken { get; set; }
 
     /// <summary>
-    /// Токен для обновления JWT
+    ///     Токен для обновления JWT
     /// </summary>
     public string? RefreshToken { get; set; }
 
     /// <summary>
-    /// Время жизни Refresh Token
+    ///     Время жизни Refresh Token
     /// </summary>
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
     /// <summary>
-    /// Id фото в профиле юзера
+    ///     Id фото в профиле юзера
     /// </summary>
     public Guid? UserPhotoId { get; set; }
 
     /// <summary>
-    /// День рождения пользователя
+    ///     День рождения пользователя
     /// </summary>
     public DateTime? Birthday { get; set; }
 
     /// <summary>
-    /// Телефон пользователя
+    ///     Телефон пользователя
     /// </summary>
     public string? Phone { get; set; }
 
     /// <summary>
-    /// Подтвержден
+    ///     Подтвержден
     /// </summary>
     public bool IsConfirmed { get; set; }
 
     /// <summary>
-    /// Корзина
+    ///     Корзина
     /// </summary>
     public Bucket? Bucket { get; set; }
 
     /// <summary>
-    /// Подписка
+    ///     Подписка
     /// </summary>
     public Subscribe? Subscribe { get; set; }
 
     /// <summary>
-    /// Чаты
+    ///     Чаты
     /// </summary>
     public List<Chat> Chats { get; set; }
 
     /// <summary>
-    /// Сообщения, отправленные пользователем
+    ///     Сообщения, отправленные пользователем
     /// </summary>
     public List<Message> Messages { get; set; }
 
     /// <summary>
-    /// Понравившиеся плейлисты
+    ///     Понравившиеся плейлисты
     /// </summary>
     public List<Playlist>? Playlists { get; set; }
 
     /// <summary>
-    /// Таблица со связями {<see cref="User"/>, <see cref="Playlist"/>}
+    ///     Таблица со связями {<see cref="User" />, <see cref="Playlist" />}
     /// </summary>
     public List<PlaylistUser> PlaylistUsers { get; set; } = new();
 
     /// <summary>
-    /// Плейлисты, созданные этим автором
+    ///     Плейлисты, созданные этим автором
     /// </summary>
     public List<Playlist> AuthorPlaylists { get; set; }
 
     /// <summary>
-    /// Песни пользователя
+    ///     Песни пользователя
     /// </summary>
     public List<Song>? Songs { get; protected set; }
 
     /// <summary>
-    /// Роли
+    ///     Роли
     /// </summary>
     public List<Role> Roles { get; set; }
-    
+
     /// <inheritdoc />
     public DateTime CreatedAt { get; set; }
 
     /// <inheritdoc />
     public DateTime? UpdatedAt { get; set; }
-    
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
@@ -193,7 +197,7 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     public DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="id">Ид пользователя</param>
     /// <param name="login">Логин пользователя</param>
@@ -220,19 +224,19 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
             Bucket = new Bucket(),
             _email = email ?? string.Empty,
             Phone = phone,
-            _passwordHash = passwordHash ?? string.Empty, 
+            _passwordHash = passwordHash ?? string.Empty,
             Roles = roles ?? new List<Role>(),
         };
 
     /// <summary>
-    /// Добавить роль
+    ///     Добавить роль
     /// </summary>
     /// <param name="role">Роль</param>
     public void AddRole(Role role)
     {
         if (Roles is null)
             throw new NotIncludedException(nameof(Roles));
-        
+
         Roles.Add(role);
     }
 }

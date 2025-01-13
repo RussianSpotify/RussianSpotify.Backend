@@ -1,16 +1,20 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL;
 
 /// <summary>
-/// Контекст БД
+///     Контекст БД
 /// </summary>
 public class EfContext : DbContext, IDbContext
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public EfContext(DbContextOptions<EfContext> options)
         : base(options)
@@ -20,7 +24,7 @@ public class EfContext : DbContext, IDbContext
     public EfContext()
     {
     }
-    
+
     /// <inheritdoc />
     public DbSet<User> Users { get; set; }
 
@@ -34,7 +38,7 @@ public class EfContext : DbContext, IDbContext
     /// <inheritdoc />
     public DbSet<Playlist> Playlists { get; set; } = default!;
 
-    /// <inheritdoc /> 
+    /// <inheritdoc />
     public DbSet<Song> Songs { get; set; } = default!;
 
     /// <inheritdoc />
@@ -51,7 +55,7 @@ public class EfContext : DbContext, IDbContext
 
     /// <inheritdoc />
     public DbSet<Chat> Chats { get; set; }
-    
+
     /// <inheritdoc />
     public DbSet<Message> Messages { get; set; }
 
@@ -59,7 +63,7 @@ public class EfContext : DbContext, IDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         ConfigureGlobalFilters(builder);
-        
+
         builder.ApplyConfigurationsFromAssembly(typeof(Entry).Assembly);
     }
 

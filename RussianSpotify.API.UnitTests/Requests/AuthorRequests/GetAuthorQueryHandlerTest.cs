@@ -1,13 +1,17 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Requests.Author.GetAuthor;
 using RussianSpotify.Contracts.Requests.Author.GetAuthor;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.AuthorRequests;
 
 /// <summary>
-/// Тест для <see cref="GetAuthorQueryHandler"/>
+///     Тест для <see cref="GetAuthorQueryHandler" />
 /// </summary>
 public class GetAuthorQueryHandlerTest : UnitTestBase
 {
@@ -17,12 +21,12 @@ public class GetAuthorQueryHandlerTest : UnitTestBase
     public GetAuthorQueryHandlerTest()
     {
         _author = User.CreateForTest(login: "login");
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(_author));
     }
 
     /// <summary>
-    /// Обработчик должен вернуть автора по запросу 
+    ///     Обработчик должен вернуть автора по запросу
     /// </summary>
     [Fact]
     public async Task Handle_ShouldReturnAuthor()

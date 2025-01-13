@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Services.Filters.AuthorFilters;
 
-/// <inheritdoc/>
+/// <inheritdoc />
 public class AuthorNameFilter : IFilter<User>
 {
     public Task<IOrderedQueryable<User>> FilterAsync(IQueryable<User> queryable, string filterValue,

@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Models;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Subscription.SendEndSubscribeNotification;
 
 /// <summary>
-/// Обработчик для <see cref="SendEndSubscribeNotificationQuery"/>
+///     Обработчик для <see cref="SendEndSubscribeNotificationQuery" />
 /// </summary>
 public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndSubscribeNotificationQuery>
 {
@@ -18,7 +22,7 @@ public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndS
     private readonly IDateTimeProvider _dateTimeProvider;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="dateTimeProvider">Провайдер дат</param>

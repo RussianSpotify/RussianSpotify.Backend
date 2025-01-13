@@ -1,15 +1,19 @@
+#region
+
 using Newtonsoft.Json;
 using RussianSpotify.API.Shared.Domain.Abstractions;
+
+#endregion
 
 namespace RussianSpotify.API.Files.Domain.Entities;
 
 /// <summary>
-/// Файл
+///     Файл
 /// </summary>
 public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="userId">ИД пользователя</param>
     /// <param name="fileName">Название файла</param>
@@ -31,38 +35,38 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
     }
 
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public FileMetadata()
     {
     }
 
     /// <summary>
-    /// Адрес на файл в S3
+    ///     Адрес на файл в S3
     /// </summary>
     [JsonProperty(nameof(Address))]
     public string Address { get; protected set; } = default!;
 
     /// <summary>
-    /// Размер файла
+    ///     Размер файла
     /// </summary>
     [JsonProperty(nameof(Size))]
     public long Size { get; protected set; }
 
     /// <summary>
-    /// Название файла
+    ///     Название файла
     /// </summary>
     [JsonProperty(nameof(FileName))]
     public string? FileName { get; protected set; }
 
     /// <summary>
-    /// Тип файла
+    ///     Тип файла
     /// </summary>
     [JsonProperty(nameof(ContentType))]
     public string? ContentType { get; protected set; }
 
     /// <summary>
-    /// Id пользователя, который загрузил файл
+    ///     Id пользователя, который загрузил файл
     /// </summary>
     public Guid UserId { get; set; }
 
@@ -71,7 +75,7 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
 
     /// <inheritdoc />
     public DateTime? UpdatedAt { get; set; }
-    
+
     /// <inheritdoc />
     public bool IsDeleted { get; set; }
 
@@ -79,7 +83,7 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
     public DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Создать тестовую сущность
+    ///     Создать тестовую сущность
     /// </summary>
     /// <param name="id">ИД</param>
     /// <param name="userId">ИД пользователя</param>

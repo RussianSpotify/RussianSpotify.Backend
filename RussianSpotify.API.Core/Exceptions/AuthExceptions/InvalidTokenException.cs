@@ -1,10 +1,14 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 /// <summary>
-/// Если пришёл не валидный JWT или Refresh Token
+///     Если пришёл не валидный JWT или Refresh Token
 /// </summary>
 public class InvalidTokenException : ApplicationBaseException
 {

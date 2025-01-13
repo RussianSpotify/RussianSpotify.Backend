@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using RussianSpotify.API.Files.Data;
 using RussianSpotify.API.Files.Grpc;
@@ -15,6 +17,8 @@ using RussianSpotify.API.Shared.Options.Kestrel;
 using RussianSpotify.API.Shared.Services;
 using RussianSpotify.API.WEB.Configurations;
 using DbContextOptions = RussianSpotify.API.Shared.Data.PostgreSQL.Options.DbContextOptions;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

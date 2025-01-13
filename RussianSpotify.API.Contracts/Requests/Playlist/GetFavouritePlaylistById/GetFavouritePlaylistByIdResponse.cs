@@ -1,47 +1,47 @@
 namespace RussianSpotify.Contracts.Requests.Playlist.GetFavouritePlaylistById;
 
 /// <summary>
-/// Ответ на запрос любимого альбома/плейлиста
+///     Ответ на запрос любимого альбома/плейлиста
 /// </summary>
 public class GetFavouritePlaylistByIdResponse
 {
     /// <summary>
-    /// Ид сущности
+    ///     Ид сущности
     /// </summary>
     public Guid Id { get; set; }
-    
+
     /// <summary>
-    /// Название плейлиста/альбома
+    ///     Название плейлиста/альбома
     /// </summary>
     public string PlaylistName { get; set; } = default!;
 
     /// <summary>
-    /// ИД картинки
+    ///     ИД картинки
     /// </summary>
     public Guid? ImageId { get; set; }
 
     /// <summary>
-    /// Это альбом
+    ///     Это альбом
     /// </summary>
     public bool IsAlbum { get; set; }
 
     /// <summary>
-    /// Id автора
+    ///     Id автора
     /// </summary>
     public Guid AuthorId { get; set; }
 
     /// <summary>
-    /// Автор
+    ///     Автор
     /// </summary>
     public string? AuthorName { get; set; }
 
     /// <summary>
-    /// Дата релиза
+    ///     Дата релиза
     /// </summary>
     public DateTime? ReleaseDate { get; set; }
 
     /// <summary>
-    /// Находится ли альбом в избранном
+    ///     Находится ли альбом в избранном
     /// </summary>
     public bool IsInFavorite { get; set; }
 }

@@ -1,12 +1,12 @@
 namespace RussianSpotify.API.Files.Requests.File.GetFileUrl;
 
 /// <summary>
-/// Ответ на запрос о получении файла в виде URL
+///     Ответ на запрос о получении файла в виде URL
 /// </summary>
 public class GetFileUrlResponse
 {
     /// <summary>
-    /// Файл в виде URL
+    ///     Файл в виде URL
     /// </summary>
     public string FileUrl { get; set; }
 }

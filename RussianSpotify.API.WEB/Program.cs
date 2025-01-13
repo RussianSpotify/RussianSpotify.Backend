@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
@@ -15,6 +17,8 @@ using RussianSpotify.API.Shared.Options;
 using RussianSpotify.API.Shared.Services;
 using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.Worker;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

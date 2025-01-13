@@ -1,12 +1,12 @@
 namespace RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 
 /// <summary>
-/// Запрос на изменение альбома/плейлиста
+///     Запрос на изменение альбома/плейлиста
 /// </summary>
 public class PutPlaylistRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     public PutPlaylistRequest()
     {
@@ -16,24 +16,24 @@ public class PutPlaylistRequest
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         PlaylistName = request.PlaylistName;
         ImageId = request.ImageId;
         SongsIds = request.SongsIds;
     }
 
     /// <summary>
-    /// Название
+    ///     Название
     /// </summary>
     public string? PlaylistName { get; set; }
 
     /// <summary>
-    /// ИД фото
+    ///     ИД фото
     /// </summary>
     public Guid? ImageId { get; set; }
 
     /// <summary>
-    /// ИД песней
+    ///     ИД песней
     /// </summary>
     public List<Guid>? SongsIds { get; set; }
 }

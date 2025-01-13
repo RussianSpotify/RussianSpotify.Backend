@@ -1,11 +1,15 @@
+#region
+
 using RussianSpotify.API.Files.Domain.Entities;
 using RussianSpotify.API.Files.Models;
 using RussianSpotify.API.Shared.Exceptions;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Exceptions;
 
 /// <summary>
-/// Ошибка на ненайденую сущность
+///     Ошибка на ненайденую сущность
 /// </summary>
 public class EntityNotFoundException<TEntity> : ApplicationBaseException
     where TEntity : class
@@ -17,7 +21,7 @@ public class EntityNotFoundException<TEntity> : ApplicationBaseException
     };
 
     /// <summary>
-    /// Исключение, выбрасываемое, когда сущность не найдена.
+    ///     Исключение, выбрасываемое, когда сущность не найдена.
     /// </summary>
     /// <param name="message">Сообщение, описывающее ошибку или адрес сущности, которую не удалось найти.</param>
     public EntityNotFoundException(string message)
@@ -26,7 +30,7 @@ public class EntityNotFoundException<TEntity> : ApplicationBaseException
     }
 
     /// <summary>
-    /// Исключение, выбрасываемое, когда сущность с указанным идентификатором не найдена.
+    ///     Исключение, выбрасываемое, когда сущность с указанным идентификатором не найдена.
     /// </summary>
     /// <param name="id">Идентификатор сущности, которую не удалось найти.</param>
     public EntityNotFoundException(Guid id)

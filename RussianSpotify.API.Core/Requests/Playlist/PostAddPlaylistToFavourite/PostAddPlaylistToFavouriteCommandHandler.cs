@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Playlist.PostAddPlaylistToFavourite;
 
 /// <summary>
-/// Обработчик для <see cref="PostAddPlaylistToFavouriteCommand"/>
+///     Обработчик для <see cref="PostAddPlaylistToFavouriteCommand" />
 /// </summary>
 public class PostAddPlaylistToFavouriteCommandHandler : IRequestHandler<PostAddPlaylistToFavouriteCommand>
 {
@@ -16,7 +20,7 @@ public class PostAddPlaylistToFavouriteCommandHandler : IRequestHandler<PostAddP
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст пользователя</param>
@@ -33,13 +37,13 @@ public class PostAddPlaylistToFavouriteCommandHandler : IRequestHandler<PostAddP
             throw new ArgumentNullException(nameof(request));
 
         var currentUser = await _dbContext.Users
-            .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
+                              .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
+                          ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
         var playlistFromDb = await _dbContext.Playlists
-            .Include(x => x.Users)
-            .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
-            ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
+                                 .Include(x => x.Users)
+                                 .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
+                             ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
 
         playlistFromDb.Users!.Add(currentUser);
         await _dbContext.SaveChangesAsync(cancellationToken);

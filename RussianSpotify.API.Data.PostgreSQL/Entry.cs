@@ -1,16 +1,20 @@
+#region
+
 using Microsoft.Extensions.DependencyInjection;
 using RussianSpotift.API.Data.PostgreSQL.Seeder;
 using RussianSpotify.API.Core.Abstractions;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL;
 
 /// <summary>
-/// Входная точка
+///     Входная точка
 /// </summary>
 public static class Entry
 {
     /// <summary>
-    /// Регистрация зависимостей
+    ///     Регистрация зависимостей
     /// </summary>
     public static void AddPostgreSQLLayout(this IServiceCollection serviceCollection)
     {

@@ -1,9 +1,13 @@
+#region
+
 using RussianSpotify.API.Shared.Requests.File;
+
+#endregion
 
 namespace RussianSpotify.Contracts.Requests.Music.GetSongContentById;
 
 /// <summary>
-/// Вернуть стрим музыки
+///     Вернуть стрим музыки
 /// </summary>
 public class GetSongContentByIdResponse : BaseFileStreamResponse
 {

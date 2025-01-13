@@ -1,16 +1,19 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.DefaultSettings;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.Contracts.Requests.Author.GetAuthor;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Author.GetAuthor;
 
 /// <summary>
-/// Обработчик для <see cref="GetAuthorQuery"/>
+///     Обработчик для <see cref="GetAuthorQuery" />
 /// </summary>
 public class GetAuthorQueryHandler
     : IRequestHandler<GetAuthorQuery, GetAuthorResponse>
@@ -19,7 +22,7 @@ public class GetAuthorQueryHandler
     private readonly IRoleManager _roleManager;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="roleManager">Взаимодействует с ролью пользователя</param>
@@ -29,7 +32,7 @@ public class GetAuthorQueryHandler
         _roleManager = roleManager;
     }
 
-    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}"/>
+    /// <inheritdoc cref="IRequestHandler{TRequest,TResponse}" />
     public async Task<GetAuthorResponse> Handle(GetAuthorQuery request, CancellationToken cancellationToken)
     {
         if (request is null)
@@ -42,7 +45,7 @@ public class GetAuthorQueryHandler
             .ToListAsync(cancellationToken);
 
         User? author = null;
-        
+
         foreach (var userWithSameName in usersWithSameNames)
         {
             if (_roleManager.IsInRole(userWithSameName, Roles.AuthorRoleName))

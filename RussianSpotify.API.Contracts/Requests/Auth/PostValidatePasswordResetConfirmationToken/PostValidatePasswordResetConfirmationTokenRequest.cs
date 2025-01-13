@@ -1,12 +1,12 @@
 ﻿namespace RussianSpotify.Contracts.Requests.Auth.PostValidatePasswordResetConfirmationToken;
 
 /// <summary>
-/// Запрос на валидацию кода подтверждения для сброса пароля
+///     Запрос на валидацию кода подтверждения для сброса пароля
 /// </summary>
 public class PostValidatePasswordResetConfirmationTokenRequest
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">PostValidatePasswordResetConfirmationTokenRequest</param>
     public PostValidatePasswordResetConfirmationTokenRequest(PostValidatePasswordResetConfirmationTokenRequest request)
@@ -18,14 +18,14 @@ public class PostValidatePasswordResetConfirmationTokenRequest
     }
 
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public PostValidatePasswordResetConfirmationTokenRequest()
     {
     }
 
     /// <summary>
-    /// Код подтверждение для сброса пароля
+    ///     Код подтверждение для сброса пароля
     /// </summary>
     public string VerificationCodeFromUser { get; set; } = default!;
 }

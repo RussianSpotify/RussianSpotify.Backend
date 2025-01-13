@@ -1,7 +1,7 @@
 namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Провайдер даты
+///     Провайдер даты
 /// </summary>
 public interface IDateTimeProvider
 {

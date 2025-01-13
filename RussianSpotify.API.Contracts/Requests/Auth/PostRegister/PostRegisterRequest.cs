@@ -1,7 +1,7 @@
 namespace RussianSpotify.Contracts.Requests.Auth.PostRegister;
 
 /// <summary>
-/// Запрос на регистрацию
+///     Запрос на регистрацию
 /// </summary>
 public class PostRegisterRequest
 {
@@ -22,27 +22,27 @@ public class PostRegisterRequest
     }
 
     /// <summary>
-    /// Никнейм юзера
+    ///     Никнейм юзера
     /// </summary>
     public string UserName { get; set; } = default!;
 
     /// <summary>
-    /// Пароль
+    ///     Пароль
     /// </summary>
     public string Password { get; set; } = default!;
 
     /// <summary>
-    /// Подтверждение пароля
+    ///     Подтверждение пароля
     /// </summary>
     public string PasswordConfirm { get; set; } = default!;
 
     /// <summary>
-    /// Почта
+    ///     Почта
     /// </summary>
     public string Email { get; set; } = default!;
 
     /// <summary>
-    /// Роль пользователя
+    ///     Роль пользователя
     /// </summary>
     public string Role { get; set; } = default!;
 }

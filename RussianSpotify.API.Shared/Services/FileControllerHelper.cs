@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -5,12 +7,14 @@ using RussianSpotify.API.Files.Requests.File;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.Shared.Requests.File;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Services;
 
 public class FileControllerHelper : IFileControllerHelper
 {
     private const string DefaultContentDisposition = "attachment";
-    
+
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public FileControllerHelper(IHttpContextAccessor httpContextAccessor)
@@ -19,7 +23,7 @@ public class FileControllerHelper : IFileControllerHelper
     }
 
     /// <summary>
-    /// Отправить файл на фронт
+    ///     Отправить файл на фронт
     /// </summary>
     /// <param name="file">Файл</param>
     /// <param name="headers">Заголовки</param>
@@ -56,7 +60,7 @@ public class FileControllerHelper : IFileControllerHelper
     }
 
     /// <summary>
-    /// Отправить файл в байтах
+    ///     Отправить файл в байтах
     /// </summary>
     /// <param name="file">Файл</param>
     /// <returns>Файл в байтах</returns>
@@ -72,7 +76,7 @@ public class FileControllerHelper : IFileControllerHelper
     }
 
     /// <summary>
-    /// Загрузить все файлы
+    ///     Загрузить все файлы
     /// </summary>
     /// <param name="files">Файлы</param>
     /// <returns>Загруженные файлы</returns>

@@ -1,11 +1,15 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using RussianSpotify.API.Shared.Domain.Abstractions;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 
 /// <summary>
-/// Перехватчик для обновления
+///     Перехватчик для обновления
 /// </summary>
 public class UpdateInterceptor : SaveChangesInterceptor
 {
@@ -29,7 +33,7 @@ public class UpdateInterceptor : SaveChangesInterceptor
 
             entry.Entity.UpdatedAt = DateTime.UtcNow;
         }
-        
+
         return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }

@@ -1,42 +1,42 @@
 ﻿namespace RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 
 /// <summary>
-/// Песня для <see cref="GetSongsByFilterResponse"/>
+///     Песня для <see cref="GetSongsByFilterResponse" />
 /// </summary>
 public class GetSongsByFilterResponseItem
 {
     /// <summary>
-    /// ИД песни
+    ///     ИД песни
     /// </summary>
     public Guid SongId { get; set; }
 
     /// <summary>
-    /// Название музыки
+    ///     Название музыки
     /// </summary>
     public string? SongName { get; set; }
 
     /// <summary>
-    /// ИД картинки
+    ///     ИД картинки
     /// </summary>
     public Guid? ImageId { get; set; }
 
     /// <summary>
-    /// Длительность
+    ///     Длительность
     /// </summary>
     public double Duration { get; set; }
 
     /// <summary>
-    /// Категория
+    ///     Категория
     /// </summary>
     public string? Category { get; set; }
 
     /// <summary>
-    /// Авторы
+    ///     Авторы
     /// </summary>
     public List<GetSongByFilterResponseItemAuthor>? Authors { get; set; } = new();
 
     /// <summary>
-    /// Добавлена ли песня в избранное
+    ///     Добавлена ли песня в избранное
     /// </summary>
     public bool IsInFavorite { get; set; }
 }

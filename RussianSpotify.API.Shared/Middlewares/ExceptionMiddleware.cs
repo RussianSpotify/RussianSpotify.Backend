@@ -1,16 +1,20 @@
+#region
+
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using RussianSpotify.API.Shared.Exceptions;
 
+#endregion
+
 namespace RussianSpotify.API.Shared.Middlewares;
 
 /// <summary>
-/// Middleware, отвечающий за обработку ошибок
+///     Middleware, отвечающий за обработку ошибок
 /// </summary>
 public class ExceptionMiddleware : IMiddleware
 {
-    /// <inheritdoc cref="IMiddleware"/>
+    /// <inheritdoc cref="IMiddleware" />
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try

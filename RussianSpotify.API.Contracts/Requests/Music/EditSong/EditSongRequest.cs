@@ -1,26 +1,26 @@
 namespace RussianSpotify.Contracts.Requests.Music.EditSong;
 
 /// <summary>
-/// Запрос на обновление песни
+///     Запрос на обновление песни
 /// </summary>
 public class EditSongRequest
 {
     /// <summary>
-    /// Пустой конструктор
+    ///     Пустой конструктор
     /// </summary>
     public EditSongRequest()
     {
     }
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="request">Запрос</param>
     protected EditSongRequest(EditSongRequest request)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
-        
+
         SongId = request.SongId;
         SongName = request.SongName;
         Category = request.Category;
@@ -30,32 +30,32 @@ public class EditSongRequest
     }
 
     /// <summary>
-    /// Id песни
+    ///     Id песни
     /// </summary>
     public Guid SongId { get; set; }
 
     /// <summary>
-    /// Новое название песни
+    ///     Новое название песни
     /// </summary>
     public string? SongName { get; set; }
 
     /// <summary>
-    /// Навый номер категории
+    ///     Навый номер категории
     /// </summary>
     public int? Category { get; set; }
 
     /// <summary>
-    /// Новая продолжительность
+    ///     Новая продолжительность
     /// </summary>
     public double? Duration { get; set; }
 
     /// <summary>
-    /// Id новой картинки
+    ///     Id новой картинки
     /// </summary>
     public Guid? ImageId { get; set; }
 
     /// <summary>
-    /// Id нового файла
+    ///     Id нового файла
     /// </summary>
     public Guid? SongFileId { get; set; }
 }

@@ -1,14 +1,18 @@
-﻿using RussianSpotify.API.Core.Entities;
+﻿#region
+
+using RussianSpotify.API.Core.Entities;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Abstractions;
 
 /// <summary>
-/// Взаимодействует с ролью пользователя
+///     Взаимодействует с ролью пользователя
 /// </summary>
 public interface IRoleManager
 {
     /// <summary>
-    /// Проверяет принадлежит ли конкретный пользователь определённой роли
+    ///     Проверяет принадлежит ли конкретный пользователь определённой роли
     /// </summary>
     /// <param name="user">User</param>
     /// <param name="roleName">Имя роли</param>

@@ -1,3 +1,5 @@
+#region
+
 using System.Security.Claims;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,12 @@ using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.Contracts.Requests.Auth.PostRefreshToken;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Auth.PostRefreshToken;
 
 /// <summary>
-/// Обработчик для <see cref="PostRefreshTokenCommand"/>
+///     Обработчик для <see cref="PostRefreshTokenCommand" />
 /// </summary>
 public class PostRefreshTokenCommandHandler : IRequestHandler<PostRefreshTokenCommand, PostRefreshTokenResponse>
 {
@@ -20,7 +24,7 @@ public class PostRefreshTokenCommandHandler : IRequestHandler<PostRefreshTokenCo
     private readonly IDateTimeProvider _dateTimeProvider;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="jwtGenerator">Отвечает за генерацию JWT</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
@@ -36,30 +40,31 @@ public class PostRefreshTokenCommandHandler : IRequestHandler<PostRefreshTokenCo
     }
 
     /// <inheritdoc />
-    public async Task<PostRefreshTokenResponse> Handle(PostRefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<PostRefreshTokenResponse> Handle(PostRefreshTokenCommand request,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        
+
         var principal = _jwtGenerator
-            .GetPrincipalFromExpiredToken(request.AccessToken)
-            ?? throw new InvalidTokenException(AuthErrorMessages.InvalidAccessToken);
-        
+                            .GetPrincipalFromExpiredToken(request.AccessToken)
+                        ?? throw new InvalidTokenException(AuthErrorMessages.InvalidAccessToken);
+
         var userEmail = principal.Claims.First(claim => claim.Type == ClaimTypes.Email).Value;
 
         if (string.IsNullOrWhiteSpace(userEmail))
             throw new NotFoundException("Не найдена почта");
-        
+
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(x => x.Email == userEmail, cancellationToken)
-            ?? throw new EntityNotFoundException<User>(userEmail);
-        
+                       .FirstOrDefaultAsync(x => x.Email == userEmail, cancellationToken)
+                   ?? throw new EntityNotFoundException<User>(userEmail);
+
         if (user.RefreshToken != request.RefreshToken
             || user.RefreshTokenExpiryTime <= _dateTimeProvider.CurrentDate)
             throw new InvalidTokenException(AuthErrorMessages.InvalidRefreshToken);
-        
+
         var newAccessToken = _jwtGenerator.GenerateToken(principal.Claims.ToList());
         var newRefreshToken = _jwtGenerator.GenerateRefreshToken();
-        
+
         user.AccessToken = newAccessToken;
         user.RefreshToken = newRefreshToken;
         user.RefreshTokenExpiryTime = _dateTimeProvider.CurrentDate.AddDays(TokenConfiguration.RefreshTokenExpiryDays);

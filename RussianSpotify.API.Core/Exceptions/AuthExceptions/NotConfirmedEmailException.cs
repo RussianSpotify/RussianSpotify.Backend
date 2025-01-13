@@ -1,10 +1,14 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 /// <summary>
-/// Если у пользователя не подтвержён Email, но он хочет залогиниться
+///     Если у пользователя не подтвержён Email, но он хочет залогиниться
 /// </summary>
 public class NotConfirmedEmailException : ApplicationBaseException
 {

@@ -1,3 +1,5 @@
+#region
+
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -9,93 +11,95 @@ using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Grpc.Clients.FileClient;
-using RussianSpotify.API.Grpc.Clients.FileClient.Models;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.UnitTests.Requests.Builders;
+using File = RussianSpotify.API.Grpc.Clients.FileClient.Models.File;
+
+#endregion
 
 namespace RussianSpotify.API.UnitTests;
 
 /// <summary>
-/// Базовая конфигурация для тестов
+///     Базовая конфигурация для тестов
 /// </summary>
 public class UnitTestBase : IDisposable
 {
     private const string CurrentUserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
 
     /// <summary>
-    /// Тестовый код для редиса (в тестах использовать его)
+    ///     Тестовый код для редиса (в тестах использовать его)
     /// </summary>
     protected const string CodeForRedis = "111111111111";
-    
+
     /// <summary>
-    /// Пользователь для теста
+    ///     Пользователь для теста
     /// </summary>
-    protected User User { get; private set; }
-    
+    protected User User { get; }
+
     /// <summary>
-    /// Мок сервиса дат
+    ///     Мок сервиса дат
     /// </summary>
     protected Mock<IDateTimeProvider> DateTimeProvider { get; private set; }
-    
+
     /// <summary>
-    /// Мок сервиса токенов
+    ///     Мок сервиса токенов
     /// </summary>
     protected Mock<IJwtGenerator> JwtGenerator { get; }
-    
+
     /// <summary>
-    /// Мок контекст пользователя
+    ///     Мок контекст пользователя
     /// </summary>
     protected Mock<IUserContext> UserContext { get; }
-    
+
     /// <summary>
-    /// Мок сервиса по работе с подпиской
+    ///     Мок сервиса по работе с подпиской
     /// </summary>
     protected Mock<ISubscriptionHandler> SubscriptionService { get; }
-    
+
     /// <summary>
-    /// Мок Взаимодействия с ролью пользователя
+    ///     Мок Взаимодействия с ролью пользователя
     /// </summary>
     protected Mock<IRoleManager> RoleManager { get; }
-    
+
     /// <summary>
-    /// Мок S3 Service
+    ///     Мок S3 Service
     /// </summary>
     protected Mock<IFileServiceClient> S3Service { get; }
-    
+
     /// <summary>
-    /// Мок Сервис для работы с паролями
+    ///     Мок Сервис для работы с паролями
     /// </summary>
     protected Mock<IPasswordService> PasswordService { get; }
-    
+
     /// <summary>
-    /// Мок Фабрика токенов для почты
+    ///     Мок Фабрика токенов для почты
     /// </summary>
     protected Mock<ITokenFactory> TokenFactory { get; }
-    
+
     /// <summary>
-    /// Мок сервиса почты
+    ///     Мок сервиса почты
     /// </summary>
     protected Mock<IEmailSender> EmailSender { get; }
-    
+
     /// <summary>
-    /// Мок Кеша
+    ///     Мок Кеша
     /// </summary>
     protected Mock<IDistributedCache> Cache { get; }
-    
+
     /// <summary>
-    /// Мок Отвечает за клэймы юзера
+    ///     Мок Отвечает за клэймы юзера
     /// </summary>
-    protected Mock<IUserClaimsManager> UserClaimsManager { get; } 
-    
+    protected Mock<IUserClaimsManager> UserClaimsManager { get; }
+
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     protected UnitTestBase()
     {
         User = UserBuilder
             .CreateBuilder()
-            .SetRoles(new List<Role>()
+            .SetRoles(new List<Role>
             {
                 new()
                 {
@@ -110,7 +114,7 @@ public class UnitTestBase : IDisposable
 
         UserClaimsManager = new Mock<IUserClaimsManager>();
         UserClaimsManager.Setup(x => x.GetUserClaims(It.IsAny<User>()))
-            .Returns(new List<Claim>()
+            .Returns(new List<Claim>
             {
                 new(ClaimTypes.Role, "хуй")
             });
@@ -153,10 +157,10 @@ public class UnitTestBase : IDisposable
         S3Service.Setup(x => x.GetFileAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Grpc.Clients.FileClient.Models.File.CreateForTest());
+            .ReturnsAsync(File.CreateForTest());
         S3Service.Setup(x => x.GetFileMetadataAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Grpc.Clients.FileClient.Models.File.CreateForTest().Metadata);
-        
+            .ReturnsAsync(File.CreateForTest().Metadata);
+
         S3Service.Setup(x => x.IsImage(It.IsAny<string>()))
             .Returns(true);
         S3Service.Setup(
@@ -164,7 +168,7 @@ public class UnitTestBase : IDisposable
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()))
             .Returns(() => Task.CompletedTask);
-        
+
         DateTimeProvider = new Mock<IDateTimeProvider>();
         DateTimeProvider.Setup(x => x.CurrentDate)
             .Returns(new DateTime(2004, 12, 12));
@@ -175,9 +179,9 @@ public class UnitTestBase : IDisposable
         JwtGenerator.Setup(x => x.GenerateRefreshToken())
             .Returns(Guid.NewGuid().ToString);
         JwtGenerator.Setup(x => x.GetPrincipalFromExpiredToken(It.IsAny<string>()))
-            .Returns(new ClaimsPrincipal(identities: new List<ClaimsIdentity>()
+            .Returns(new ClaimsPrincipal(identities: new List<ClaimsIdentity>
             {
-                new(claims: new List<Claim>()
+                new(claims: new List<Claim>
                 {
                     new(ClaimTypes.Email, User.Email)
                 })
@@ -201,7 +205,7 @@ public class UnitTestBase : IDisposable
     }
 
     /// <summary>
-    /// Сконфигурировать сервис дат, на выдачу конкретной даты
+    ///     Сконфигурировать сервис дат, на выдачу конкретной даты
     /// </summary>
     /// <param name="dateTime">Дата</param>
     protected void SetUpCustomDate(DateTime dateTime)
@@ -212,7 +216,7 @@ public class UnitTestBase : IDisposable
     }
 
     /// <summary>
-    /// Создать EfContext в памяти
+    ///     Создать EfContext в памяти
     /// </summary>
     /// <param name="dbSeeder">Seed тестовых данных</param>
     /// <returns></returns>
@@ -231,14 +235,14 @@ public class UnitTestBase : IDisposable
     }
 
     /// <summary>
-    /// Добавить песни в бакет пользователя
+    ///     Добавить песни в бакет пользователя
     /// </summary>
     /// <param name="songs">Песни</param>
     protected void SetUserSongs(List<Song> songs)
         => User.Bucket!.Songs.AddRange(songs);
 
     /// <summary>
-    /// Сконфигурировать логгер
+    ///     Сконфигурировать логгер
     /// </summary>
     /// <typeparam name="THandler">Тип логгера</typeparam>
     /// <returns>Логгер</returns>
@@ -248,7 +252,7 @@ public class UnitTestBase : IDisposable
         var logger = new Mock<ILogger<THandler>>();
         return logger;
     }
-    
+
     /// <inheritdoc />
     public void Dispose() => GC.SuppressFinalize(this);
 }

@@ -1,12 +1,12 @@
 namespace RussianSpotify.API.Core.Exceptions;
 
 /// <summary>
-/// Обязательные поля
+///     Обязательные поля
 /// </summary>
 public class RequiredFieldException : ApplicationException
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="field">Поле</param>
     public RequiredFieldException(string field)

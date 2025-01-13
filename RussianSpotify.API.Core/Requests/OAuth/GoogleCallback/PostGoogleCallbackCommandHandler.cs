@@ -1,19 +1,23 @@
+#region
+
 using MediatR;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.Contracts.Requests.OAuth;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Requests.OAuth.GoogleCallback;
 
 /// <summary>
-/// Обработчик для <see cref="PostGoogleCallbackCommand"/>
+///     Обработчик для <see cref="PostGoogleCallbackCommand" />
 /// </summary>
-public class PostGoogleCallbackCommandHandler : UserUpsertBase, IRequestHandler<PostGoogleCallbackCommand, GetExternalLoginCallbackResponseBase>
+public class PostGoogleCallbackCommandHandler : UserUpsertBase,
+    IRequestHandler<PostGoogleCallbackCommand, GetExternalLoginCallbackResponseBase>
 {
     private readonly IGoogleService _googleService;
-    
-    /// <inheritdoc/>
+
+    /// <inheritdoc />
     public PostGoogleCallbackCommandHandler(
         IDbContext dbContext,
         IUserClaimsManager userClaimsManager,
@@ -24,8 +28,9 @@ public class PostGoogleCallbackCommandHandler : UserUpsertBase, IRequestHandler<
         _googleService = googleService;
     }
 
-    /// <inheritdoc/> 
-    public async Task<GetExternalLoginCallbackResponseBase> Handle(PostGoogleCallbackCommand request, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<GetExternalLoginCallbackResponseBase> Handle(PostGoogleCallbackCommand request,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 

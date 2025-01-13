@@ -16,12 +16,12 @@ public class PostRefreshTokenRequest
     }
 
     /// <summary>
-    /// JWT
+    ///     JWT
     /// </summary>
     public string AccessToken { get; set; } = default!;
 
     /// <summary>
-    /// Токен для обновления JWT
+    ///     Токен для обновления JWT
     /// </summary>
     public string RefreshToken { get; set; } = default!;
 }

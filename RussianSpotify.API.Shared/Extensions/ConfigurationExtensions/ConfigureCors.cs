@@ -1,15 +1,19 @@
+#region
+
 using Microsoft.Extensions.DependencyInjection;
 using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions.CorsPolicy;
+
+#endregion
 
 namespace RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
 
 /// <summary>
-/// Конфигурация Cors
+///     Конфигурация Cors
 /// </summary>
 public static class ConfigureCors
 {
     /// <summary>
-    /// Добавить политики
+    ///     Добавить политики
     /// </summary>
     /// <param name="serviceCollection">Сервисы</param>
     public static void AddCustomCors(this IServiceCollection serviceCollection)

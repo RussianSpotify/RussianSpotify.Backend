@@ -1,22 +1,22 @@
 namespace RussianSpotify.API.Core.Enums;
 
 /// <summary>
-/// Привилегии
+///     Привилегии
 /// </summary>
 public enum Privileges
 {
     /// <summary>
-    /// Слушать музыку
+    ///     Слушать музыку
     /// </summary>
     ListenMusic = 1,
 
     /// <summary>
-    /// Выпускать музыку
+    ///     Выпускать музыку
     /// </summary>
     DeployMusic = 2,
 
     /// <summary>
-    /// Админ
+    ///     Админ
     /// </summary>
     EditPages = 3,
 }

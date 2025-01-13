@@ -1,3 +1,5 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
@@ -6,25 +8,27 @@ using RussianSpotify.Contracts.Enums;
 using RussianSpotify.Contracts.Requests.Music.AddSong;
 using Xunit;
 
+#endregion
+
 namespace RussianSpotify.API.UnitTests.Requests.SongRequests;
 
 /// <summary>
-/// Тест для <see cref="PostAddSongCommandHandler"/>
+///     Тест для <see cref="PostAddSongCommandHandler" />
 /// </summary>
 public class PostAddSongCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
-    
+
     public PostAddSongCommandHandlerTest()
     {
         var category = Category.CreateForTest(
             categoryType: CategoryType.Rap);
-        
+
         _dbContext = CreateInMemory(x => x.AddRange(User, category));
     }
 
     /// <summary>
-    /// Обработчик должен создать песню
+    ///     Обработчик должен создать песню
     /// </summary>
     [Fact]
     public async Task Handle_ShouldCreateSong()

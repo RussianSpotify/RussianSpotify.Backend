@@ -1,7 +1,11 @@
+#region
+
 using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotify.API.ChatMessageSaver.Configurations;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Shared.Options;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();

@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -8,10 +10,12 @@ using RussianSpotify.API.Grpc.Clients.FileClient;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.EditSong;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Music.PatchEditSong;
 
 /// <summary>
-/// Обработчик команды на обновление данных о песне
+///     Обработчик команды на обновление данных о песне
 /// </summary>
 public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand, EditSongResponse>
 {
@@ -20,7 +24,7 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
     private readonly IFileServiceClient _fileServiceClient;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="fileHelper">Сервис для работы с файлами</param>
@@ -34,7 +38,7 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         _fileServiceClient = fileServiceClient;
     }
 
-    /// <inheritdoc/> 
+    /// <inheritdoc />
     public async Task<EditSongResponse> Handle(PatchEditSongCommand request, CancellationToken cancellationToken)
     {
         // Достаем песню из бд
@@ -102,7 +106,7 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
         {
             // Достаем файл из бд
             var file = await _fileServiceClient.GetFileMetadataAsync(request.SongFileId.Value, cancellationToken);
-            
+
             // Проверяем, является ли файл аудио и присвоение
             if (!_fileServiceClient.IsAudio(file.ContentType))
                 throw new SongBadFileException("File's content type is not Audio");

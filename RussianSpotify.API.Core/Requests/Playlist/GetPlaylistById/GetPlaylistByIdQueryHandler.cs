@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
@@ -5,10 +7,12 @@ using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.GetFavouritePlaylistById;
 
+#endregion
+
 namespace RussianSpotify.API.Core.Requests.Playlist.GetPlaylistById;
 
 /// <summary>
-/// Обработчик для <see cref="GetPlaylistByIdQuery"/>
+///     Обработчик для <see cref="GetPlaylistByIdQuery" />
 /// </summary>
 public class GetPlaylistByIdQueryHandler
     : IRequestHandler<GetPlaylistByIdQuery, GetFavouritePlaylistByIdResponse>
@@ -17,7 +21,7 @@ public class GetPlaylistByIdQueryHandler
     private readonly IUserContext _userContext;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="userContext">Контекст юзера</param>
@@ -36,18 +40,18 @@ public class GetPlaylistByIdQueryHandler
             throw new ArgumentNullException(nameof(request));
 
         return await _dbContext.Playlists
-           .Select(x => new GetFavouritePlaylistByIdResponse
-           {
-               Id = x.Id,
-               PlaylistName = x.PlaylistName,
-               ImageId = x.ImageFileId,
-               IsAlbum = x.IsAlbum,
-               AuthorId = x.AuthorId,
-               AuthorName = x.Author!.UserName,
-               ReleaseDate = x.ReleaseDate,
-               IsInFavorite = x.Users!.Any(y => y.Id == _userContext.CurrentUserId)
-           })
-           .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
-            ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
+                   .Select(x => new GetFavouritePlaylistByIdResponse
+                   {
+                       Id = x.Id,
+                       PlaylistName = x.PlaylistName,
+                       ImageId = x.ImageFileId,
+                       IsAlbum = x.IsAlbum,
+                       AuthorId = x.AuthorId,
+                       AuthorName = x.Author!.UserName,
+                       ReleaseDate = x.ReleaseDate,
+                       IsInFavorite = x.Users!.Any(y => y.Id == _userContext.CurrentUserId)
+                   })
+                   .FirstOrDefaultAsync(x => x.Id == request.PlaylistId, cancellationToken)
+               ?? throw new EntityNotFoundException<Entities.Playlist>(request.PlaylistId);
     }
 }

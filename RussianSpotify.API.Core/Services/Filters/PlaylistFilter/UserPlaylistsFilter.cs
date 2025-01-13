@@ -1,10 +1,14 @@
+#region
+
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Services.Filters.PlaylistFilter;
 
 /// <summary>
-/// Фильтр для получения плейлистов пользователя, чтобы добавить туда песню
+///     Фильтр для получения плейлистов пользователя, чтобы добавить туда песню
 /// </summary>
 public class UserPlaylistsFilter : IFilter<Playlist>
 {

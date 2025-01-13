@@ -1,12 +1,12 @@
 ﻿namespace RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 
 /// <summary>
-/// Отфильтрованные песни
+///     Отфильтрованные песни
 /// </summary>
 public class GetSongsByFilterResponse
 {
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="entities">Сущности</param>
     /// <param name="totalCount">Общее кол-во</param>
@@ -17,12 +17,12 @@ public class GetSongsByFilterResponse
     }
 
     /// <summary>
-    /// Отфильтрованные песни
+    ///     Отфильтрованные песни
     /// </summary>
     public List<GetSongsByFilterResponseItem> Entities { get; }
 
     /// <summary>
-    /// Общее кол-во подобных треков
+    ///     Общее кол-во подобных треков
     /// </summary>
     public int TotalCount { get; set; }
 }

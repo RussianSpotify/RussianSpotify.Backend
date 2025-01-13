@@ -1,13 +1,17 @@
+#region
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Shared.Data.PostgreSQL.EntityTypeConfiguration;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 
+#endregion
+
 namespace RussianSpotift.API.Data.PostgreSQL.Confugurations;
 
 /// <summary>
-/// Конфигурация для <see cref="Song"/>
+///     Конфигурация для <see cref="Song" />
 /// </summary>
 public class SongConfiguration : EntityTypeConfigurationBase<Song>
 {
@@ -21,11 +25,11 @@ public class SongConfiguration : EntityTypeConfigurationBase<Song>
         builder.Property(p => p.Duration)
             .HasComment("Длительность")
             .IsRequired();
-        
+
         builder.Property(x => x.PlaysNumber)
             .HasComment("Кол-во прослушиваний")
             .HasDefaultValue(0);
-        
+
         builder.ConfigureSoftDeletableEntity();
         builder.ConfigureTimeTrackableEntity();
 

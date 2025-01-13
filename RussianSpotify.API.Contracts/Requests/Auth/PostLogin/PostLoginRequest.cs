@@ -1,7 +1,7 @@
 namespace RussianSpotify.Contracts.Requests.Auth.PostLogin;
 
 /// <summary>
-/// Запрос на логин для PostLogin
+///     Запрос на логин для PostLogin
 /// </summary>
 public class PostLoginRequest
 {
@@ -19,12 +19,12 @@ public class PostLoginRequest
     }
 
     /// <summary>
-    /// Почта пользователя
+    ///     Почта пользователя
     /// </summary>
     public string Email { get; set; } = default!;
 
     /// <summary>
-    /// Пароль
+    ///     Пароль
     /// </summary>
     public string Password { get; set; } = default!;
 }

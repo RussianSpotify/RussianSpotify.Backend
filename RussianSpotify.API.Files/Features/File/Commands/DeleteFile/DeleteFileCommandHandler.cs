@@ -1,3 +1,5 @@
+#region
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Minio.Exceptions;
@@ -9,10 +11,12 @@ using RussianSpotify.API.Files.Interfaces;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.API.Shared.Interfaces;
 
+#endregion
+
 namespace RussianSpotify.API.Files.Features.File.Commands.DeleteFile;
 
 /// <summary>
-/// Обработчик команды <see cref="DeleteFileCommand"/>
+///     Обработчик команды <see cref="DeleteFileCommand" />
 /// </summary>
 public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand>
 {
@@ -21,7 +25,7 @@ public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand>
     private readonly IFileHelper _fileHelper;
 
     /// <summary>
-    /// Конструктор
+    ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <param name="fileHelper">Сервис-помощник для работы с файлами в S3</param>
@@ -36,12 +40,12 @@ public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand>
         _fileHelper = fileHelper;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task Handle(DeleteFileCommand request, CancellationToken cancellationToken)
     {
         var fileFromDb = await _dbContext.FilesMetadata
-            .FirstOrDefaultAsync(i => i.Id == request.FileId, cancellationToken)
-            ?? throw new EntityNotFoundException<FileMetadata>(request.FileId);
+                             .FirstOrDefaultAsync(i => i.Id == request.FileId, cancellationToken)
+                         ?? throw new EntityNotFoundException<FileMetadata>(request.FileId);
 
         if (!_userContext.CurrentUserId.HasValue)
             throw new ForbiddenException();

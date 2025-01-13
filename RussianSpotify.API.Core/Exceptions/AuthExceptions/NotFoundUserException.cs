@@ -1,10 +1,14 @@
+#region
+
 using System.Net;
 using RussianSpotify.API.Shared.Exceptions;
+
+#endregion
 
 namespace RussianSpotify.API.Core.Exceptions.AuthExceptions;
 
 /// <summary>
-/// Исключение выбрасывается при логине пользователя, если не удалось найти пользователя с нужной почтой
+///     Исключение выбрасывается при логине пользователя, если не удалось найти пользователя с нужной почтой
 /// </summary>
 public class NotFoundUserException : ApplicationBaseException
 {
