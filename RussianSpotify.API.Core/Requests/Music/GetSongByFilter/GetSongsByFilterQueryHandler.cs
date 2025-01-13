@@ -24,6 +24,7 @@ public class GetSongsByFilterQueryHandler
     /// </summary>
     /// <param name="filterHandler">Фильтр хэндлер</param>
     /// <param name="dbContext">Контекст БД</param>
+    /// <param name="userContext">Контекст пользователя</param>
     public GetSongsByFilterQueryHandler(IFilterHandler filterHandler, IDbContext dbContext, IUserContext userContext)
     {
         _filterHandler = filterHandler;

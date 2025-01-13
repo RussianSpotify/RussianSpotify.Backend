@@ -82,7 +82,6 @@ public class FileMetadata : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="size">Размер</param>
     /// <param name="fileName">Название файла</param>
     /// <param name="contentType">Тип</param>
-    /// <param name="fileRelation">К чему относится файл</param>
     /// <returns>Тестовая сущность</returns>
     [Obsolete("Только для тестов")]
     public static FileMetadata CreateForTest(

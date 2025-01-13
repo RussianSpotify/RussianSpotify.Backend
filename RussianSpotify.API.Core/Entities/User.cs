@@ -198,7 +198,6 @@ public class User : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="id">Ид пользователя</param>
     /// <param name="login">Логин пользователя</param>
     /// <param name="birthday">Дата рождения</param>
-    /// <param name="userPhoto">Фото пользователя</param>
     /// <param name="email">E-mail пользователя</param>
     /// <param name="phone">Телефон</param>
     /// <param name="passwordHash">Хеш пароля</param>

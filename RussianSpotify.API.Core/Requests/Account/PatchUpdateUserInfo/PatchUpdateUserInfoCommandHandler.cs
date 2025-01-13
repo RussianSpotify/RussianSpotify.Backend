@@ -35,7 +35,6 @@ public class PatchUpdateUserInfoCommandHandler
     /// <param name="fileServiceClient">Сервис-помощник для работы с файлами</param>
     /// <param name="dbContext">Интерфейс контекста бд</param>
     /// <param name="passwordChanger">Сервис по смене пароля</param>
-    /// <param name="fileHelper">Помощник при работе с файлами</param>
     public PatchUpdateUserInfoCommandHandler(
         IUserContext userContext,
         IUserClaimsManager claimsManager,

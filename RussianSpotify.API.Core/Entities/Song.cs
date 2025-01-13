@@ -95,9 +95,9 @@ public class Song : BaseEntity, ISoftDeletable, ITimeTrackable
     /// <param name="duration">Длительность</param>
     /// <param name="playsNumber">Кол-во прослушиваний</param>
     /// <param name="category">Категория</param>
-    /// <param name="image">Фото</param>
+    /// <param name="imageFileId">Идентификатор фото</param>
     /// <param name="authors">Авторы</param>
-    /// <param name="files">Файлы (тут музыка и картинка)</param>
+    /// <param name="songFileId">Идентификатор файла песни</param>
     /// <returns>Тестовая сущность</returns>
     [Obsolete("Только для тестов")]
     public static Song CreateForTest(
