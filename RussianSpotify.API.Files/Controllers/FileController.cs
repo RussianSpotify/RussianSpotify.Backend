@@ -9,6 +9,7 @@ using RussianSpotify.API.Files.Features.File.Queries.GetImageById;
 using RussianSpotify.API.Files.Requests.File.DeleteFile;
 using RussianSpotify.API.Files.Requests.File.GetFileUrl;
 using RussianSpotify.API.Files.Requests.File.UploadFile;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.Shared.Services;
 
 namespace RussianSpotify.API.Files.Controllers;
@@ -21,9 +22,9 @@ namespace RussianSpotify.API.Files.Controllers;
 [Route("api/[controller]")]
 public class FileController : ControllerBase
 {
-    private readonly FileControllerHelper _fileControllerHelper;
+    private readonly IFileControllerHelper _fileControllerHelper;
 
-    public FileController(FileControllerHelper fileControllerHelper)
+    public FileController(IFileControllerHelper fileControllerHelper)
     {
         _fileControllerHelper = fileControllerHelper;
     }

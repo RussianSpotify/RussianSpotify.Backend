@@ -99,7 +99,7 @@ services:
       MinioOptions__ServiceUrl: "minio:9000"
       MinioOptions__BucketName: "russian-spotify"
       MinioOptions__TempBucketName: "russian-spotify-temp"
-      ConnectionStrings__RedisConnection: "redis:6379"
+      RedisOptions__ConnectionString: "redis:6379"
       JWT__ValidAudience: "176.57.208.209"
       JWT__ValidIssuer: "176.57.208.209"
       JWT__Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"

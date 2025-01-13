@@ -42,6 +42,10 @@ builder.Services.AddSignalR();
 var grpcOptions = builder.Configuration.GetSection(nameof(GrpcOptions)).Get<GrpcOptions>()!;
 builder.Services.AddGrpcServices(grpcOptions);
 
+// Redis
+var redisOptions = builder.Configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()!;
+builder.Services.AddRedis(redisOptions);
+
 // RabbitMQ
 builder.Services.AddRabbitMq(configuration.GetSection("RabbitMq").Get<RabbitMqOptions>()!);
 

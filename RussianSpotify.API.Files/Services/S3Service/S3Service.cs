@@ -49,21 +49,20 @@ public class S3Service: IS3Service
             if (fileContent.Content == null)
                 throw new ArgumentNullException(nameof(fileContent.Content));
 
-            var tempMinioFileLocation = ContentKey(fileContent.FileName, isTemporary: true);
-            var permanentMinioFileLocation = ContentKey(fileContent.FileName, isTemporary: false);
+            var minioFileLocation = ContentKey(fileContent.FileName);
 
             await BucketExistAsync(_minioOptions.TempBucketName, cancellationToken);
         
             var putArgs = new PutObjectArgs()
                 .WithBucket(_minioOptions.TempBucketName)
-                .WithObject(tempMinioFileLocation)
+                .WithObject(minioFileLocation)
                 .WithStreamData(fileContent.Content)
                 .WithObjectSize(fileContent.Content.Length);
 
             await _minioClient.PutObjectAsync(putArgs, cancellationToken);
 
-            var metadataKey = $"metadata:{tempMinioFileLocation}";
-
+            // Сохранение метаданных в Redis
+            var metadataKey = $"metadata:{minioFileLocation}";
             var metadata = new FileMetadataDto
             {
                 FileName = fileContent.FileName,
@@ -74,12 +73,14 @@ public class S3Service: IS3Service
             };
 
             var metadataJson = JsonConvert.SerializeObject(metadata);
+
             await _redis.SetStringAsync(metadataKey, metadataJson, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
             }, cancellationToken);
 
-            var counterKey = $"counter:{tempMinioFileLocation}";
+            // Обработка счетчика загрузок
+            var counterKey = $"counter:{minioFileLocation}";
             var counter = await _redis.GetStringAsync(counterKey, cancellationToken);
             var newCounter = counter == null ? 1 : int.Parse(counter) + 1;
 
@@ -88,14 +89,24 @@ public class S3Service: IS3Service
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
             }, cancellationToken);
 
+            // Перенос в постоянное хранилище
             if (newCounter == 2)
             {
-                await MoveToPermanentStorageAsync(tempMinioFileLocation, permanentMinioFileLocation, cancellationToken);
-                await _redis.RemoveAsync(metadataKey, cancellationToken);
-                await _redis.RemoveAsync(counterKey, cancellationToken);
+                // Проверка успешного сохранения метаданных
+                var savedMetadata = await _redis.GetStringAsync(metadataKey, cancellationToken);
+                if (!string.IsNullOrEmpty(savedMetadata))
+                {
+                    await MoveToPermanentStorageAsync(minioFileLocation, cancellationToken);
+                    await _redis.RemoveAsync(metadataKey, cancellationToken);
+                    await _redis.RemoveAsync(counterKey, cancellationToken);
+                }
+                else
+                {
+                    _logger.LogError($"Failed to retrieve metadata for file {minioFileLocation}. Transfer to permanent storage skipped.");
+                }
             }
 
-            return tempMinioFileLocation;
+            return minioFileLocation;
         }
         catch (Exception e)
         {
@@ -104,21 +115,18 @@ public class S3Service: IS3Service
         }
     }
 
-    private async Task MoveToPermanentStorageAsync(string tempLocation, string permanentLocation, CancellationToken cancellationToken)
+    private async Task MoveToPermanentStorageAsync(string minioFileLocation, CancellationToken cancellationToken)
     {
-        // Проверяем, существует ли постоянный бакет
         await BucketExistAsync(_minioOptions.BucketName, cancellationToken);
 
-        // Скачиваем объект из временного бакета
         var getArgs = new GetObjectArgs()
             .WithBucket(_minioOptions.TempBucketName)
-            .WithObject(tempLocation)
+            .WithObject(minioFileLocation)
             .WithCallbackStream(async (stream, ct) =>
             {
-                // Загружаем объект в постоянный бакет
                 var putArgs = new PutObjectArgs()
                     .WithBucket(_minioOptions.BucketName)
-                    .WithObject(permanentLocation)
+                    .WithObject(minioFileLocation)
                     .WithStreamData(stream)
                     .WithObjectSize(stream.Length);
 
@@ -129,7 +137,7 @@ public class S3Service: IS3Service
 
         await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
             .WithBucket(_minioOptions.TempBucketName)
-            .WithObject(tempLocation), cancellationToken);
+            .WithObject(minioFileLocation), cancellationToken);
     }
 
     /// <inheritdoc />
@@ -234,12 +242,12 @@ public class S3Service: IS3Service
             return;
         
         var mbArgs = new MakeBucketArgs()
-            .WithBucket(_minioOptions.BucketName);
+            .WithBucket(bucket);
         
         await _minioClient
             .MakeBucketAsync(mbArgs, cancellationToken).ConfigureAwait(false);
     }
 
-    private string ContentKey(string fileName, bool isTemporary)
-        => isTemporary ? $"temp/{fileName}" : $"permanent/{fileName}";
+    private static string ContentKey(string fileName)
+        => $"{Guid.NewGuid()}/{fileName}";
 }

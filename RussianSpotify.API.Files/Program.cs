@@ -10,6 +10,7 @@ using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
 using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions.CorsPolicy;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.Shared.Middlewares;
+using RussianSpotify.API.Shared.Options;
 using RussianSpotify.API.Shared.Options.Kestrel;
 using RussianSpotify.API.Shared.Services;
 using RussianSpotify.API.WEB.Configurations;
@@ -29,22 +30,23 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGenWithAuth(typeof(Program).Assembly);
 }
 
-builder.Services.AddAuthenticationWithJwtAndExternalServices(builder.Configuration);
+builder.Services.AddAuthenticationWithJwtAndExternalServices(configuration);
 
 builder.Services
-    .AddDataContext(builder.Configuration.GetSection(nameof(DbContextOptions)).Get<DbContextOptions>()!);
+    .AddDataContext(configuration.GetSection(nameof(DbContextOptions)).Get<DbContextOptions>()!);
 
 builder.Services
     .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
-builder.Services.AddRedis(configuration);
+builder.Services.AddRedis(configuration.GetSection(nameof(RedisOptions)).Get<RedisOptions>()!);
 
 builder.Services.AddResponseCompression();
 builder.Services.AddCustomLogging();
 builder.Services.AddHttpContextAccessor();
 builder.Services
     .AddScoped<IUserContext, UserContext>()
-    .AddScoped<IFileHelper, FileHelper>();
+    .AddScoped<IFileHelper, FileHelper>()
+    .AddScoped<IFileControllerHelper, FileControllerHelper>();
 
 // Добавлен middleware для обработки исключений
 builder.Services
@@ -52,7 +54,7 @@ builder.Services
     .AddSingleton<UpdateInterceptor>()
     .AddSingleton<SoftDeleteInterceptor>();
 
-var kestrelOptions = builder.Configuration.GetSection(nameof(KestrelOptions)).Get<KestrelOptions>()!;
+var kestrelOptions = configuration.GetSection(nameof(KestrelOptions)).Get<KestrelOptions>()!;
 builder.WebHost.UseKestrel(options =>
 {
     var restOptions = kestrelOptions.Options.First(x => x.EndpointType == EndpointType.Rest);
@@ -64,7 +66,7 @@ builder.WebHost.UseKestrel(options =>
 
 builder.Services.AddGrpc();
 
-builder.Services.AddS3Storage(builder.Configuration.GetSection("MinioS3").Get<MinioOptions>()!);
+builder.Services.AddS3Storage(configuration.GetSection("MinioS3").Get<MinioOptions>()!);
 
 var app = builder.Build();
 
