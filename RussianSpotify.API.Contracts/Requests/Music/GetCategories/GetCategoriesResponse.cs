@@ -17,5 +17,5 @@ public class GetCategoriesResponse
     /// <summary>
     ///     Категории
     /// </summary>
-    public List<GetCategoriesResponseItem> Entities { get; set; } = new();
+    public List<GetCategoriesResponseItem> Entities { get; set; }
 }

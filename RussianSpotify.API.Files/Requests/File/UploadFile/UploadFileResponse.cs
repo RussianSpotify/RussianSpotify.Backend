@@ -17,7 +17,7 @@ public class UploadFileResponse
     /// </summary>
     /// <param name="files">Коллекция объектов типа <see cref="UploadFileResponseItem" />, представляющих загруженные файлы.</param>
     public UploadFileResponse(IEnumerable<UploadFileResponseItem> files)
-        => FileNameToIds = files?.ToList() ?? new List<UploadFileResponseItem>();
+        => FileNameToIds = files.ToList();
 
     /// <summary>
     ///     Список файлов, представленных объектами <see cref="UploadFileResponseItem" /> с соответствующими ID.

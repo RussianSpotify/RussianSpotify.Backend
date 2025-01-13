@@ -1,3 +1,5 @@
+using RussianSpotify.API.Shared.Requests.File;
+
 namespace RussianSpotify.API.Files.Requests.File.GetImageById;
 
 /// <summary>

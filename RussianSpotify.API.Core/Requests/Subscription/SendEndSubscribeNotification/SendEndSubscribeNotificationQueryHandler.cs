@@ -63,7 +63,7 @@ public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndS
 
         var placeholders = new Dictionary<string, string>
         {
-            ["{username}"] = subscribe.User.UserName ?? subscribe.User.Email!,
+            ["{username}"] = subscribe.User.UserName,
         };
 
         var emailNotification = await EmailTemplateHelper
@@ -71,7 +71,7 @@ public class SendEndSubscribeNotificationQueryHandler : IRequestHandler<SendEndS
                 placeholders: placeholders,
                 template: Templates.SendEndSubscribeNotification,
                 head: "Истекает срок подписки",
-                emailTo: subscribe.User.Email!,
+                emailTo: subscribe.User.Email,
                 cancellationToken: cancellationToken);
 
         await _dbContext.EmailNotifications.AddAsync(emailNotification, cancellationToken);

@@ -47,7 +47,7 @@ public class PostAddSongAuthorCommandHandlerTest : UnitTestBase
     {
         var request = new AddSongAuthorRequest
         {
-            AuthorEmail = _user.Email!,
+            AuthorEmail = _user.Email,
             SongId = _song.Id,
         };
 

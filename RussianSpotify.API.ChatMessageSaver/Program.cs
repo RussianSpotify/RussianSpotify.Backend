@@ -13,7 +13,7 @@ builder.Configuration.AddEnvironmentVariables();
 // RabbitMQ
 builder.Services.AddRabbitMq(builder.Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>()!);
 
-builder.Services.AddPostgreSQLLayout();
+builder.Services.AddPostgreSqlLayout();
 builder.Services.AddCustomDbContext(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 builder.Services

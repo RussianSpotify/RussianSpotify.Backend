@@ -95,7 +95,7 @@ public class HttpClientBase
         try
         {
             var details = await ExtractJsonDataAsync<ProblemDetailsResponse>(responseMessage).ConfigureAwait(false);
-            var message = details?.Title ?? details?.Detail ?? "Ошибка при обработке запроса";
+            var message = details.Title ?? details.Detail ?? "Ошибка при обработке запроса";
             throw new ApplicationException(message);
         }
         catch (JsonException)
@@ -107,7 +107,7 @@ public class HttpClientBase
 
     private async Task<TResponse> ExtractJsonDataAsync<TResponse>(HttpResponseMessage responseMessage)
     {
-        if (responseMessage?.Content is null)
+        if (responseMessage.Content is null)
             return default!;
 
         var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);

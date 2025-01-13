@@ -15,7 +15,6 @@ using RussianSpotify.API.Shared.Middlewares;
 using RussianSpotify.API.Shared.Options;
 using RussianSpotify.API.Shared.Options.Kestrel;
 using RussianSpotify.API.Shared.Services;
-using RussianSpotify.API.WEB.Configurations;
 using DbContextOptions = RussianSpotify.API.Shared.Data.PostgreSQL.Options.DbContextOptions;
 
 #endregion

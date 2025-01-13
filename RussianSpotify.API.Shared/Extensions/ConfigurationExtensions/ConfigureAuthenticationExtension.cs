@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 #endregion
 
-namespace RussianSpotify.API.WEB.Configurations;
+namespace RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
 
 /// <summary>
 ///     Конфигурация аутентификации

@@ -16,7 +16,7 @@ public static class Entry
     /// <summary>
     ///     Регистрация зависимостей
     /// </summary>
-    public static void AddPostgreSQLLayout(this IServiceCollection serviceCollection)
+    public static void AddPostgreSqlLayout(this IServiceCollection serviceCollection)
     {
         if (serviceCollection is null)
             throw new ArgumentNullException(nameof(serviceCollection));

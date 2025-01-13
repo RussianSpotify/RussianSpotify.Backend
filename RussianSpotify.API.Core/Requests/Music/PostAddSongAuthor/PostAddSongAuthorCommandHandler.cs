@@ -57,7 +57,7 @@ public class PostAddSongAuthorCommandHandler : IRequestHandler<PostAddSongAuthor
 
         // Достаем нового автора из бд
         var userFromDb = await _dbContext.Users
-                             .FirstOrDefaultAsync(i => i.Email!.Equals(request.AuthorEmail), cancellationToken)
+                             .FirstOrDefaultAsync(i => i.Email.Equals(request.AuthorEmail), cancellationToken)
                          ?? throw new EntityNotFoundException<User>(request.AuthorEmail);
 
         // Проверка, является ли добавляемый пользовател автором
@@ -76,7 +76,7 @@ public class PostAddSongAuthorCommandHandler : IRequestHandler<PostAddSongAuthor
         {
             SongId = songFromDb.Id,
             AuthorId = userFromDb.Id,
-            AuthorName = userFromDb.UserName!
+            AuthorName = userFromDb.UserName
         };
     }
 }

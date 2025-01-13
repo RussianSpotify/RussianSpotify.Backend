@@ -1,4 +1,4 @@
-namespace RussianSpotify.API.Files.Requests.File;
+namespace RussianSpotify.API.Shared.Requests.File;
 
 /// <summary>
 ///     Базовый ответ в байтах

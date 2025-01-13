@@ -57,7 +57,7 @@ public class PostCreatePlaylistCommandHandler : IRequestHandler<PostCreatePlayli
                               .FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId, cancellationToken)
                           ?? throw new EntityNotFoundException<User>(_userContext.CurrentUserId!.Value);
 
-        var userRoles = new List<string>();
+        var userRoles = currentUser.Roles.Select(x => x.Name).ToList();
 
         var isArtist = userRoles.Contains(Roles.AdminRoleName) || userRoles.Contains(Roles.AuthorRoleName);
 

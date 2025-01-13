@@ -70,7 +70,7 @@ public class GetSongsByFilterQueryHandler
                     .Select(y => new GetSongByFilterResponseItemAuthor
                     {
                         AuthorId = y.Id,
-                        AuthorName = y.UserName!
+                        AuthorName = y.UserName
                     })
                     .ToList(),
                 IsInFavorite = song.Buckets

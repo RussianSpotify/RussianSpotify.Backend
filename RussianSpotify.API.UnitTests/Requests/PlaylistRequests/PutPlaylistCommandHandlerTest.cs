@@ -20,19 +20,18 @@ public class PutPlaylistCommandHandlerTest : UnitTestBase
 {
     private readonly IDbContext _dbContext;
     private readonly Playlist _playlist;
-    private readonly Song _song;
     private readonly Mock<ILogger<PutPlaylistCommandHandler>> _logger;
 
     public PutPlaylistCommandHandlerTest()
     {
-        _song = Song.CreateForTest(songName: "my song");
+        var song = Song.CreateForTest(songName: "my song");
 
         _playlist = Playlist.CreateForTest(
             playlistName: "my playlist",
             author: User.CreateForTest(id: UserContext.Object.CurrentUserId),
             songs: new List<Song>
             {
-                _song
+                song
             });
 
         _logger = ConfigureLogger<PutPlaylistCommandHandler>();
@@ -40,7 +39,7 @@ public class PutPlaylistCommandHandlerTest : UnitTestBase
         _dbContext = CreateInMemory(
             x => x.AddRange(
                 _playlist,
-                _song));
+                song));
     }
 
     /// <summary>

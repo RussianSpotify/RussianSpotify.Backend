@@ -40,7 +40,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 
 // Добавлен слой с db контекстом
 // TODO: Как будто бы это должно быть в одном методе AddPostgreSQLLayout и AddCustomDbContext
-builder.Services.AddPostgreSQLLayout();
+builder.Services.AddPostgreSqlLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddSignalR();
 var grpcOptions = builder.Configuration.GetSection(nameof(GrpcOptions)).Get<GrpcOptions>()!;

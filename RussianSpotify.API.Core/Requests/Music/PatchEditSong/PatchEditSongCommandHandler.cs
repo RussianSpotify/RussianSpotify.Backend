@@ -27,7 +27,6 @@ public class PatchEditSongCommandHandler : IRequestHandler<PatchEditSongCommand,
     ///     Конструктор
     /// </summary>
     /// <param name="dbContext">Контекст базы данных</param>
-    /// <param name="fileHelper">Сервис для работы с файлами</param>
     /// <param name="userContext">Контекст текущего пользователя</param>
     /// <param name="fileServiceClient">Сервис для работы с файлами</param>
     public PatchEditSongCommandHandler(IDbContext dbContext, IUserContext userContext,
