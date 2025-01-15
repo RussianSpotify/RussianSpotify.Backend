@@ -57,16 +57,6 @@ public class S3Service : IS3Service
 
             var minioFileLocation = ContentKey(fileContent.FileName);
 
-            await BucketExistAsync(_minioOptions.TempBucketName, cancellationToken);
-
-            var putArgs = new PutObjectArgs()
-                .WithBucket(_minioOptions.TempBucketName)
-                .WithObject(minioFileLocation)
-                .WithStreamData(fileContent.Content)
-                .WithObjectSize(fileContent.Content.Length);
-
-            await _minioClient.PutObjectAsync(putArgs, cancellationToken);
-
             // Обработка счетчика
             var counterKey = $"counter:{minioFileLocation}";
             await IncrementCounterAsync(counterKey, cancellationToken);
@@ -88,6 +78,16 @@ public class S3Service : IS3Service
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
             }, cancellationToken);
+
+            await BucketExistAsync(_minioOptions.TempBucketName, cancellationToken);
+
+            var putArgs = new PutObjectArgs()
+                .WithBucket(_minioOptions.TempBucketName)
+                .WithObject(minioFileLocation)
+                .WithStreamData(fileContent.Content)
+                .WithObjectSize(fileContent.Content.Length);
+
+            await _minioClient.PutObjectAsync(putArgs, cancellationToken);
 
             var counter = await IncrementCounterAsync(counterKey, cancellationToken);
 
