@@ -1,9 +1,9 @@
 # This is a generated file. Not intended for manual editing.
 version: "3.9"
 services:
-  chat_message_saver:
+  chat-message-saver:
     build:
-      context: "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend"
+      context: "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend"
       dockerfile: "RussianSpotify.API.ChatMessageSaver/Dockerfile"
       target: "base"
     command: []
@@ -12,17 +12,16 @@ services:
     - "/app/bin/Debug/net7.0/RussianSpotify.API.ChatMessageSaver.dll"
     environment:
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
-    image: "karantuligor/russian-spotify-chat_message_saver:dev"
+    image: "karantuligor/russian-spotify-chat-message-saver:dev"
     ports: []
     volumes:
-    - "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend\\\
-      RussianSpotify.API.ChatMessageSaver:/app:rw"
-    - "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend:/src:rw"
-    - "C:\\Users\\gafar\\.nuget\\packages:/root/.nuget/packages"
+    - "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend/RussianSpotify.API.ChatMessageSaver:/app:rw"
+    - "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend:/src:rw"
+    - "/Users/ivansosorin/.nuget/packages:/root/.nuget/packages"
     working_dir: "/app"
-  files_service:
+  files-service:
     build:
-      context: "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend"
+      context: "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend"
       dockerfile: "RussianSpotify.API.Files/Dockerfile"
       target: "base"
     command: []
@@ -34,15 +33,13 @@ services:
     image: "karantuligor/russian-spotify-files-service:dev"
     ports: []
     volumes:
-    - "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend\\\
-      RussianSpotify.API.Files:/app:rw"
-    - "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend:/src:rw"
-    - "C:\\Users\\gafar\\AppData\\Roaming\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-    - "C:\\Users\\gafar\\.nuget\\packages:/root/.nuget/packages"
+    - "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend/RussianSpotify.API.Files:/app:rw"
+    - "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend:/src:rw"
+    - "/Users/ivansosorin/.nuget/packages:/root/.nuget/packages"
     working_dir: "/app"
-  main_project:
+  main-project:
     build:
-      context: "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend"
+      context: "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend"
       dockerfile: "RussianSpotify.API.WEB/Dockerfile"
       target: "base"
     command: []
@@ -54,9 +51,8 @@ services:
     image: "karantuligor/russian-spotify-backend:dev"
     ports: []
     volumes:
-    - "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend\\\
-      RussianSpotify.API.WEB:/app:rw"
-    - "C:\\Users\\gafar\\source\\fuz1kort\\RussianSpotify\\RussianSpotify.Backend:/src:rw"
-    - "C:\\Users\\gafar\\AppData\\Roaming\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-    - "C:\\Users\\gafar\\.nuget\\packages:/root/.nuget/packages"
+    - "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend/RussianSpotify.API.WEB:/app:rw"
+    - "/Users/ivansosorin/My/CSharp/Stud/RussianSpotify/RussianSpotify.Backend:/src:rw"
+    - "/Users/ivansosorin/.microsoft/usersecrets:/root/.microsoft/usersecrets"
+    - "/Users/ivansosorin/.nuget/packages:/root/.nuget/packages"
     working_dir: "/app"

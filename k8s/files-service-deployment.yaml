@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: files-service
+  name: files-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: files-service
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: files-service
+    spec:
+      containers:
+        - name: russianspotify-api-files
+          image: karantuligor/russian-spotify-files-service
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: DbContextOptions__ConnectionString
+              value: User ID=postgres;Password=root;Host=postgres-db;Port=5433;Database=russianspotify-api-files-data
+            - name: JWT__Secret
+              value: some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET
+            - name: JWT__ValidAudience
+              value: 176.57.208.209
+            - name: JWT__ValidIssuer
+              value: 176.57.208.209
+            - name: KestrelOptions__Options__0__EndpointType
+              value: Rest
+            - name: KestrelOptions__Options__0__Port
+              value: "5111"
+            - name: KestrelOptions__Options__1__EndpointType
+              value: Grpc
+            - name: KestrelOptions__Options__1__Port
+              value: "5112"
+            - name: MinioOptions__AccessKey
+              value: russianSpotifyMinio
+            - name: MinioOptions__BucketName
+              value: russian-spotify
+            - name: MinioOptions__MinioClient
+              value: RussianSpotify
+            - name: MinioOptions__SecretKey
+              value: russianSpotifyMinioPassword
+            - name: MinioOptions__ServiceUrl
+              value: minio:9000
+            - name: MinioOptions__TempBucketName
+              value: russian-spotify-temp
+            - name: RedisOptions__ConnectionString
+              value: redis:6379
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 81
+              protocol: TCP
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+      restartPolicy: Always
