@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: main-project
+  name: main-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: main-project
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: main-project
+    spec:
+      containers:
+        - name: russianspotify-api-web
+          image: karantuligor/russian-spotify-backend
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ConnectionStrings__DefaultConnection
+              value: User ID=postgres;Password=root;Host=postgres-db;Port=5433;Database=russianspotify-api-data
+            - name: EmailSettings__EmailAddress
+              value: s1chess@yandex.ru
+            - name: EmailSettings__FromName
+              value: RussianSpotify
+            - name: EmailSettings__Password
+              value: qsmylcfruascxvhi
+            - name: EmailSettings__SMTPServerHost
+              value: smtp.yandex.ru
+            - name: EmailSettings__SMTPServerPort
+              value: "465"
+            - name: GrpcOptions__Services__0__Name
+              value: File
+            - name: GrpcOptions__Services__0__ServerUri
+              value: http://files_service:81
+            - name: JWT__Secret
+              value: some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET
+            - name: JWT__ValidAudience
+              value: 176.57.208.209
+            - name: JWT__ValidIssuer
+              value: 176.57.208.209
+            - name: RabbitMq__Host
+              value: rabbitmq
+            - name: RedirectUrl
+              value: http://176.57.208.209:3000
+            - name: RedisOptions__ConnectionString
+              value: redis:6379
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1000m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+      restartPolicy: Always

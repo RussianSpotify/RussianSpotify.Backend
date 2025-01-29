@@ -47,10 +47,4 @@
         <ProjectReference Include="..\RussianSpotify.API.Worker\RussianSpotify.API.Worker.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
-    </ItemGroup>
-
 </Project>

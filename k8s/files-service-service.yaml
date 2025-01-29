@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: files-service
+  name: files-service
+spec:
+  type: NodePort
+  ports:
+    - name: "82"
+      port: 82
+      targetPort: 80
+    - name: "81"
+      port: 81
+      targetPort: 81
+      nodePort: 30080
+  selector:
+    io.kompose.service: files-service

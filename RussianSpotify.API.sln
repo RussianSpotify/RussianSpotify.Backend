@@ -30,6 +30,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.Gateway", "RussianSpotify.API.Gateway\RussianSpotify.API.Gateway.csproj", "{BB259E10-50B7-43BA-A9A1-B3A352101ED8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Main", "Main", "{35712146-7769-478C-A819-74BC600C9749}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{7B26A734-4C3C-4928-9377-3AA1AEB5421E}"
 EndProject

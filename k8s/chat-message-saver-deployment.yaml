@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: chat-message-saver
+  name: chat-message-saver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: chat-message-saver
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: chat-message-saver
+    spec:
+      containers:
+        - name: russianspotify-api-chat-message-saver
+          image: karantuligor/russian-spotify-chat_message_saver
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ConnectionStrings__DefaultConnection
+              value: User ID=postgres;Password=root;Host=postgres-db;Port=5433;Database=russianspotify-api-data
+            - name: RabbitMq__Host
+              value: rabbitmq
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+      restartPolicy: Always
