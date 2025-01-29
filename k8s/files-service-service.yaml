@@ -8,6 +8,7 @@ metadata:
     io.kompose.service: files-service
   name: files-service
 spec:
+  type: NodePort
   ports:
     - name: "82"
       port: 82
@@ -15,5 +16,6 @@ spec:
     - name: "81"
       port: 81
       targetPort: 81
+      nodePort: 30080
   selector:
     io.kompose.service: files-service
