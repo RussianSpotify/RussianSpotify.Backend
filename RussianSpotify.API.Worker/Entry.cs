@@ -5,6 +5,8 @@ using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Shared.Interfaces;
+using RussianSpotify.API.Shared.Options;
 using RussianSpotify.API.Worker.Workers;
 
 #endregion

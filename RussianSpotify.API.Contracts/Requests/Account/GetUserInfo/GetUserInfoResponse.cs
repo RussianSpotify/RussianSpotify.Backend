@@ -34,4 +34,9 @@ public class GetUserInfoResponse
     ///     Чат обычного пользователя
     /// </summary>
     public Guid? ChatId { get; set; }
+
+    /// <summary>
+    /// История оплат пользователя
+    /// </summary>
+    public UserPaymentHistory? PaymentHistory { get; set; }
 }

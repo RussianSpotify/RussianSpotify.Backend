@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package payments;
+
+import "google/protobuf/timestamp.proto";
+
+service PaymentService {
+  rpc GetPaymentHistory(GetPaymentHistoryRequest) returns (GetPaymentHistoryResponse);
+}
+
+message GetPaymentHistoryRequest {
+  string user_id = 1;
+}
+
+message GetPaymentHistoryResponse {
+  repeated GetPaymentHistoryResponseItem items = 1;
+}
+
+message GetPaymentHistoryResponseItem {
+  google.protobuf.Timestamp createdAt = 1;
+  double amount = 2;
+}

@@ -22,9 +22,6 @@ public static class ConfigureSwaggerExtension
     public static void AddSwaggerGenWithAuth(this IServiceCollection services, Assembly assembly) =>
         services.AddSwaggerGen(opt =>
         {
-            var xmlFileName = $"{assembly.GetName().Name}.xml";
-            opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
-
             opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",

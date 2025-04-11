@@ -8,7 +8,9 @@ using RussianSpotify.API.Shared.Interfaces;
 
 namespace RussianSpotify.API.Shared.Data.PostgreSQL.Services;
 
-public class Migrator<TContext> : IMigrator where TContext : DbContext
+public class Migrator<TContext> 
+    : IMigrator where TContext
+    : DbContext
 {
     private readonly TContext _dbContext;
 

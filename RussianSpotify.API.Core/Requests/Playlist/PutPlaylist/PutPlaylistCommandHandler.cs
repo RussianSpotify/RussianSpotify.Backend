@@ -6,8 +6,9 @@ using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.Playlist;
 using RussianSpotify.API.Grpc.Clients.FileClient;
+using RussianSpotify.API.Shared.Exceptions;
+using RussianSpotify.API.Shared.Exceptions.Playlist;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Playlist.PutPlaylist;
 

@@ -3,6 +3,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RussianSpotify.API.Core.Requests.EmailNotificator.SendEmailNotification;
+using RussianSpotify.API.Shared.Interfaces;
 
 #endregion
 

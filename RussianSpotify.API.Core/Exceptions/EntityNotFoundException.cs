@@ -1,10 +1,10 @@
 #region
 
+#endregion
+
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Shared.Exceptions;
-
-#endregion
 
 namespace RussianSpotify.API.Core.Exceptions;
 
@@ -18,7 +18,7 @@ public class EntityNotFoundException<TEntity> : ApplicationBaseException
     {
         [typeof(FileContent)] = "Не найден файл в S3 хранилище",
         [typeof(User)] = "Не найден пользователь",
-        [typeof(Entities.Playlist)] = "Не найден альбом/плейлист",
+        [typeof(Playlist)] = "Не найден альбом/плейлист",
         [typeof(Song)] = "Не найдена песня",
         [typeof(Chat)] = "Чат не найден"
     };

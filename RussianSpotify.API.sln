@@ -42,6 +42,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.Files", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.Grpc", "RussianSpotify.API.Grpc\RussianSpotify.API.Grpc.csproj", "{330A2595-FEBE-436B-A2F1-E8B20BD16845}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.SubscriptionService", "RussianSpotify.API.SubscriptionService\RussianSpotify.API.SubscriptionService.csproj", "{D68FA51A-D024-4017-9F36-E01AE91D675F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.PaymentService", "RussianSpotify.API.PaymentService\RussianSpotify.API.PaymentService.csproj", "{008543DE-E33C-45BE-B9CA-653F994E8682}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,8 @@ Global
 		{E8D9CD9F-5A56-4B21-AB1F-FD45625644A3} = {223B2189-F44E-49F2-8903-29B8598869AB}
 		{4BFF650C-8E91-47BC-B9BD-AEBA51A3B777} = {223B2189-F44E-49F2-8903-29B8598869AB}
 		{330A2595-FEBE-436B-A2F1-E8B20BD16845} = {7B26A734-4C3C-4928-9377-3AA1AEB5421E}
+		{D68FA51A-D024-4017-9F36-E01AE91D675F} = {223B2189-F44E-49F2-8903-29B8598869AB}
+		{008543DE-E33C-45BE-B9CA-653F994E8682} = {223B2189-F44E-49F2-8903-29B8598869AB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{93621E9D-982B-478A-8811-ACB7C67693F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -113,5 +119,13 @@ Global
 		{330A2595-FEBE-436B-A2F1-E8B20BD16845}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{330A2595-FEBE-436B-A2F1-E8B20BD16845}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{330A2595-FEBE-436B-A2F1-E8B20BD16845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D68FA51A-D024-4017-9F36-E01AE91D675F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68FA51A-D024-4017-9F36-E01AE91D675F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68FA51A-D024-4017-9F36-E01AE91D675F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68FA51A-D024-4017-9F36-E01AE91D675F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{008543DE-E33C-45BE-B9CA-653F994E8682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{008543DE-E33C-45BE-B9CA-653F994E8682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{008543DE-E33C-45BE-B9CA-653F994E8682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{008543DE-E33C-45BE-B9CA-653F994E8682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

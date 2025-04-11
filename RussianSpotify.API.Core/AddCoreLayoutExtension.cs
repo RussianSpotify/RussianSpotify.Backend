@@ -37,7 +37,6 @@ public static class AddCoreLayoutExtension
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IUserContext, UserContext>();
-        services.AddScoped<ISubscriptionHandler, SubscriptionHandler>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IUserClaimsManager, UserClaimsManager>();
         services.AddScoped<IRoleManager, RoleManager>();

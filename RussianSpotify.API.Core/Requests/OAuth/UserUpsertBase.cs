@@ -5,6 +5,7 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
 using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Exceptions;
 using RussianSpotify.Contracts.Requests.OAuth;
 
 #endregion

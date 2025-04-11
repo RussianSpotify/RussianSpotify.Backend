@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.SongExceptions;
 using RussianSpotify.API.Shared.Domain.Constants;
+using RussianSpotify.API.Shared.Exceptions;
+using RussianSpotify.API.Shared.Exceptions.SongExceptions;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.AddSongAuthor;
 

@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <Protobuf Include="Protos\files.proto" GrpcServices="Both" AdditionalImportDirs="Protos/"/>
+        <Protobuf Include="Protos\payments.proto" GrpcServices="Both" AdditionalImportDirs="Protos/"/>
     </ItemGroup>
 
     <ItemGroup>
