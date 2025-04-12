@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.JsonWebTokens;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
-using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Exceptions;
 
 #endregion
 

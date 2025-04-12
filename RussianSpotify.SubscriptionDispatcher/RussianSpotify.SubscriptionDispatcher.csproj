@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-RussianSpotify.SubscriptionDispatcher-ace0d808-095d-4bf0-8191-255450397d78</UserSecretsId>
+    </PropertyGroup>
+
+    
+    <ItemGroup>
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14"/>
+        <PackageReference Include="Hangfire.MemoryStorage" Version="1.8.1.1"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RussianSpotify.API.Shared\RussianSpotify.API.Shared.csproj" />
+      <ProjectReference Include="..\RussianSpotify.API.SubscriptionService\RussianSpotify.API.SubscriptionService.csproj" />
+    </ItemGroup>
+</Project>

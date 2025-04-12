@@ -42,6 +42,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 // TODO: Как будто бы это должно быть в одном методе AddPostgreSQLLayout и AddCustomDbContext
 builder.Services.AddPostgreSqlLayout();
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddExternalSubscriptionDbContext(configuration["ExternalSubscriptionDbContext"]!);
 builder.Services.AddSignalR();
 var grpcOptions = builder.Configuration.GetSection(nameof(GrpcOptions)).Get<GrpcOptions>()!;
 builder.Services.AddGrpcServices(grpcOptions);

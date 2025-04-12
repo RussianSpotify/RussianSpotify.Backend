@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Exceptions;
+using RussianSpotify.API.Shared.Exceptions;
 using ValidationException = FluentValidation.ValidationException;
 
 #endregion

@@ -53,11 +53,6 @@ public class UnitTestBase : IDisposable
     protected Mock<IUserContext> UserContext { get; }
 
     /// <summary>
-    ///     Мок сервиса по работе с подпиской
-    /// </summary>
-    protected Mock<ISubscriptionHandler> SubscriptionService { get; }
-
-    /// <summary>
     ///     Мок Взаимодействия с ролью пользователя
     /// </summary>
     protected Mock<IRoleManager> RoleManager { get; }
@@ -190,12 +185,6 @@ public class UnitTestBase : IDisposable
         UserContext = new Mock<IUserContext>();
         UserContext.Setup(x => x.CurrentUserId)
             .Returns(Guid.Parse(CurrentUserId));
-
-        SubscriptionService = new Mock<ISubscriptionHandler>();
-        SubscriptionService.Setup(x => x.GetSubscription(It.IsAny<Guid>()))
-            .Verifiable();
-        SubscriptionService.Setup(x => x.Subscribe(It.IsAny<Guid>(), It.IsAny<int>()))
-            .Verifiable();
 
         RoleManager = new Mock<IRoleManager>();
         RoleManager.Setup(x => x.IsInRole(

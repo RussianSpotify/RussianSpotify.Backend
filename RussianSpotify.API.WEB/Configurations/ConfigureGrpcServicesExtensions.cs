@@ -1,5 +1,6 @@
 #region
 
+using Payments;
 using RussianSpotify.API.Grpc;
 using RussianSpotify.API.Grpc.Clients;
 using RussianSpotify.API.Grpc.Clients.FileClient;
@@ -22,7 +23,11 @@ public static class ConfigureGrpcServicesExtensions
     public static void AddGrpcServices(this IServiceCollection services, GrpcOptions grpcOptions)
     {
         var fileServerUri = grpcOptions.GetServerUri("File");
+        var paymentServerUri = grpcOptions.GetServerUri("Payment");
+        
         services.AddGrpcClientService<FileService.FileServiceClient>(fileServerUri);
+        services.AddGrpcClientService<PaymentService.PaymentServiceClient>(paymentServerUri);
+        
         services.AddScoped<IFileServiceClient, FileServiceClient>();
     }
 

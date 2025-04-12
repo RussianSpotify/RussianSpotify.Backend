@@ -57,9 +57,5 @@ public static class ConfigureAuthenticationExtension
                     return Task.CompletedTask;
                 }
             };
-        }).AddGoogle(config =>
-        {
-            config.ClientId = configuration["Authentication:Google:ClientId"]!;
-            config.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
         });
 }

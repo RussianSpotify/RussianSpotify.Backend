@@ -30,6 +30,35 @@ services:
     networks:
       - russianspotify-network
 
+  subscription-postgres-db:
+    image: postgres:16
+    container_name: russian-spotify-subscription-postgres-sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: russianspotify-subscription-api-data
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_subscription_data:/var/lib/postgresql/data
+    networks:
+      - russianspotify-network
+
+  payment-postgres-db:
+    image: postgres:16
+    container_name: russian-spotify-payment-postgres-sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: russianspotify-payment-api-data
+    ports:
+      - "5430:5432"
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+    networks:
+      - russianspotify-network
+
+
   redis:
     container_name: russianspotify-api-redis
     image: redis:latest
@@ -62,6 +91,7 @@ services:
       - rabbitmq
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ExternalSubscriptionDbContext: "User ID=postgres;Password=root;Host=subscription-postgres-db;Port=5432;Database=russianspotify-subscription-api-data"
       ConnectionStrings__DefaultConnection: "User ID=postgres;Password=root;Host=postgres-db;Port=5432;Database=russianspotify-api-data"
       RedisOptions__ConnectionString: "redis:6379"
       EmailSettings__FromName: "RussianSpotify"
@@ -76,6 +106,8 @@ services:
       RedirectUrl: "http://176.57.208.209:3000"
       GrpcOptions__Services__0__Name: "File"
       GrpcOptions__Services__0__ServerUri: "http://files-service:81"
+      GrpcOptions__Services__1__Name: "Payment"
+      GrpcOptions__Services__1__ServerUri: "http://payment-service:5116"
     ports:
       - "80:80"
     networks:
@@ -133,10 +165,69 @@ services:
     networks:
       - russianspotify-network
 
+  subscription-service:
+    build:
+      context: .
+      dockerfile: RussianSpotify.API.SubscriptionService/Dockerfile
+    image: karantuligor/russian-spotify-subscription-service
+    container_name: russian-spotify-subscription-service
+    depends_on:
+      - redis
+      - rabbitmq
+      - subscription-postgres-db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      DbContextOptions__ConnectionString: "User ID=postgres;Password=root;Host=subscription-postgres-db;Port=5432;Database=russianspotify-subscription-api-data"
+      RabbitMqOptions__Host: "rabbitmq"
+      RedisOptions__ConnectionString: "redis:6379"
+      JWT__ValidAudience: "176.57.208.209"
+      JWT__ValidIssuer: "176.57.208.209"
+      JWT__Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"
+      KestrelOptions__Options__0__EndpointType: Rest
+      KestrelOptions__Options__0__Port: 5113
+      KestrelOptions__Options__1__EndpointType: Grpc
+      KestrelOptions__Options__1__Port: 5114
+    ports:
+      - "83:5113"
+      - "84:5114"
+    networks:
+      - russianspotify-network
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: RussianSpotify.API.PaymentService/Dockerfile
+    image: karantuligor/russian-spotify-payment-service
+    container_name: russian-spotify-payment-service
+    depends_on:
+      - redis
+      - rabbitmq
+      - payment-postgres-db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      DbContextOptions__ConnectionString: "User ID=postgres;Password=root;Host=payment-postgres-db;Port=5432;Database=russianspotify-payment-api-data"
+      RabbitMqOptions__Host: "rabbitmq"
+      RedisOptions__ConnectionString: "redis:6379"
+      JWT__ValidAudience: "176.57.208.209"
+      JWT__ValidIssuer: "176.57.208.209"
+      JWT__Secret: "some_secret_key_HAFHSDHASHDASHDHADHADHASDHADHLOLLOLOLROFLLMAODOTNET"
+      KestrelOptions__Options__0__EndpointType: Rest
+      KestrelOptions__Options__0__Port: 5115
+      KestrelOptions__Options__1__EndpointType: Grpc
+      KestrelOptions__Options__1__Port: 5116
+    ports:
+      - "85:5115"
+      - "86:5116"
+    networks:
+      - russianspotify-network
+
+
 volumes:
   minio_data:
   postgres_data:
   rabbitmq_data:
+  postgres_subscription_data:
+  postgres_payment_data:
 
 networks:
   russianspotify-network:

@@ -7,11 +7,12 @@ using RussianSpotify.API.Core.Abstractions;
 using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Enums;
 using RussianSpotify.API.Core.Exceptions;
-using RussianSpotify.API.Core.Exceptions.AuthExceptions;
 using RussianSpotify.API.Core.Extensions;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Shared.Domain.Constants;
 using RussianSpotify.API.Shared.Exceptions;
+using RussianSpotify.API.Shared.Exceptions.AuthExceptions;
+using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Auth.PostRegister;
 using Role = RussianSpotify.API.Core.Entities.Role;
 
