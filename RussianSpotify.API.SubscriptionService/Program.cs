@@ -10,7 +10,6 @@ using RussianSpotify.API.Shared.Options.Kestrel;
 using RussianSpotify.API.Shared.Services;
 using RussianSpotify.Grpc.SubscriptionService.Configures;
 using RussianSpotify.Grpc.SubscriptionService.Features.Services;
-using RussianSpotify.Grpc.SubscriptionService.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
