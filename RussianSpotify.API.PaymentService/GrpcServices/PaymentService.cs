@@ -9,13 +9,11 @@ namespace RussianSpotify.API.PaymentService.GrpcServices;
 
 public class PaymentService : Payments.PaymentService.PaymentServiceBase
 {
-    private readonly ILogger<PaymentService> _logger;
     private readonly IDbContext _dbContext;
 
-    public PaymentService(IDbContext dbContext, ILogger<PaymentService> logger)
+    public PaymentService(IDbContext dbContext)
     {
         _dbContext = dbContext;
-        _logger = logger;
     }
 
     public override async Task<GetPaymentHistoryResponse> GetPaymentHistory(GetPaymentHistoryRequest request, ServerCallContext context)

@@ -3,8 +3,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RussianSpotify.API.Shared.Models.SubscriptionEvents;
 using RussianSpotify.Grpc.SubscriptionService.Data;
-
-namespace RussianSpotify.Grpc.SubscriptionService.Workers;
+using RussianSpotify.Grpc.SubscriptionService.Domain.Entities;
 
 public class OutBoxDispatcherBackgroundService : BackgroundService
 {
@@ -28,64 +27,68 @@ public class OutBoxDispatcherBackgroundService : BackgroundService
         {
             try
             {
-                await using var dbContext = _serviceScopeFactory
-                    .CreateScope()
-                    .ServiceProvider
-                    .GetRequiredService<SubscriptionDbContext>();
+                await using var scope = _serviceScopeFactory.CreateAsyncScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<SubscriptionDbContext>();
 
                 var messages = await dbContext.MessageOutboxes
-                    .Where(message => !message.IsSent)
+                    .Where(m => !m.IsSent)
                     .Take(100)
                     .ToListAsync(stoppingToken);
 
-                if (!messages.Any())
+                if (messages.Count == 0)
+                {
+                    await Task.Delay(2000, stoppingToken);
                     continue;
-
-                foreach (var message in messages)
-                {
-                    var type = Type.GetType(message.Type);
-
-                    if (type is null)
-                    {
-                        _logger.LogCritical("Не удалось найти тип {MessageType}", message.Type);
-                        continue;
-                    }
-                    
-                    var payload = JsonSerializer.Deserialize(message.Payload, type);
-
-                    if (payload is null)
-                    {
-                        _logger.LogCritical(
-                            "Не удалось десериализовать объект {MessagePayload} Type: {Type}",
-                            message.Payload,
-                            message.Type);
-
-                        continue;
-                    }
-                    
-                    var convertedPayload = payload switch
-                    {
-                        SubscriptionCreatedEvent subscriptionCreatedEvent => subscriptionCreatedEvent,
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-                    
-                    await _bus.Publish(convertedPayload, stoppingToken);
                 }
-                
-                messages.ForEach(x => x.IsSent = true);
+
+                var publishTasks = messages
+                    .Select(message => HandleMessageAsync(message, stoppingToken))
+                    .ToList();
+
+                await Task.WhenAll(publishTasks);
+
+                messages.ForEach(m => m.IsSent = true);
                 await dbContext.SaveChangesAsync(stoppingToken);
-                await Task.Delay(10000, stoppingToken);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.BeginScope(new Dictionary<string, object>()
-                {
-                    ["Service"] = nameof(OutBoxDispatcherBackgroundService),
-                    ["Message"] = e.Message,
-                    ["StackTrace"] = e.StackTrace ?? string.Empty,
-                });
-                _logger.LogError("Произошла ошибка при отправке сообщения");
+                _logger.LogError(ex, "Ошибка в OutboxDispatcher");
             }
+        }
+    }
+
+    private async Task HandleMessageAsync(MessageOutbox message, CancellationToken ct)
+    {
+        try
+        {
+            var type = Type.GetType(message.Type);
+            if (type == null)
+            {
+                _logger.LogWarning("Не удалось найти тип: {Type}", message.Type);
+                return;
+            }
+
+            var payload = JsonSerializer.Deserialize(message.Payload, type);
+            if (payload == null)
+            {
+                _logger.LogWarning("Payload пуст: {Payload}", message.Payload);
+                return;
+            }
+
+            switch (payload)
+            {
+                case SubscriptionCreatedEvent created:
+                    await _bus.Publish(created, ct);
+                    break;
+
+                default:
+                    _logger.LogWarning("Неизвестный тип события: {Type}", type);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ошибка при обработке сообщения {Id}", message.Id);
         }
     }
 }
