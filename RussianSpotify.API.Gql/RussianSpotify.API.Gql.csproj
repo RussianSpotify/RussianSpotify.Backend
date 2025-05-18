@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="HotChocolate" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Abstractions" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Data" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Execution.Abstractions" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Execution.Projections" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Types.OffsetPagination" Version="15.1.4" />
+        <PackageReference Include="HotChocolate.Types.Scalars" Version="15.1.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RussianSpotify.API.Data.PostgreSQL\RussianSpotify.API.Data.PostgreSQL.csproj" />
+      <ProjectReference Include="..\RussianSpotify.API.Grpc\RussianSpotify.API.Grpc.csproj" />
+      <ProjectReference Include="..\RussianSpotify.API.PaymentService\RussianSpotify.API.PaymentService.csproj" />
+      <ProjectReference Include="..\RussianSpotify.API.Shared\RussianSpotify.API.Shared.csproj" />
+      <ProjectReference Include="..\RussianSpotify.API.SubscriptionService\RussianSpotify.API.SubscriptionService.csproj" />
+    </ItemGroup>
+
+</Project>
