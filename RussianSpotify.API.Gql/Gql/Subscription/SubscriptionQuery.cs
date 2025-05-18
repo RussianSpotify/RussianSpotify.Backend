@@ -10,6 +10,7 @@ public class SubscriptionQuery
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Получение подписок пользователя")]
     public IQueryable<RussianSpotify.Grpc.SubscriptionService.Domain.Entities.Subscription> GetSubscriptions(
         IDbContext dbContext, Guid userId)
     {

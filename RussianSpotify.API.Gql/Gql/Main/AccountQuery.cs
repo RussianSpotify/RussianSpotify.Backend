@@ -11,6 +11,7 @@ public class AccountQuery
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Получение информации о пользователе")]
     public IQueryable<User> GetUser([Service] IDbContext dbContext, Guid userId)
     {
         return dbContext.Users

@@ -11,6 +11,7 @@ public class SongQuery
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Получение песен")]
     public IQueryable<Song> GetSongs([Service] IDbContext dbContext)
     {
         return dbContext.Songs;

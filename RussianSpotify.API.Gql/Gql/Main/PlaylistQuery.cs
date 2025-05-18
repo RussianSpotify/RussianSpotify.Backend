@@ -11,6 +11,7 @@ public class PlaylistQuery
     [UseProjection]
     [UseFiltering]
     [UseSorting]
+    [GraphQLDescription("Получение плейлистов")]
     public IQueryable<Playlist> GetPlaylists([Service] IDbContext dbContext)
     {
         return dbContext.Playlists;

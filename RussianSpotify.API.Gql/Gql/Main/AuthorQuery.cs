@@ -8,6 +8,11 @@ namespace RussianSpotify.API.Gql.Gql.Main;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class AuthorQuery
 {
+    [UseFirstOrDefault]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLDescription("Получение авторов")]
     public IQueryable<User> GetAuthors([Service] IDbContext dbContext)
     {
         return dbContext.Users
