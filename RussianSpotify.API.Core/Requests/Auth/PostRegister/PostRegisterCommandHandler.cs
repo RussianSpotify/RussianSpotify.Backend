@@ -81,6 +81,8 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
             email: request.Email,
             passwordHash: passwordHash);
 
+        user.IsConfirmed = true;
+
         if (request.Role.Equals(Roles.AdminRoleName, StringComparison.OrdinalIgnoreCase))
             throw new UserCannotBeAdminException("Пользователь не может быть админом");
 
@@ -101,10 +103,10 @@ public class PostRegisterCommandHandler : IRequestHandler<PostRegisterCommand, P
         var message = messageTemplate.ReplacePlaceholders(placeholders);
         await _cache.SetStringAsync(request.Email, token, cancellationToken);
 
-        await _emailSender.SendEmailAsync(
-            user.Email,
-            message,
-            cancellationToken);
+        // await _emailSender.SendEmailAsync(
+        //     user.Email,
+        //     message,
+        //     cancellationToken);
 
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync(cancellationToken);
