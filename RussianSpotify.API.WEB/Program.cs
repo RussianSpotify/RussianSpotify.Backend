@@ -86,6 +86,8 @@ builder.Services.Configure<MemoryCacheOptions>(options =>
     options.SizeLimit = 1000; // Максимальное количество элементов в кэше
 });
 
+builder.WebHost.UseUrls("http://0.0.0.0:80");
+
 var app = builder.Build();
 
 // Применение миграций

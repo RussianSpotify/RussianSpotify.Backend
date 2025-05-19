@@ -37,6 +37,8 @@ builder.Services.AddCustomDbContext<IDbContext, EfContext>(
 builder.Services.AddCustomDbContext<RussianSpotify.Grpc.SubscriptionService.Data.IDbContext, SubscriptionDbContext>(
     builder.Configuration.GetSection("DataContext:SubscriptionConnectionString").Get<string>()!);
 
+builder.WebHost.UseUrls("http://0.0.0.0:56807");
+
 var app = builder.Build();
 
 app.UseRouting()

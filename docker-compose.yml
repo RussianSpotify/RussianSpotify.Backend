@@ -91,6 +91,7 @@ services:
       - rabbitmq
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://0.0.0.0:80"
       ExternalSubscriptionDbContext: "User ID=postgres;Password=root;Host=subscription-postgres-db;Port=5432;Database=russianspotify-subscription-api-data"
       ConnectionStrings__DefaultConnection: "User ID=postgres;Password=root;Host=postgres-db;Port=5432;Database=russianspotify-api-data"
       RedisOptions__ConnectionString: "redis:6379"
