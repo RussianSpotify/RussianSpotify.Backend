@@ -51,8 +51,7 @@ public class GrpcChatService : API.Grpc.ChatService.ChatServiceBase
                 {
                     SenderId = senderId.ToString(),
                     Username = "mock_username", // Подставить имя из профиля
-                    Content = request.Content,
-                    Timestamp = Timestamp.FromDateTime(DateTime.UtcNow)
+                    Content = request.Content
                 };
 
                 // Ищем, подключён ли receiver

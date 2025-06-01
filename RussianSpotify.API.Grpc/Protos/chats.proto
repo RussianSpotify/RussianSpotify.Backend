@@ -2,8 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "RussianSpotify.API.Grpc";
 
-import "google/protobuf/timestamp.proto";
-
 service ChatService {
   rpc SendMessageStream(stream SendMessageStreamRequest) returns (stream SendMessageStreamResponse);
 }
@@ -17,5 +15,4 @@ message SendMessageStreamResponse {
   string sender_id = 1;
   string username = 2;
   string content = 3;
-  google.protobuf.Timestamp timestamp = 4;
 }
