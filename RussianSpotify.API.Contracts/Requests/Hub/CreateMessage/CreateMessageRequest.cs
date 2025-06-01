@@ -13,5 +13,10 @@ public class CreateMessageRequest
     /// <summary>
     ///     Чат
     /// </summary>
-    public Guid ChatId { get; set; }
+    public Guid? ChatId { get; set; }
+
+    /// <summary>
+    /// Идентификатор получателя
+    /// </summary>
+    public Guid? ReceiverId { get; set; }
 }

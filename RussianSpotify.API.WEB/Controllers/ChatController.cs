@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RussianSpotify.API.Core.Requests.Chat.GetChats;
+using RussianSpotify.API.Core.Requests.Chat.GetHistoryGrpc;
 using RussianSpotify.API.Core.Requests.Chat.GetStory;
 using RussianSpotify.Contracts.Requests.Chat.GetChats;
 using RussianSpotify.Contracts.Requests.Chat.GetStory;
@@ -47,4 +48,21 @@ public class ChatController : ControllerBase
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
             }, cancellationToken);
+    
+    /// <summary>
+    ///     Получить историю чата
+    /// </summary>
+    [HttpGet("grpc")]
+    public async Task<GetStoryResponse> GetStoryGrpcAsync(
+        [FromServices] IMediator mediator,
+        [FromBody] GetStoryRequest? request,
+        CancellationToken cancellationToken)
+        => request == null
+            ? await mediator.Send(new GetHistoryGrpcQuery(), cancellationToken)
+            : await mediator.Send(new GetHistoryGrpcQuery
+            {
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            }, cancellationToken);
+
 }

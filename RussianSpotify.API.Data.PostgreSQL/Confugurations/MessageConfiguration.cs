@@ -32,7 +32,7 @@ public class MessageConfiguration : EntityTypeConfigurationBase<Message>
 
         builder.Property(p => p.ChatId)
             .HasComment("Идентификатор чата")
-            .IsRequired();
+            .IsRequired(false);
 
         builder.HasOne(x => x.User)
             .WithMany(y => y.Messages)

@@ -11,7 +11,7 @@ namespace RussianSpotify.API.ChatMessageSaver.Configurations;
 /// <summary>
 ///     Конфигурация бд
 /// </summary>
-public static class ConfigureDbContext
+public static class  ConfigureDbContext
 {
     /// <summary>
     ///     Добавление db контекста
@@ -22,7 +22,6 @@ public static class ConfigureDbContext
         services.AddDbContext<EfContext>(
             (sp, options) => options
                 .UseNpgsql(connectionString)
-                .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<UpdateInterceptor>()));
 }
