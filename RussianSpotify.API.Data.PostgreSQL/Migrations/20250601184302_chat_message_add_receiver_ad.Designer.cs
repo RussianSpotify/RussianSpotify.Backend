@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RussianSpotift.API.Data.PostgreSQL;
@@ -11,9 +12,11 @@ using RussianSpotift.API.Data.PostgreSQL;
 namespace RussianSpotift.API.Data.PostgreSQL.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20250601184302_chat_message_add_receiver_ad")]
+    partial class chat_message_add_receiver_ad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,7 +223,7 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChatId")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uuid")
                         .HasComment("Идентификатор чата");
 
@@ -618,7 +621,9 @@ namespace RussianSpotift.API.Data.PostgreSQL.Migrations
                 {
                     b.HasOne("RussianSpotify.API.Core.Entities.Chat", "Chat")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatId");
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RussianSpotify.API.Core.Entities.User", "Receiver")
                         .WithMany()

@@ -111,6 +111,8 @@ services:
       GrpcOptions__Services__1__ServerUri: "http://payment-service:5116"
     ports:
       - "80:80"
+      - "87:5117"
+      - "88:5118"
     networks:
       - russianspotify-network
 

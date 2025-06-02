@@ -31,15 +31,28 @@ public class CreateMessageConsumer : IConsumer<CreateMessageModel>
                               .Include(x => x.Chats)
                               .FirstOrDefaultAsync(x => x.Id == request.UserId)
                           ?? throw new ForbiddenException();
-
-        var chat = currentUser.Chats
-                       .FirstOrDefault(x => x.Id == request.ChatId)
-                   ?? throw new EntityNotFoundException<Chat>(request.ChatId);
+        
 
         var message = new Message(
             context.Message.Message,
-            currentUser,
-            chat);
+            currentUser);
+
+        if (context.Message.ChatId is not null)
+        {
+            var chat = currentUser.Chats
+                           .FirstOrDefault(x => x.Id == request.ChatId)
+                       ?? throw new EntityNotFoundException<Chat>(request.ChatId!.Value);
+            
+            message.Chat = chat;
+        }
+
+        if (context.Message.ReceiverId is not null)
+        {
+            var receiverUser = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == request.UserId) 
+                               ?? throw new ForbiddenException();
+            
+            message.Receiver = receiverUser;
+        }
 
         await _dbContext.Messages.AddAsync(message);
         await _dbContext.SaveChangesAsync();

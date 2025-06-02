@@ -87,6 +87,7 @@ public class ChatService : IChatService
             Message = model.Message,
             ChatId = model.ChatId,
             UserId = currentUser.Id,
+            ReceiverId = model.ReceiverId
         });
 
         return new GetSenderMessageInfo

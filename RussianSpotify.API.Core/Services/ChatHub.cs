@@ -40,7 +40,7 @@ public class ChatHub : Hub
     public async Task SendMessage(CreateMessageRequest request)
     {
         var senderInfo = await _chatService.CreateMessageAsync(request);
-        var receiverUsers = (await _chatService.GetUsersInChat(request.ChatId))
+        var receiverUsers = (await _chatService.GetUsersInChat(request.ChatId!.Value))
             .Select(x => x.ToString())
             .ToList();
 

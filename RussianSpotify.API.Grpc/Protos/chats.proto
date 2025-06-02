@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "RussianSpotify.API.Grpc";
+
+service ChatService {
+  rpc SendMessageStream(stream SendMessageStreamRequest) returns (stream SendMessageStreamResponse);
+}
+
+message SendMessageStreamRequest {
+  string receiver_id = 1;
+  string content = 3;
+}
+
+message SendMessageStreamResponse {
+  string sender_id = 1;
+  string username = 2;
+  string content = 3;
+}

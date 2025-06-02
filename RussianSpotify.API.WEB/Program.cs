@@ -1,5 +1,6 @@
 #region
 
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
@@ -7,6 +8,7 @@ using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
 using RussianSpotify.API.Core.Models;
 using RussianSpotify.API.Core.Services;
+using RussianSpotify.API.Core.Services.Grpc;
 using RussianSpotify.API.Grpc.Options;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
@@ -14,6 +16,7 @@ using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions.CorsPolicy;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.API.Shared.Middlewares;
 using RussianSpotify.API.Shared.Options;
+using RussianSpotify.API.Shared.Options.Kestrel;
 using RussianSpotify.API.Shared.Services;
 using RussianSpotify.API.WEB.Configurations;
 using RussianSpotify.API.Worker;
@@ -32,6 +35,7 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGenWithAuth(typeof(Program).Assembly);
 }
 
+builder.Services.AddGrpc();
 builder.Services.AddHangfireWorker();
 builder.Services.AddCustomLogging();
 
@@ -86,7 +90,21 @@ builder.Services.Configure<MemoryCacheOptions>(options =>
     options.SizeLimit = 1000; // Максимальное количество элементов в кэше
 });
 
+
 builder.WebHost.UseUrls("http://0.0.0.0:80");
+ConfigureKestrel(builder.WebHost, configuration.GetSection(nameof(KestrelOptions)).Get<KestrelOptions>()!);
+
+void ConfigureKestrel(IWebHostBuilder webHost, KestrelOptions options)
+{
+    webHost.ConfigureKestrel(kestrel =>
+    {
+        var rest = options.Options.First(x => x.EndpointType == EndpointType.Rest);
+        var grpc = options.Options.First(x => x.EndpointType == EndpointType.Grpc);
+
+        kestrel.ListenAnyIP(rest.Port, lo => lo.Protocols = HttpProtocols.Http1);
+        kestrel.ListenAnyIP(grpc.Port, lo => lo.Protocols = HttpProtocols.Http2);
+    });
+}
 
 var app = builder.Build();
 
@@ -117,5 +135,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/chat-hub");
+app.MapGrpcService<GrpcChatService>();
 
 app.Run();

@@ -17,11 +17,10 @@ public class Message : BaseEntity, ITimeTrackable
     /// <param name="messageText">Текст сообщения</param>
     /// <param name="user">Пользователь, кто отправил</param>
     /// <param name="chat">Чат</param>
-    public Message(string messageText, User user, Chat chat)
+    public Message(string messageText, User user)
     {
         MessageText = messageText;
         User = user;
-        Chat = chat;
     }
 
     /// <summary>
@@ -50,7 +49,7 @@ public class Message : BaseEntity, ITimeTrackable
     /// <summary>
     ///     Идентификатор чата
     /// </summary>
-    public Guid ChatId { get; set; }
+    public Guid? ChatId { get; set; }
 
     /// <summary>
     ///     Пользователь, кто отправил
@@ -60,7 +59,17 @@ public class Message : BaseEntity, ITimeTrackable
     /// <summary>
     ///     Чат
     /// </summary>
-    public Chat Chat { get; set; }
+    public Chat? Chat { get; set; }
+    
+    /// <summary>
+    /// Идентификатор получателя
+    /// </summary>
+    public Guid? ReceiverId { get; set; }
+    
+    /// <summary>
+    ///     Пользователь, кто получил
+    /// </summary>
+    public User? Receiver { get; set; }
 
     /// <summary>
     ///     Создать тестовую сущность
