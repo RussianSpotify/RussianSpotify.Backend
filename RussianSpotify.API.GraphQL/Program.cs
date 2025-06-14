@@ -1,7 +1,7 @@
 using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotify.API.Core.Abstractions;
-using RussianSpotify.API.GraphQL.Gql.Main;
-using RussianSpotify.API.GraphQL.Gql.Subscription;
+// using RussianSpotify.API.GraphQL.Gql.Main;
+// using RussianSpotify.API.GraphQL.Gql.Subscription;
 using RussianSpotify.API.GraphQL.GqlTypes;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Extensions;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
@@ -10,20 +10,20 @@ using SubscriptionDbContext = RussianSpotify.Grpc.SubscriptionService.Data.Subsc
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services
-    .AddRouting()
-    .AddGraphQLServer(disableDefaultSecurity: true)
-    .AddQueryType(m => m.Name("Query"))
-    .AddType<AccountQuery>()
-    .AddType<AuthorQuery>()
-    .AddType<PlaylistQuery>()
-    .AddType<SongQuery>()
-    .AddType<SubscriptionQuery>()
-    .BindRuntimeType<uint, UnsignedIntType>()
-    .AddFiltering(x =>
-        x.AddDefaults().BindRuntimeType<uint, UnsignedIntOperationFilterInputType>())
-    .AddSorting()
-    .AddProjections();
+// builder.Services
+//     .AddRouting()
+//     .AddGraphQLServer(disableDefaultSecurity: true)
+//     .AddQueryType(m => m.Name("Query"))
+//     .AddType<AccountQuery>()
+//     .AddType<AuthorQuery>()
+//     .AddType<PlaylistQuery>()
+//     .AddType<SongQuery>()
+//     .AddType<SubscriptionQuery>()
+//     .BindRuntimeType<uint, UnsignedIntType>()
+//     .AddFiltering(x =>
+//         x.AddDefaults().BindRuntimeType<uint, UnsignedIntOperationFilterInputType>())
+//     .AddSorting()
+//     .AddProjections();
 
 // Добавлен middleware для обработки исключений
 builder.Services

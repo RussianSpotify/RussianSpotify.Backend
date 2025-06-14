@@ -13,6 +13,7 @@ using RussianSpotify.API.Core.Requests.Music.PatchEditSong;
 using RussianSpotify.API.Core.Requests.Music.PostAddSong;
 using RussianSpotify.API.Core.Requests.Music.PostAddSongAuthor;
 using RussianSpotify.API.Core.Requests.Music.PostAddSongToFavourite;
+using RussianSpotify.API.Core.Requests.Music.UpdateSongPlaysNumber;
 using RussianSpotify.API.Shared.Interfaces;
 using RussianSpotify.Contracts.Requests.Music.AddSong;
 using RussianSpotify.Contracts.Requests.Music.AddSongAuthor;
@@ -21,6 +22,7 @@ using RussianSpotify.Contracts.Requests.Music.DeleteSongAuthor;
 using RussianSpotify.Contracts.Requests.Music.EditSong;
 using RussianSpotify.Contracts.Requests.Music.GetCategories;
 using RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
+using RussianSpotify.Contracts.Requests.Music.UpdateSongPlaysNumber;
 
 #endregion
 
@@ -46,6 +48,21 @@ public class SongController : ControllerBase
     {
         _mediator = mediator;
         _fileControllerHelper = fileControllerHelper;
+    }
+
+    /// <summary>
+    ///     Обновить кол-во прослушиваний песни
+    /// </summary>
+    /// <param name="request">Запрос, который содержит ID песни</param>
+    /// <param name="cancellationToken">Токен отмены задачи</param>
+    [HttpPost("UpdateSongPlaysNumber")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task UpdateSongPlaysNumber([FromQuery] UpdateSongPlaysNumberRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new UpdateSongPlaysNumberCommand(request), cancellationToken);
     }
 
     /// <summary>
