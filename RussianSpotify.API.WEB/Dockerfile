@@ -14,6 +14,7 @@ COPY ["RussianSpotify.API.Core/RussianSpotify.API.Core.csproj", "RussianSpotify.
 COPY ["RussianSpotify.API.Worker/RussianSpotify.API.Worker.csproj", "RussianSpotify.API.Worker/"]
 COPY ["RussianSpotify.API.Shared/RussianSpotify.API.Shared.csproj", "RussianSpotify.API.Shared/"]
 COPY ["RussianSpotify.API.Grpc/RussianSpotify.API.Grpc.csproj", "RussianSpotify.API.Grpc/"]
+COPY ["RussianSpotify.API.Data.Cassandra/RussianSpotify.API.Data.Cassandra.csproj", "RussianSpotify.API.Data.Cassandra/"]
 RUN dotnet restore "RussianSpotify.API.WEB/RussianSpotify.API.WEB.csproj"
 COPY . .
 WORKDIR "/src/RussianSpotify.API.WEB"

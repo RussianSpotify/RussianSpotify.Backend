@@ -6,9 +6,10 @@ using Microsoft.Extensions.Internal;
 using RussianSpotift.API.Data.PostgreSQL;
 using RussianSpotify.API.Client;
 using RussianSpotify.API.Core;
-using RussianSpotify.API.Core.Models;
+using RussianSpotify.API.Core.Entities;
 using RussianSpotify.API.Core.Services;
 using RussianSpotify.API.Core.Services.Grpc;
+using RussianSpotify.API.Data.Cassandra;
 using RussianSpotify.API.Grpc.Options;
 using RussianSpotify.API.Shared.Data.PostgreSQL.Interceptors;
 using RussianSpotify.API.Shared.Extensions.ConfigurationExtensions;
@@ -45,6 +46,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 // Добавлен слой с db контекстом
 // TODO: Как будто бы это должно быть в одном методе AddPostgreSQLLayout и AddCustomDbContext
 builder.Services.AddPostgreSqlLayout();
+builder.Services.AddCassandraLayout(builder.Configuration);
 builder.Services.AddCustomDbContext(configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddExternalSubscriptionDbContext(configuration["ExternalSubscriptionDbContext"]!);
 builder.Services.AddSignalR();
@@ -112,6 +114,9 @@ var app = builder.Build();
 using var scoped = app.Services.CreateScope();
 var migrator = scoped.ServiceProvider.GetRequiredService<Migrator>();
 await migrator.MigrateAsync();
+
+using var cassandraContext = scoped.ServiceProvider.GetRequiredService<CassandraContext>();
+await cassandraContext.CreateTableIfNotExistsAsync<SongStatistic>();
 
 app.UseResponseCompression();
 

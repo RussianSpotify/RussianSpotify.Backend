@@ -1,6 +1,4 @@
-﻿version: "3.9"
-
-services:
+﻿services:
   minio:
     container_name: russianspotify-api-minio-storage
     image: quay.io/minio/minio
@@ -78,6 +76,23 @@ services:
     networks:
       - russianspotify-network
 
+  cassandra:
+    container_name: russianspotify-api-cassandra
+    image: cassandra:4.1
+    environment:
+      - CASSANDRA_CLUSTER_NAME=RussianSpotifyCluster
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_AUTHENTICATOR=AllowAllAuthenticator
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks:
+      - russianspotify-network
+    
+
   main-project:
     build:
       context: .
@@ -85,6 +100,7 @@ services:
     image: karantuligor/russian-spotify-backend
     container_name: russianspotify-api-web
     depends_on:
+      - cassandra
       - redis
       - postgres-db
       - minio
@@ -109,6 +125,9 @@ services:
       GrpcOptions__Services__0__ServerUri: "http://files-service:81"
       GrpcOptions__Services__1__Name: "Payment"
       GrpcOptions__Services__1__ServerUri: "http://payment-service:5116"
+      Cassandra__Host: "russianspotify-api-cassandra"
+      Cassandra__Port: "9042"
+      Cassandra__Keyspace: "song_statistic"
     ports:
       - "80:80"
       - "87:5117"
@@ -231,6 +250,7 @@ volumes:
   rabbitmq_data:
   postgres_subscription_data:
   postgres_payment_data:
+  cassandra_data:
 
 networks:
   russianspotify-network:
