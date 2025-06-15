@@ -1,11 +1,13 @@
 using MediatR;
-using RussianSpotify.Contracts.Requests.Music.GetSongPlaysNumber;
 
 namespace RussianSpotify.API.Core.Requests.Music.GetSongPlaysNumber;
 
-public class GetSongPlaysNumberQuery : GetSongPlaysNumberRequest, IRequest<int>
+public class GetSongPlaysNumberQuery : IRequest<int>
 {
-    public GetSongPlaysNumberQuery(GetSongPlaysNumberRequest request) : base(request)
+    public GetSongPlaysNumberQuery(string id)
     {
+        SongId = id;
     }
+
+    public string SongId { get; set; }
 }

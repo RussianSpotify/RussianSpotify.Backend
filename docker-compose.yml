@@ -1,6 +1,4 @@
-﻿version: "3.9"
-
-services:
+﻿services:
   minio:
     container_name: russianspotify-api-minio-storage
     image: quay.io/minio/minio
@@ -127,7 +125,7 @@ services:
       GrpcOptions__Services__0__ServerUri: "http://files-service:81"
       GrpcOptions__Services__1__Name: "Payment"
       GrpcOptions__Services__1__ServerUri: "http://payment-service:5116"
-      Cassandra__Host: "cassandra"
+      Cassandra__Host: "russianspotify-api-cassandra"
       Cassandra__Port: "9042"
       Cassandra__Keyspace: "song_statistic"
     ports:
