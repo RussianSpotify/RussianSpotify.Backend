@@ -9,6 +9,7 @@ using RussianSpotify.API.Core.Requests.Music.DeleteSongFromBucket;
 using RussianSpotify.API.Core.Requests.Music.GetCategories;
 using RussianSpotify.API.Core.Requests.Music.GetSongByFilter;
 using RussianSpotify.API.Core.Requests.Music.GetSongContentById;
+using RussianSpotify.API.Core.Requests.Music.GetSongPlaysNumber;
 using RussianSpotify.API.Core.Requests.Music.PatchEditSong;
 using RussianSpotify.API.Core.Requests.Music.PostAddSong;
 using RussianSpotify.API.Core.Requests.Music.PostAddSongAuthor;
@@ -21,6 +22,7 @@ using RussianSpotify.Contracts.Requests.Music.DeleteSong;
 using RussianSpotify.Contracts.Requests.Music.DeleteSongAuthor;
 using RussianSpotify.Contracts.Requests.Music.EditSong;
 using RussianSpotify.Contracts.Requests.Music.GetCategories;
+using RussianSpotify.Contracts.Requests.Music.GetSongPlaysNumber;
 using RussianSpotify.Contracts.Requests.Music.GetSongsByFilter;
 using RussianSpotify.Contracts.Requests.Music.UpdateSongPlaysNumber;
 
@@ -63,6 +65,21 @@ public class SongController : ControllerBase
         CancellationToken cancellationToken)
     {
         await _mediator.Send(new UpdateSongPlaysNumberCommand(request), cancellationToken);
+    }
+
+    /// <summary>
+    ///     Получить кол-во прослушиваний песни
+    /// </summary>
+    /// <param name="request">Запрос, который содержит ID песни</param>
+    /// <param name="cancellationToken">Токен отмены задачи</param>
+    /// <returns>Кол-во прослушиваний песни</returns>
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<int> GetSongPlaysNumber([FromQuery] GetSongPlaysNumberRequest request,
+        CancellationToken cancellationToken)
+    {
+        return await _mediator.Send(new GetSongPlaysNumberQuery(request), cancellationToken);
     }
 
     /// <summary>

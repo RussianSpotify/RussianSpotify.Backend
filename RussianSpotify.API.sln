@@ -46,6 +46,40 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.PaymentS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.GraphQL", "RussianSpotify.API.GraphQL\RussianSpotify.API.GraphQL.csproj", "{937B5040-204C-4DFC-BDEA-E079B676111E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RussianSpotify.API.Data.Cassandra", "RussianSpotify.API.Data.Cassandra\RussianSpotify.API.Data.Cassandra.csproj", "{1707C700-BAEB-4945-83CE-6A3E5D472C95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{1F55F3A9-FBD1-46A8-94FC-8FE1F11ACF77}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\rabbitmq-data-persistentvolumeclaim.yaml = k8s\rabbitmq-data-persistentvolumeclaim.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deployments", "deployments", "{DDADE734-21EF-4ABD-9773-D43D58780202}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\chat-message-saver-deployment.yaml = k8s\chat-message-saver-deployment.yaml
+		k8s\files-service-deployment.yaml = k8s\files-service-deployment.yaml
+		k8s\main-project-deployment.yaml = k8s\main-project-deployment.yaml
+		k8s\minio-deployment.yaml = k8s\minio-deployment.yaml
+		k8s\postgres-db-deployment.yaml = k8s\postgres-db-deployment.yaml
+		k8s\rabbitmq-deployment.yaml = k8s\rabbitmq-deployment.yaml
+		k8s\redis-deployment.yaml = k8s\redis-deployment.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{8845D42B-EA5C-4FBB-A393-FE16894B6527}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\files-service-service.yaml = k8s\files-service-service.yaml
+		k8s\main-project-service.yaml = k8s\main-project-service.yaml
+		k8s\minio-service.yaml = k8s\minio-service.yaml
+		k8s\postgres-db-service.yaml = k8s\postgres-db-service.yaml
+		k8s\rabbitmq-service.yaml = k8s\rabbitmq-service.yaml
+		k8s\redis-service.yaml = k8s\redis-service.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "volumes", "volumes", "{DE7C7D1E-F51D-49DB-B727-2B7AB5739961}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\minio-data-persistentvolumeclaim.yaml = k8s\minio-data-persistentvolumeclaim.yaml
+		k8s\postgres-data-persistentvolumeclaim.yaml = k8s\postgres-data-persistentvolumeclaim.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +103,11 @@ Global
 		{D68FA51A-D024-4017-9F36-E01AE91D675F} = {223B2189-F44E-49F2-8903-29B8598869AB}
 		{008543DE-E33C-45BE-B9CA-653F994E8682} = {223B2189-F44E-49F2-8903-29B8598869AB}
 		{937B5040-204C-4DFC-BDEA-E079B676111E} = {223B2189-F44E-49F2-8903-29B8598869AB}
+		{1707C700-BAEB-4945-83CE-6A3E5D472C95} = {35712146-7769-478C-A819-74BC600C9749}
+		{1F55F3A9-FBD1-46A8-94FC-8FE1F11ACF77} = {51F88DE0-A860-46BE-9092-C690960A2E0D}
+		{DDADE734-21EF-4ABD-9773-D43D58780202} = {1F55F3A9-FBD1-46A8-94FC-8FE1F11ACF77}
+		{8845D42B-EA5C-4FBB-A393-FE16894B6527} = {1F55F3A9-FBD1-46A8-94FC-8FE1F11ACF77}
+		{DE7C7D1E-F51D-49DB-B727-2B7AB5739961} = {1F55F3A9-FBD1-46A8-94FC-8FE1F11ACF77}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{93621E9D-982B-478A-8811-ACB7C67693F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -127,5 +166,9 @@ Global
 		{937B5040-204C-4DFC-BDEA-E079B676111E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{937B5040-204C-4DFC-BDEA-E079B676111E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{937B5040-204C-4DFC-BDEA-E079B676111E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1707C700-BAEB-4945-83CE-6A3E5D472C95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1707C700-BAEB-4945-83CE-6A3E5D472C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1707C700-BAEB-4945-83CE-6A3E5D472C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1707C700-BAEB-4945-83CE-6A3E5D472C95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

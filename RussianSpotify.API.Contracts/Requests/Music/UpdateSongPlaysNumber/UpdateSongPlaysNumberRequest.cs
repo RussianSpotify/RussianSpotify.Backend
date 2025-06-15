@@ -14,5 +14,5 @@ public class UpdateSongPlaysNumberRequest
         SongId = request.SongId;
     }
     
-    public Guid SongId { get; set; }
+    public string SongId { get; set; }
 }
